@@ -10,7 +10,7 @@ class Help(commands.Cog):
     if choice == None:
 
       embed=discord.Embed(title='Help Me!',description='this command helps you by providing you commands',colour=discord.Colour.blue())
-      embed.add_field(name='Type these for more information',value='```help general```\n```help starwars```\n```help fun```\n```help games```\n```help animals```')
+      embed.add_field(name='Type these for more information',value='```help general```\n```help starwars```\n```help fun```\n```help games```\n```help animals```\n```help admin```\n```help ChatBot```')
       # embed.set_image(url='https://thumbs.dreamstime.com/b/help-me-abstract-colorful-background-bokeh-design-illustration-isolated-yellow-red-banner-154777299.jpg')
       embed.set_footer(text=f'{ctx.author.name} asked me...Dont Blame me',icon_url=f'{ctx.author.avatar_url}')
       await ctx.send(embed=embed)
