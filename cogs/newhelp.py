@@ -12,7 +12,7 @@ class Help(commands.Cog):
       embed=discord.Embed(title='Help Me!',description='this command helps you by providing you commands',colour=discord.Colour.blue())
       embed.add_field(name='Type these for more information',value='```help general```\n```help starwars```\n```help fun```\n```help games```\n```help animals```\n```help admin```\n```help ChatBot```')
       # embed.set_image(url='https://thumbs.dreamstime.com/b/help-me-abstract-colorful-background-bokeh-design-illustration-isolated-yellow-red-banner-154777299.jpg')
-      embed.set_footer(text=f'{ctx.author.name} asked me...Dont Blame me',icon_url=f'{ctx.author.avatar_url}')
+      embed.set_footer(text='Use command prefix "~~" ')
       await ctx.send(embed=embed)
 
     elif choice.lower() == 'general':
@@ -52,9 +52,9 @@ class Help(commands.Cog):
 
     elif choice.lower() == 'animals':
       embed=discord.Embed(title='Help Animals',description='This shows all the animal commands',colour=discord.Colour.blue())
-      embed.add_field(name='Commands',value='`cat - Shows a picture of a cat`\n`dog - Shows a picture of a dog`\n`fox - shows a picture of a fox`\n`panda - shows a picture or a panda`\n`redpanda - shows a picture of a red panda`\n`koala - shows a picture of a koala`\n`bird - shows a picture of a bird`')
+      embed.add_field(name='Commands',value='`cat - Shows a picture of a cat`\n`dog - Shows a picture of a dog`\n`fox - shows a picture of a fox`\n`panda - shows a picture or a panda`\n`koala - shows a picture of a koala`\n`bird - shows a picture of a bird`')
       #embed.set_image(url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVgy78TcDxVTIpbrcmFGkzgWaeZM0sCcgUAw&usqp=CAU')
-      embed.set_footer(text='Use command prefix "~~" ',icon_url=ctx.author.avatar_url)
+      embed.set_footer(text='Use command prefix "~~" and for animals use ~~animal <animal choice>',icon_url=ctx.author.avatar_url)
       await ctx.send(embed=embed)
 
     elif choice.lower() == 'admin':

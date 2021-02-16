@@ -49,7 +49,7 @@ class secret(commands.Cog):
         # Check for level promotion
         if exp in level_check_point:
             update_level(message.author.id)
-            await message.channel.send(f'Congratulations {message.author.mention} You are now level {lvl+1}🎉🥳!!!')
+            await message.channel.send(f'Congratulations {message.author.mention} You are now level {lvl}🎉🥳!!!')
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -106,9 +106,11 @@ class secret(commands.Cog):
             a = exp
             b = round(level_check_point[lvl+1])
             c = round(level_check_point[lvl])
-            number_of_blue_squares = round((a-c)/(c-b) * 10) 
+            
+            number_of_blue_squares = round((a-c)/(b-c) * 10) 
             number_of_white_squares = (int(10 - number_of_blue_squares))
-            value =':blue_circle:' * number_of_white_squares + ':white_circle:' * number_of_blue_squares 
+            value =':blue_circle:' * number_of_blue_squares + ':white_circle:' * number_of_white_squares 
+            # print(f'exp={a}\tb={b}\tc={c}\tbcircles={number_of_blue_squares}\t')
             embed.add_field(name='Progress',value=value,inline=False)
             embed.add_field(name='the first person is...',value=f'1)<@!{max_player}>, xp = {max_exp}')
     
@@ -132,10 +134,11 @@ class secret(commands.Cog):
             a = exp
             b = round(level_check_point[lvl+1])
             c = round(level_check_point[lvl])
-            number_of_blue_squares = round((a-c)/(c-b) * 10) 
+            
+            number_of_blue_squares = round((a-c)/(b-c) * 10) 
             number_of_white_squares = (int(10 - number_of_blue_squares))
-            value =':blue_circle:' * number_of_white_squares + ':white_circle:' * number_of_blue_squares 
-
+            value =':blue_circle:' * number_of_blue_squares + ':white_circle:' * number_of_white_squares 
+            # print(f'exp={a}\tb={b}\tc={c}\tbcircles={number_of_blue_squares}\t')
             embed.add_field(name='Progress',value=value,inline=False)
             embed.add_field(name='the first person is...',value=f'1)<@!{max_player}>, xp = {max_exp}')
             embed.set_thumbnail(url=member.avatar_url)
@@ -178,17 +181,17 @@ class secret(commands.Cog):
 def add_exp(id,num):
     if id in db.keys():
         exp, lvl = db[id].split(',')
-
         db[id] = f'{str(int(exp)+int(num))},{lvl}'
+        update_level(id)
     else:
-        db[id] = '2,0'
+        db[id] = f'{str(num)},{lvl}'
 
 
 def user_level(exp):
     lvl = 0
     for index, num in enumerate(level_check_point):
         if exp >= num:
-            lvl = index+1
+            lvl = index
     return lvl
 
 
@@ -250,7 +253,7 @@ def get_leader(guild=None):
     return max_exp, max_player
 
 
-level_check_point = [20, 100, 200, 350, 500, 700, 900, 1100, 1300, 1500,
+level_check_point = [0,20, 100, 200, 350, 500, 700, 900, 1100, 1300, 1500,
                      1800, 2300, 2700, 3100, 3700, 4300, 5000, 5800, 6700, 7700, 9000, 10300,11600,1300,15000,17000,19000]
 # level_check_point = [10,20,30,40,50,60,70,80,90,100,1000]
 masters = [793433316258480128, 790459205038506055]
