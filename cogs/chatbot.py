@@ -25,6 +25,7 @@ class ChatBot(commands.Cog):
 				return
 			if chat_author_id == message.author.id:
 				if message.content.lower() == "gaara go to sleep" or message.content.lower() == "~~chatdisable":
+        
 				  chat = 0
 				  chat_author_id = 0
 				

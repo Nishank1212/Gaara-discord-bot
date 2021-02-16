@@ -6,7 +6,6 @@ from discord.ext import commands, tasks
 from itertools import cycle
 from keep_alive import keep_alive
 import os
-import aiofiles
 # import discore.Utils as dsu
 from PIL import Image
 from io import BytesIO
@@ -23,17 +22,6 @@ intents=intents, owner_ids={793433316258480128})
 status = cycle(['Gaara|Ping for more info','Gaara|Ping for more info'])
 client.sniped_messages = {}
 client.load_extension('jishaku')
-
-# Define a new client.
-# cluster = pymongo.MongoClient(getenv('mongo_warn_pass')
-
-
-# # Get the database (database name by default is "test")
-# db = cluster.db_name # OR db = client.
-# db.create_connection('Warning_System')
-# warn_collection = db.collection_name
-
-
 
 client.remove_command("help")
 global chat, chat_author_id
@@ -80,7 +68,7 @@ async def on_message(message):
       
 
       embed=discord.Embed(colour=discord.Colour.blue())
-      embed.set_author(name='My command prefix is `~`,type `~help` for more info',icon_url=message.author.avatar_url)
+      embed.set_author(name='My command prefix is `~~`,type `~~help` for more info',icon_url=message.author.avatar_url)
       await message.channel.send(embed=embed)
 	
   await client.process_commands(message)
@@ -318,12 +306,13 @@ async def play(ctx,*,DASONG):
       if i.guild == ctx.guild:
         
         if i.is_playing():
-          await ctx.send('Song added to queue!')
-          try:
-            if type(queue[ctx.guild.id]) == list:
-              queue[ctx.guild.id].append(DASONG)
-          except KeyError:
-            queue.update({ctx.guild.id:[DASONG]})
+          # await ctx.send('Song added to queue!')
+          # try:
+          #   if type(queue[ctx.guild.id]) == list:
+          #     queue[ctx.guild.id].append(DASONG)
+          # except KeyError:
+          #   queue.update({ctx.guild.id:[DASONG]})
+          pass
           
         else: 
           i.play(discord.FFmpegPCMAudio(x['formats'][0]['url'],**FFMPEG_OPTIONS))

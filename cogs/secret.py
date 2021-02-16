@@ -32,10 +32,19 @@ class secret(commands.Cog):
 
         if message.author.bot:
             return
-
-        add_exp(message.author.id)
-
+            
         exp, lvl = get_stats(message.author.id)
+
+        if lvl > 10:
+
+          add_exp(message.author.id,1)
+
+        else:
+
+          add_exp(message.author.id,2)
+
+
+        
 
         # Check for level promotion
         if exp in level_check_point:
@@ -119,16 +128,36 @@ class secret(commands.Cog):
             embed = discord.Embed(title='Level {}'.format(
                 lvl), description=f"{exp} XP", color=discord.Color.blue())
             embed.set_author(name=member, icon_url=member.avatar_url)
+            
             a = exp
             b = round(level_check_point[lvl+1])
             c = round(level_check_point[lvl])
             number_of_blue_squares = round((a-c)/(c-b) * 10) 
             number_of_white_squares = (int(10 - number_of_blue_squares))
             value =':blue_circle:' * number_of_white_squares + ':white_circle:' * number_of_blue_squares 
+
             embed.add_field(name='Progress',value=value,inline=False)
             embed.add_field(name='the first person is...',value=f'1)<@!{max_player}>, xp = {max_exp}')
             embed.set_thumbnail(url=member.avatar_url)
             await ctx.send(embed=embed)
+
+    @commands.command(aliases=['LEADERBOARD','Leaderboard'])
+    async def leaderboard(self,ctx):
+      my_dic = {}
+      for index in db.keys():
+          exp, lvl = db[index].split(',')
+          my_dic[index] = [exp]
+          my_dic[index].append(lvl)
+      print('-------- my_dic ---------')
+      print(my_dic)
+
+      # sort from new dictionary and report results
+      top_list = sorted(my_dic.items(), key=lambda x: int(x[1][0]), reverse=True)
+      print('------- TOP 5 --------')
+      embed=discord.Embed(title='Leaderboard',colour=discord.Colour.blue())
+      for x in range(5):
+        embed.add_field(name=f'Rank #{x+1}', value=f'User <@!{top_list[x][0]}>, Exp={top_list[x][1][0]}, Level={top_list[x][1][1]}',inline=False)
+      await ctx.send(embed=embed)
 
     @commands.command(aliases=['db_count', 'db_records'], hidden=True)
     async def print_all(self, ctx, pre=''):
@@ -146,11 +175,11 @@ class secret(commands.Cog):
 # Helper functions below
 
 
-def add_exp(id):
+def add_exp(id,num):
     if id in db.keys():
         exp, lvl = db[id].split(',')
 
-        db[id] = f'{str(int(exp)+2)},{lvl}'
+        db[id] = f'{str(int(exp)+int(num))},{lvl}'
     else:
         db[id] = '2,0'
 
