@@ -69,6 +69,10 @@ class secret(commands.Cog):
              embed=discord.Embed(title='Missing Command',description='Command Not Found buddy! :thinking:',colour=discord.Colour.blue())
              await ctx.send(embed=embed)
 
+
+        else:
+          raise error
+
         
 
 
@@ -106,12 +110,14 @@ class secret(commands.Cog):
             a = exp
             b = round(level_check_point[lvl+1])
             c = round(level_check_point[lvl])
+
+            print(lvl)
             
             number_of_blue_squares = round((a-c)/(b-c) * 10) 
             number_of_white_squares = (int(10 - number_of_blue_squares))
             value =':blue_circle:' * number_of_blue_squares + ':white_circle:' * number_of_white_squares 
             # print(f'exp={a}\tb={b}\tc={c}\tbcircles={number_of_blue_squares}\t')
-            embed.add_field(name='Progress',value=value,inline=False)
+            embed.add_field(name=f'Progress to next level - {int((a-c)/(b-c) * 100)}\%',value=value,inline=False)
             embed.add_field(name='the first person is...',value=f'1)<@!{max_player}>, xp = {max_exp}')
     
             embed.set_thumbnail(url=ctx.author.avatar_url)
@@ -138,8 +144,8 @@ class secret(commands.Cog):
             number_of_blue_squares = round((a-c)/(b-c) * 10) 
             number_of_white_squares = (int(10 - number_of_blue_squares))
             value =':blue_circle:' * number_of_blue_squares + ':white_circle:' * number_of_white_squares 
-            # print(f'exp={a}\tb={b}\tc={c}\tbcircles={number_of_blue_squares}\t')
-            embed.add_field(name='Progress',value=value,inline=False)
+            # print(f'exp={a}\tb={b}\tc={c}\tbcircles={int(((a-c)/(b-c))*100)}\%\t')
+            embed.add_field(name=f'Progress to next level - {int((a-c)/(b-c) * 100)}\%',value=value,inline=False)
             embed.add_field(name='the first person is...',value=f'1)<@!{max_player}>, xp = {max_exp}')
             embed.set_thumbnail(url=member.avatar_url)
             await ctx.send(embed=embed)
@@ -151,8 +157,8 @@ class secret(commands.Cog):
           exp, lvl = db[index].split(',')
           my_dic[index] = [exp]
           my_dic[index].append(lvl)
-      print('-------- my_dic ---------')
-      print(my_dic)
+      # print('-------- my_dic ---------')
+      # print(my_dic)
 
       # sort from new dictionary and report results
       top_list = sorted(my_dic.items(), key=lambda x: int(x[1][0]), reverse=True)
@@ -254,7 +260,7 @@ def get_leader(guild=None):
 
 
 level_check_point = [0,20, 100, 200, 350, 500, 700, 900, 1100, 1300, 1500,
-                     1800, 2300, 2700, 3100, 3700, 4300, 5000, 5800, 6700, 7700, 9000, 10300,11600,1300,15000,17000,19000]
+                     1800, 2300, 2700, 3100, 3700, 4300, 5000, 5800, 6700, 7700, 9000, 10300,11600,13000,15000,17000,19000]
 # level_check_point = [10,20,30,40,50,60,70,80,90,100,1000]
 masters = [793433316258480128, 790459205038506055]
 

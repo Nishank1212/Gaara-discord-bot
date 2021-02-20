@@ -9,9 +9,9 @@ import os
 # import discore.Utils as dsu
 from PIL import Image
 from io import BytesIO
-import youtube_dl
 
-from youtube_search import YoutubeSearch
+# import youtube_dl
+# from youtube_search import YoutubeSearch
 
 
 
@@ -53,7 +53,9 @@ async def on_message(message):
   #   None
 	
   if message.content.lower() == 'no u':
-     await message.channel.send('no u')
+
+    if message.author.id == 793433316258480128:
+      await message.channel.send('no u')
 #Entropy was here!
   # if message.content.lower() == 'lol' or message.content.lower() == 'lmao':
   #    await message.channel.send('lol so funny hahaha')
@@ -109,10 +111,11 @@ async def change_status():
 	await client.change_presence(activity=discord.Game(next(status)))
 
 for filename in os.listdir('./cogs'):
-	if filename.endswith('.py'):
-		client.load_extension(f'cogs.{filename[:-3]}')
-	else:
-		None
+#if filename.endswith('economy.py'):
+  if filename.endswith('.py') and not(filename.startswith('miya')):
+	  client.load_extension(f'cogs.{filename[:-3]}')
+  else:
+	  None
 
 
 
@@ -286,6 +289,10 @@ async def joinvc(ctx):
 queue = {}
 @client.command()
 async def play(ctx,*,DASONG):
+  
+  await ctx.send('I do not feel like it right now')
+  # Commented until youtube import fixed
+  '''
   await ctx.message.add_reaction('\U0001f60e')
   FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
   await ctx.send("DASONG IS: "+DASONG)
@@ -325,7 +332,7 @@ async def play(ctx,*,DASONG):
           #   discord.FFmpegPCMAudio(x['formats'][0]['url'])
         
           # i.play(discord.FFmpegPCMAudio(x['formats'][0]['url']))
-
+  '''
         
   
 

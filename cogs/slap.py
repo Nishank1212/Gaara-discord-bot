@@ -100,25 +100,6 @@ class Slap(commands.Cog):
 
     await ctx.send(file = discord.File('profile.jpg'))
 
-  @commands.command(aliases=['FIGHT','Fight'])
-  async def fight(self,ctx, user : discord.Member=None):
-    if user == None:
-      user = ctx.author
-      
-      im = Image.open('fight.png')
-      asset = user.avatar_url_as(format=None, static_format='png', size=128)
-      data = BytesIO(await asset.read())
-      pfp = Image.open(data)
-      asset2 = ctx.author.avatar_url_as(format=None, static_format='png', size=128)
-      data2 = BytesIO(await asset2.read())
-      pfp2 = Image.open(data2)
-      pfp = pfp.resize((94, 92))
-      pfp2 = pfp2.resize((94, 92))
-      im = im.copy()
-      im.paste(pfp, (31, 9))
-      im.paste(pfp2, (181, 4))
-      im.save('fought.png')
-      await ctx.send(file=discord.File('fought.png'))
 
 
 def setup(client):
