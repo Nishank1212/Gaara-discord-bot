@@ -155,10 +155,11 @@ async def gaara(ctx):
 
 @client.event
 async def on_message_delete(message):
-  client.sniped_messages[message.author.id] = (message.content,message.author,message.channel.name,message.created_at)
+  client.sniped_messages[message.guild.id] = {message.author.id:(message.content,message.author,message.channel.name,message.created_at)}
   client.sniped_messages1[message.guild.id] = (message.content,message.author,message.channel.name,message.created_at)
 @client.command()
 async def snipe(ctx,member:discord.Member=None):
+  
 
   if member == None:
     contents, author, channel_name, time = client.sniped_messages1[ctx.guild.id]
@@ -171,8 +172,8 @@ async def snipe(ctx,member:discord.Member=None):
     await ctx.send(f'{author.name} has beened sniped 🔫')
 
   else:
-  
-    contents, author, channel_name, time = client.sniped_messages[member.id]
+
+    contents, author, channel_name, time = client.sniped_messages[ctx.guild.id][member.id]
 
     embed=discord.Embed(description = contents, colour=discord.Colour.blue(),timestamp=time)
     embed.set_author(name=f'{member.name}#{member.discriminator}',icon_url=member.avatar_url)
@@ -180,6 +181,7 @@ async def snipe(ctx,member:discord.Member=None):
     await ctx.send(embed=embed)
     
     await ctx.send(f'{member.name} has beened sniped 🔫')
+
 
 
 @client.command()
