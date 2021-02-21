@@ -75,8 +75,9 @@ class Economy(commands.Cog):
     else:
 
       if amount.lower() == 'all' or amount.lower() == 'max':
-        bankinfo['bank'] = bankinfo['bank'] + bankinfo['wallet']
-        bankinfo['wallet'] = 0
+        wallet = bankinfo['wallet']
+        bankinfo['bank'] += wallet
+        bankinfo['wallet'] -= wallet
         await ctx.send('All money Deposited')
 
       if bankinfo['wallet'] < int(amount):
@@ -102,8 +103,9 @@ class Economy(commands.Cog):
     else:
 
       if amount.lower() == 'all' or amount.lower() == 'max':
-        bankinfo['wallet'] = bankinfo['wallet'] + bankinfo['bank']
-        bankinfo['bank'] = 0
+        bank = bankinfo['bank']
+        bankinfo['wallet'] += bank
+        bankinfo['bank'] -= bank
         await ctx.send('All money Withdrawn')
 
       if bankinfo['bank'] < int(amount):
