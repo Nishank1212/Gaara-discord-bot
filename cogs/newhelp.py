@@ -71,7 +71,7 @@ class Help(commands.Cog):
 
     elif choice.lower() == 'economy':
       embed=discord.Embed(title='Help Economy',description='Economy commands',colour=discord.Colour.blue())
-      embed.add_field(name='commands...',value='`bal - tells the balance of a person`\n`beg - begs a person for an amount`\n`dep - deposits an amount to the bank`\n`with - withdraws an amount from bank`\n`slots - plays slots and u can bet a money on it also`\n`rob - robs any person`\n`search - searches for money`\n`give - gives money to any person you choose`\n`buy - buy an object from shop`\n`fish - fishes`\n`hunt - hunts for animals`\n`sell - you can sell any animal or fish via this cmd`\n`inv - shares the inventory of a person`\n`shop - shows the shop`\n`postmeme - posts a meme`')
+      embed.add_field(name='commands...',value='`bal - tells the balance of a person`\n`beg - begs a person for an amount`\n`dep - deposits an amount to the bank`\n`with - withdraws an amount from bank`\n`slots - plays slots and u can bet a money on it also`\n`rob - robs any person`\n`search - searches for money`\n`give - gives money to any person you choose`\n`buy - buy an object from shop`\n`fish - fishes`\n`hunt - hunts for animals`\n`sell - you can sell any animal or fish via this cmd`\n`inv - shares the inventory of a person`\n`shop - shows the shop`\n`postmeme - posts a meme`\n`gamble - gambles an amount you choose`')
       embed.set_footer(text='Use command prefix "~~" ',icon_url=ctx.author.avatar_url)
       await ctx.send(embed=embed)
 

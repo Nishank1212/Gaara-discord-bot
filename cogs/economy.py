@@ -216,7 +216,7 @@ class Economy(commands.Cog):
               bankinfo1['wallet'] += 500
 
         else:
-          amount_stolen = random.randint(20,(bankinfo['wallet']/2))
+          amount_stolen = random.randint(20,int(bankinfo['wallet']/2))
 
           await ctx.send(f'You stole {amount_stolen} fluxes from {member.mention}')
           bankinfo['wallet'] += amount_stolen
@@ -535,8 +535,10 @@ class Economy(commands.Cog):
     await ctx.send(embed=embed)    
 
 
-  @commands.command(aliases=['POSTMEME','Postmeme','PM','Pm','pm'])
-  async def postmeme(self,ctx):
+  @commands.command(aliases=['POSTMEME','Postmeme','PM','Pm','postmeme'])
+  @commands.cooldown(1, 20, commands.BucketType.user) \
+  
+  async def pm(self,ctx):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
@@ -573,7 +575,7 @@ class Economy(commands.Cog):
               bankinfo['wallet'] += amount
               await ctx.send(f'Your Kind meme is VIRAL!!! you got {amount} fluxes by the ads')
 
-        if msg.content.lower() == 'b':
+        elif msg.content.lower() == 'b':
           choice = random.choice([0,1])
           if choice == 0:
             await ctx.send('Nobody Liked Your Inspirational Meme LOL!')
@@ -590,56 +592,57 @@ class Economy(commands.Cog):
               bankinfo['wallet'] += amount
               await ctx.send(f'Your Inspirational meme went VIRAL online! you got {amount} fluxes from the ads!')
 
-        if msg.content.lower() == 'c':
-            choice = random.choice([0,1])
-            if choice == 0:
-              await ctx.send('Nobody Liked Your CopyPasta Meme LOL!')
+        elif msg.content.lower() == 'c':
+          choice = random.choice([0,1])
+          if choice == 0:
+            await ctx.send('Nobody Liked Your CopyPasta Meme LOL!')
+
+          else:
+            decent_nice = random.choice(['decent','awesome'])
+            if decent_nice == 'decent':
+              amount = random.randint(100,400)
+              bankinfo['wallet'] += amount
+              await ctx.send(f'Your CopyPasta meme got decent response online! you got {amount} fluxes from the ads!')
+              
+            else:
+              amount = random.randint(400,600)
+              bankinfo['wallet'] += amount
+              await ctx.send(f'Your CopyPasta meme went VIRAL online! you got {amount} fluxes from the ads!')
+              
+
+        elif msg.content.lower() == 'd':
+          choice = random.choice([0,1])
+          if choice == 0:
+            await ctx.send('Nobody Liked Your Fresh Meme LOL!')
+
+          else:
+            decent_nice = random.choice(['decent','awesome'])
+            if decent_nice == 'decent':
+              amount = random.randint(300,600)
+              bankinfo['wallet'] += amount
+              await ctx.send(f'Your Fresh meme got decent response online! you got {amount} fluxes from the ads!')
 
             else:
-              decent_nice = random.choice(['decent','awesome'])
-              if decent_nice == 'decent':
-                amount = random.randint(100,400)
-                bankinfo['wallet'] += amount
-                await ctx.send(f'Your CopyPasta meme got decent response online! you got {amount} fluxes from the ads!')
+              amount = random.randint(600,1000)
+              bankinfo['wallet'] += amount
+              await ctx.send(f'Your Fresh meme went VIRAL online! you got {amount} fluxes from the ads!')
 
-              else:
-                amount = random.randint(400,600)
-                bankinfo['wallet'] += amount
-                await ctx.send(f'Your CopyPasta meme went VIRAL online! you got {amount} fluxes from the ads!')
+        elif msg.content.lower() == 'e':
+          choice = random.choice([0,1])
+          if choice == 0:
+            await ctx.send('Nobody Liked Your Random Meme LOL!')
 
-        if msg.content.lower() == 'd':
-            choice = random.choice([0,1])
-            if choice == 0:
-              await ctx.send('Nobody Liked Your Fresh Meme LOL!')
-
-            else:
-              decent_nice = random.choice(['decent','awesome'])
-              if decent_nice == 'decent':
-                amount = random.randint(300,600)
-                bankinfo['wallet'] += amount
-                await ctx.send(f'Your Fresh meme got decent response online! you got {amount} fluxes from the ads!')
-
-              else:
-                amount = random.randint(600,1000)
-                bankinfo['wallet'] += amount
-                await ctx.send(f'Your Fresh meme went VIRAL online! you got {amount} fluxes from the ads!')
-
-        if msg.content.lower() == 'e':
-            choice = random.choice([0,1])
-            if choice == 0:
-              await ctx.send('Nobody Liked Your Random Meme LOL!')
+          else:
+            decent_nice = random.choice(['decent','awesome'])
+            if decent_nice == 'decent':
+              amount = random.randint(100,300)
+              bankinfo['wallet'] += amount
+              await ctx.send(f'Your Random meme decent response online! you got {amount} fluxes from the ads!')
 
             else:
-              decent_nice = random.choice(['decent','awesome'])
-              if decent_nice == 'decent':
-                amount = random.randint(100,300)
-                bankinfo['wallet'] += amount
-                await ctx.send(f'Your Random meme decent response online! you got {amount} fluxes from the ads!')
-
-              else:
-                amount = random.randint(300,500)
-                bankinfo['wallet'] += amount
-                await ctx.send(f'Your Random meme went VIRAL online! you got {amount} fluxes from the ads!')
+              amount = random.randint(300,500)
+              bankinfo['wallet'] += amount
+              await ctx.send(f'Your Random meme went VIRAL online! you got {amount} fluxes from the ads!')
 
         else:
           await ctx.send('Thats Not a Valid Option')
@@ -647,11 +650,46 @@ class Economy(commands.Cog):
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
 
             
+  @commands.command(aliases=['Gamble','GAMBLE'])
+  async def gamble(self,ctx,amount:int=None):
+
+    bankinfo = collection.find_one({"user": ctx.author.id})
+    if not bankinfo:
+      #make new entry
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
+      return
+
+
+    else:
+    
+
+      if amount == None:
+        await ctx.send('Try the cmd again but next time tell me How much money are you betting?')
+
+      else:
+
+        a = random.randint(0,10)
+        b = random.randint(0,10)
+
+        embed=discord.Embed(title=f"{ctx.author.name}'s Gambling Game",colour=discord.Colour.blue())
+        embed.add_field(name=f'Gaara rolled `{b}`',value="\u200b")
+        embed.add_field(name=f'{ctx.author.name} rolled `{b}`',value="\u200b")
+
+        if a<b:
+          embed.add_field(name='**You Won!** :cry:',value=f'You win {amount} fluxes!',inline=False)
+          bankinfo['wallet'] += amount
+        elif a>b:
+          embed.add_field(name='**I won!** :smile:',value=f'You loose {amount} fluxes!',inline=False)
+          bankinfo['wallet'] -= amount
+        else:
+          embed.add_field(name='**Its a Draw** :cry:',value='Noone wins or looses any money',inline=False)
+
+        await ctx.send(embed=embed)
+  
+        collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
 
           
-     
-
-
 def slots(a,b,c):
   if a == b or a == c:
     return True

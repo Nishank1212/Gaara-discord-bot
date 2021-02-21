@@ -21,6 +21,7 @@ client = commands.Bot(command_prefix = '~~',
 intents=intents, owner_ids={793433316258480128})
 status = cycle(['Gaara|Ping for more info','Gaara|Ping for more info'])
 client.sniped_messages = {}
+client.sniped_messages1 = {}
 client.load_extension('jishaku')
 
 client.remove_command("help")
@@ -154,19 +155,31 @@ async def gaara(ctx):
 
 @client.event
 async def on_message_delete(message):
-  client.sniped_messages[message.guild.id] = (message.content,message.author,message.channel.name,message.created_at)
-
-
+  client.sniped_messages[message.author.id] = (message.content,message.author,message.channel.name,message.created_at)
+  client.sniped_messages1[message.guild.id] = (message.content,message.author,message.channel.name,message.created_at)
 @client.command()
-async def snipe(ctx):
-  contents, author, channel_name, time = client.sniped_messages[ctx.guild.id]
+async def snipe(ctx,member:discord.Member=None):
 
-  embed=discord.Embed(description = contents, colour=discord.Colour.blue(),timestamp=time)
-  embed.set_author(name=f'{author.name}#{author.discriminator}',icon_url=author.avatar_url)
-  embed.set_footer(text=f'Deleted in : #{channel_name}')
-  await ctx.send(embed=embed)
+  if member == None:
+    contents, author, channel_name, time = client.sniped_messages1[ctx.guild.id]
+
+    embed=discord.Embed(description = contents, colour=discord.Colour.blue(),timestamp=time)
+    embed.set_author(name=f'{author.name}#{author.discriminator}',icon_url=author.avatar_url)
+    embed.set_footer(text=f'Deleted in : #{channel_name}')
+    await ctx.send(embed=embed)
+    
+    await ctx.send(f'{author.name} has beened sniped 🔫')
+
+  else:
   
-  await ctx.send(f'{author.name} has beened sniped 🔫')
+    contents, author, channel_name, time = client.sniped_messages[member.id]
+
+    embed=discord.Embed(description = contents, colour=discord.Colour.blue(),timestamp=time)
+    embed.set_author(name=f'{member.name}#{member.discriminator}',icon_url=member.avatar_url)
+    embed.set_footer(text=f'Deleted in : #{channel_name}')
+    await ctx.send(embed=embed)
+    
+    await ctx.send(f'{member.name} has beened sniped 🔫')
 
 
 @client.command()

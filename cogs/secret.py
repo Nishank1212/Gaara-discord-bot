@@ -181,6 +181,29 @@ class secret(commands.Cog):
             await ctx.send(f'You do not have that power {ctx.message.author.name}')
         return
 
+    @commands.command(aliases=['guilds', 'my_guilds', 'listguilds', 'servers', 'my_servers'], hidden=False)
+    async def list_guilds(self, ctx):
+        ''' Returns a list of servers where Hokage is a member '''
+        await ctx.channel.purge(limit=1)
+        if ctx.author.id == 793433316258480128:
+            temp_txt, index = '', 0
+            async for guild in self.client.fetch_guilds(limit=150):
+                    index += 1
+                    temp_txt = temp_txt + \
+                            f'**{index})** {guild.name}\n'
+            embed = discord.Embed(title=f"{self.client.user.display_name}\'s Servers", colour=discord.Colour(
+                    0xE5E242), description=temp_txt)
+
+            embed.set_image(
+                    url="https://image.shutterstock.com/image-vector/yay-vector-handdrawn-lettering-banner-260nw-1323618563.jpg")
+
+            embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+
+            await ctx.author.send(embed=embed)
+        else:
+            await ctx.send('You are not eligible for this command')
+
+
 # Helper functions below
 
 
@@ -282,6 +305,8 @@ def inspect_records(pre=''):
     else:
         return f'{len(matches)} db rows processed using prefix {pre} my MASTER'
 
+      
+  
 
 def setup(client):
 
