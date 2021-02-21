@@ -42,7 +42,7 @@ class eightball(commands.Cog):
   @commands.command()
   @commands.has_permissions(administrator=True)
   async def mute(self,ctx,member:discord.Member):
-    muted_role = ctx.guild.get_role(806929016543379476)
+    muted_role = ctx.guild.get_role(812650737150197770)
 
     await member.add_roles(muted_role)
 
