@@ -547,7 +547,7 @@ class Economy(commands.Cog):
         await ctx.send('You need to buy a laptop for this!')
 
       else:
-        await ctx.send('What type of meme do you want to post online:\n`a`1)Kind Meme\n`b`2)Inspirational Meme\n`c`3)Copypasta\n`d`4)Fresh Meme\n`e`5)Random Meme')
+        await ctx.send('What type of meme do you want to post online:\n`a`Kind Meme\n`b`Inspirational Meme\n`c`Copypasta\n`d`Fresh Meme\n`e`Random Meme')
 
         def check(m):
           return m.author == ctx.author
