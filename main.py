@@ -18,7 +18,7 @@ from io import BytesIO
 intents = discord.Intents.all()
 intents.members = True
 client = commands.Bot(command_prefix = '~~',
-intents=intents, owner_ids={793433316258480128})
+intents=intents, owner_ids={793433316258480128, 747451011484090479})
 status = cycle(['Gaara|Ping for more info','Gaara|Ping for more info'])
 client.sniped_messages = {}
 client.load_extension('jishaku')
