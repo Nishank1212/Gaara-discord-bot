@@ -10,7 +10,7 @@ class Help(commands.Cog):
     if choice == None:
 
       embed=discord.Embed(title='Help Me!',description='this command helps you by providing you commands',colour=discord.Colour.blue())
-      embed.add_field(name='Type these for more information',value='```help general```\n```help starwars```\n```help fun```\n```help games```\n```help animals```\n```help admin```\n```help ChatBot```')
+      embed.add_field(name='Type these for more information',value='```help general```\n```help starwars```\n```help fun```\n```help games```\n```help animals```\n```help admin```\n```help ChatBot```\n```help economy```\n```help rank```')
       # embed.set_image(url='https://thumbs.dreamstime.com/b/help-me-abstract-colorful-background-bokeh-design-illustration-isolated-yellow-red-banner-154777299.jpg')
       embed.set_footer(text='Use command prefix "~~" ')
       await ctx.send(embed=embed)
@@ -69,6 +69,17 @@ class Help(commands.Cog):
       embed.set_footer(text='Use command prefix "~~" ',icon_url=ctx.author.avatar_url)
       await ctx.send(embed=embed)
 
+    elif choice.lower() == 'economy':
+      embed=discord.Embed(title='Help Economy',description='Economy commands',colour=discord.Colour.blue())
+      embed.add_field(name='commands...',value='`bal - tells the balance of a person`\n`beg - begs a person for an amount`\n`dep - deposits an amount to the bank`\n`with - withdraws an amount from bank`\n`slots - plays slots and u can bet a money on it also`\n`rob - robs any person`\n`search - searches for money`\n`give - gives money to any person you choose`\n`buy - buy an object from shop`\n`fish - fishes`\n`hunt - hunts for animals`\n`sell - you can sell any animal or fish via this cmd`\n`inv - shares the inventory of a person`\n`shop - shows the shop`\n`postmeme - posts a meme`')
+      embed.set_footer(text='Use command prefix "~~" ',icon_url=ctx.author.avatar_url)
+      await ctx.send(embed=embed)
+
+    elif choice.lower() == 'rank':
+      embed=discord.Embed(title='Help Rank',description='Rank commands',colour=discord.Colour.blue())
+      embed.add_field(name='commands...',value='`rank - shows the rank of a person`\n`leaderboard - shows the leaderboard of top 5 people`')
+      embed.set_footer(text='Use command prefix "~~" ',icon_url=ctx.author.avatar_url)
+      await ctx.send(embed=embed)
 
     else:
       await ctx.send('No help command found try typing ***help*** for more info')

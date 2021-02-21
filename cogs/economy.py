@@ -248,7 +248,7 @@ class Economy(commands.Cog):
       messages = {
         'van':'This would happen in real life also! Very nice Gaara!',
         'area51':'NOW RUN! the government is behind you',
-        'air': 'How the Heck? Why were yoou even looking there?',
+        'air': 'How the Heck? Why were you even looking there?',
         'grass':'How? I wonder if somebody left there wallet',
         'hospital':'Are you proud of yourself Now?',
         'dog':'That poor poor Dog',
@@ -638,6 +638,9 @@ class Economy(commands.Cog):
                 amount = random.randint(300,500)
                 bankinfo['wallet'] += amount
                 await ctx.send(f'Your Random meme went VIRAL online! you got {amount} fluxes from the ads!')
+
+        else:
+          await ctx.send('Thats Not a Valid Option')
 
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
 

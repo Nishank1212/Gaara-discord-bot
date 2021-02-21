@@ -16,7 +16,7 @@ class Slap(commands.Cog):
 
   @commands.command(aliases=['SLAP','Slap'])
   async def slap(self,ctx, user : discord.Member):
-        if user.id in [793433316258480128, 800219427928801290, 747451011484090479]:
+        if user.id in [793433316258480128, 800219427928801290]:
           await ctx.send('HAHA U CANT SLAP TOO GOOD PEOPLE TRY TO SLAP SOMEONE ELSE LOL')
 
         else:
