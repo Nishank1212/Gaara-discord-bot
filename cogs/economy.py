@@ -246,7 +246,7 @@ class Economy(commands.Cog):
       return
 
     else:
-      searching_places = ['van','area51','air','grass','hospital','dog','bank','shoe','tree']
+      searching_places = ['van','area51','air','grass','hospital','dog','bank','shoe','tree','house','discord','pocket']
       messages = {
         'van':'This would happen in real life also! Very nice Gaara!',
         'area51':'NOW RUN! the government is behind you',
@@ -256,7 +256,10 @@ class Economy(commands.Cog):
         'dog':'That poor poor Dog',
         'bank':'Did you just roub the bank?!',
         'shoe':'Why were you looking in your shoe?',
-        'tree':'Why were you searching in a tree?'}
+        'tree':'Why were you searching in a tree?',
+        'house':'Be happy Your mother was nice',
+        'discord':'Your DMs are valuable :thinking:',
+        'pocket':'Now it is in your wallet!'}
 
       a = random.choice(searching_places)
       searching_places.remove(a)
@@ -265,7 +268,7 @@ class Economy(commands.Cog):
       c = random.choice(searching_places)
       searching_places.remove(c)
 
-      await ctx.send(f'Where do you want to search {ctx.author.mention}\n`{a}`,`{b}` or `{c}`')
+      await ctx.send(f'**Where do you want to search** {ctx.author.mention}\nchoose from the following and type in the chat\n`{a}`,`{b}` or `{c}`')
 
 
       def check(m):
@@ -279,13 +282,13 @@ class Economy(commands.Cog):
       else:
           coins = random.randint(60,500)
           if msg.content.lower() == a:
-            await ctx.channel.send(f'You Found {coins} fluxes\n{messages[a]}')
+            await ctx.send(f'{ctx.author.mention} searched the {a}\nYou Found {coins} fluxes,{messages[a]}')
 
           if msg.content.lower() == c:
-            await ctx.send(f'You Found {coins} fluxes\n{messages[c]}')
+            await ctx.send(f'{ctx.author.mention} searched the {c}\nYou Found {coins} fluxes,{messages[c]}')
 
           if msg.content.lower() == b:
-            await ctx.send(f'You Found {coins} fluxes\n{messages[b]}')
+            await ctx.send(f'{ctx.author.mention} searched the {b}\nYou Found {coins} fluxes,{messages[b]}')
 
           bankinfo['wallet'] += coins
 
@@ -536,7 +539,7 @@ class Economy(commands.Cog):
 
 
   @commands.command(aliases=['POSTMEME','Postmeme','PM','Pm','postmeme'])
-  @commands.cooldown(1, 20, commands.BucketType.user) \
+  @commands.cooldown(1, 20, commands.BucketType.user) 
   
   async def pm(self,ctx):
     bankinfo = collection.find_one({"user": ctx.author.id})
@@ -651,6 +654,7 @@ class Economy(commands.Cog):
 
             
   @commands.command(aliases=['Gamble','GAMBLE'])
+  @commands.cooldown(1, 20, commands.BucketType.user) 
   async def gamble(self,ctx,amount:int=None):
 
     bankinfo = collection.find_one({"user": ctx.author.id})
@@ -667,13 +671,16 @@ class Economy(commands.Cog):
       if amount == None:
         await ctx.send('Try the cmd again but next time tell me How much money are you betting?')
 
+      elif amount > bankinfo['wallet']:
+        await ctx.send('You cant bet more than how much money you have ')
+
       else:
 
         a = random.randint(0,10)
         b = random.randint(0,10)
 
         embed=discord.Embed(title=f"{ctx.author.name}'s Gambling Game",colour=discord.Colour.blue())
-        embed.add_field(name=f'Gaara rolled `{b}`',value="\u200b")
+        embed.add_field(name=f'Gaara rolled `{a}`',value="\u200b")
         embed.add_field(name=f'{ctx.author.name} rolled `{b}`',value="\u200b")
 
         if a<b:

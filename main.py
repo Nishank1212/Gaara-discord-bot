@@ -9,6 +9,7 @@ import os
 # import discore.Utils as dsu
 from PIL import Image
 from io import BytesIO
+import asyncio
 
 # import youtube_dl
 # from youtube_search import YoutubeSearch
@@ -118,8 +119,6 @@ for filename in os.listdir('./cogs'):
   else:
 	  None
 
-
-
 @client.command(aliases=['SHOOT','Shoot'])
 async def shoot(ctx,member:discord.Member=None):
 
@@ -225,6 +224,12 @@ async def admin(ctx,member1:discord.Member,member2:discord.Member,member3:discor
     await ctx.send(file=discord.File('adminned.jpg'))
 
 @client.command()
+async def test(ctx):
+  message = await ctx.send("hello")
+  await asyncio.sleep(5)
+  await message.edit(content="newcontent")
+
+@client.command()
 async def team(ctx,member1:discord.Member,member2:discord.Member,member3:discord.Member,member4:discord.Member,member5:discord.Member,member6:discord.Member,member7:discord.Member,member8:discord.Member):
 
     #await ctx.send('HAHA U CANT SLAP TOO GOOD PEOPLE TRY TO SLAP SOMEONE ELSE LOL')
@@ -282,87 +287,6 @@ async def team(ctx,member1:discord.Member,member2:discord.Member,member3:discord
     im.paste(pfp8, (961,43))
     im.save('teamed.jpg')
     await ctx.send(file=discord.File('teamed.jpg'))
-
-# @client.command()
-# async def getemoji(ctx, *, message: str):
-
-#     msg = dsu.getemoji(message, ctx.message.guild.emojis)
-    
-#     try:
-#         await ctx.send(msg)
-#     except:
-#         await ctx.send('No Emoji Found')
-
-@client.command()
-async def joinvc(ctx):
-  
-  #author = ctx.message.author
-  channel = client.get_channel(ctx.message.author.voice.channel.id)
-  await channel.connect()
-
-
-queue = {}
-@client.command()
-async def play(ctx,*,DASONG):
-  
-  await ctx.send('I do not feel like it right now')
-  # Commented until youtube import fixed
-  '''
-  await ctx.message.add_reaction('\U0001f60e')
-  FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
-  await ctx.send("DASONG IS: "+DASONG)
-  results = YoutubeSearch(DASONG, max_results=1).to_dict()
-  
-
-
-  with youtube_dl.YoutubeDL({}) as ytdl:
-    x = ytdl.extract_info("https://youtube.com/watch?v="+results[0]['id'], download=False)
-    # await ctx.send(str(x['title']))
-    # await ctx.send(str(x['channel']))
-    # await ctx.send(str(x['duration']))
-    # #await ctx.send(str(x['views']))
-    # await ctx.send(f'https://youtube.com/watch?v={str(x["url_suffix"])}')
-    discord.FFmpegPCMAudio(x['formats'][0]['url'])
-
-    for i in client.voice_clients:
-      if i.guild == ctx.guild:
-        
-        if i.is_playing():
-          # await ctx.send('Song added to queue!')
-          # try:
-          #   if type(queue[ctx.guild.id]) == list:
-          #     queue[ctx.guild.id].append(DASONG)
-          # except KeyError:
-          #   queue.update({ctx.guild.id:[DASONG]})
-          pass
-          
-        else: 
-          i.play(discord.FFmpegPCMAudio(x['formats'][0]['url'],**FFMPEG_OPTIONS))
-
-          # resultsqueue = YoutubeSearch(DASONG, max_results=1).to_dict()
-
-
-          # with youtube_dl.YoutubeDL({}) as ytdl:
-          #   x = ytdl.extract_info("https://youtube.com/watch?v="+resultsqueue[0]['id'], download=False)
-          #   discord.FFmpegPCMAudio(x['formats'][0]['url'])
-        
-          # i.play(discord.FFmpegPCMAudio(x['formats'][0]['url']))
-  '''
-        
-  
-
-@client.command()
-async def leave(ctx):
-  
-  #author = ctx.message.author
-  channel = client.voice_client_in(ctx.message.author.guild)
-  await channel.disconnect()
-
-
-# nav = Navigation(":discord:743511195197374563", "👎", "\U0001F44D")
-# color = discord.Color.dark_gold()
-
-# client.help_command = PrettyHelp(navigation=nav, color=color, active_time=60) 
 
 
 keep_alive()

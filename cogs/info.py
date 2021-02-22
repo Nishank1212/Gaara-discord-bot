@@ -65,13 +65,23 @@ class Info(commands.Cog):
 
     embed.set_thumbnail(url=self.client.user.avatar_url)
 
+    mh = 0
+    for i in self.client.guilds:
+      
+      mh += len([m for m in i.members if not m.bot])
+      
+    mh = mh - len(self.client.guilds)
+
+ 
+
     fields = [("ID", 800219427928801290, False),
               ("Owner",'<@!793433316258480128>', True),
               ("Second developer","<@!747451011484090479>",True),
               ("🤖Name", "Gaara",True),
               ("😀No. of servers", int(len(list(self.client.guilds))),True),
               ("📝Invite me","[Click Here to Add Me](https://discord.com/api/oauth2/authorize?client_id=800219427928801290&permissions=8&scope=bot)",True),
-              ("Join My server","[Click Here To Join](https://discord.gg/RSz98FM7c5)",False),
+              ('Helping',f'{mh} members',True),
+              ("Join My server","[Click Here To Join](https://discord.gg/RSz98FM7c5)",False)
               ]
               
 
@@ -86,10 +96,10 @@ class Info(commands.Cog):
     embed=discord.Embed(title='Invite Me here',description='[Click Here to Add me](https://discord.com/api/oauth2/authorize?client_id=810818178464612363&permissions=8&scope=bot)',colour=discord.Colour.blue())  
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['JOIN','Join'])
-  async def join(self,ctx):
-    embed=discord.Embed(title='Join my Server',description='[Click Here to Join](https://discord.gg/RSz98FM7c5)',colour=discord.Colour.blue())  
-    await ctx.send(embed=embed)
+  # @commands.command(aliases=['JOIN','Join'])
+  # async def join(self,ctx):
+  #   embed=discord.Embed(title='Join my Server',description='[Click Here to Join](https://discord.gg/RSz98FM7c5)',colour=discord.Colour.blue())  
+  #   await ctx.send(embed=embed)
 
   @commands.command(aliases=['VOTE','Vote'])
   async def vote(self,ctx):
