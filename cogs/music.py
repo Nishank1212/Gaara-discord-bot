@@ -434,14 +434,14 @@ class Music(commands.Cog):
 
 			if total_votes >= round((len(memberss)-1)/2):
 				message = await ctx.send('skipping...')
-				asyncio.sleep(2)
+				await asyncio.sleep(2)
 				await message.edit(content = 'Skipped!')
 				await ctx.message.add_reaction("⏭")
 				ctx.voice_state.skip()
 
 			else:
 				message = await ctx.send('Adding skip vote...')
-				asyncio.sleep(2)
+				await asyncio.sleep(2)
 				await message.edit(content = f'Added Skip Vote! votes currently at {total_votes}/{round((len(memberss)-1)/2)}')
 
 

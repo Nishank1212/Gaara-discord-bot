@@ -80,7 +80,7 @@ class Economy(commands.Cog):
         bankinfo['wallet'] -= wallet
         await ctx.send('All money Deposited')
 
-      if bankinfo['wallet'] < int(amount):
+      elif bankinfo['wallet'] < int(amount):
         await ctx.send('You dont have that much money! :slight_smile:')
 
       else:
@@ -108,7 +108,7 @@ class Economy(commands.Cog):
         bankinfo['bank'] -= bank
         await ctx.send('All money Withdrawn')
 
-      if bankinfo['bank'] < int(amount):
+      elif bankinfo['bank'] < int(amount):
         await ctx.send('You dont have that much money in your bank! :slight_smile:')
 
       else:
