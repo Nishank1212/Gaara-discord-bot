@@ -63,7 +63,7 @@ class Economy(commands.Cog):
         print(bankinfo["wallet"])
         await ctx.send(f'{random.choice(people)} gave you {result} fluxes!')
 
-  @commands.command(aliases=['DEPOSIT','Deposit','Dep','DEP'])
+  @commands.command(aliases=['DEPOSIT','Deposit','Dep','DEP','deposit'])
   async def dep(self,ctx,amount:str):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
@@ -514,7 +514,7 @@ class Economy(commands.Cog):
       return
 
     else:
-      sellable_collectable = {'fishing pole':'object','rabbit':'sellable','deer':'sellable','horse':'sellable','fish':'sellable','rifle':'object'}
+      sellable_collectable = {'fishing pole':'object','rabbit':'sellable','deer':'sellable','horse':'sellable','fish':'sellable','rifle':'object','laptop':'object'}
       embed=discord.Embed(title=f"{member.name}'s Inventory'",colour=discord.Colour.blue())
       for i in bankinfo['inventory']:
         embed.add_field(name=f'{i}',value=f'{sellable_collectable[i]}',inline=True)

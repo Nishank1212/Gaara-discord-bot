@@ -353,6 +353,38 @@ class Music(commands.Cog):
 		).set_footer(text="Viewing page {}/{}".format(page, pages))
 		await ctx.send(embed=embed)
 
+	@commands.command(aliases=['PAUSE','Pause'])
+	async def pause(self,ctx):
+		if ctx.voice_state.is_playing and ctx.voice_state.voice.is_playing:
+			message = await ctx.send("pausing...")
+			await asyncio.sleep(3)
+			await message.edit(content="Paused!")
+			ctx.voice_state.voice.pause()
+			await ctx.message.add_reaction("⏯")
+			
+	
+	@commands.command(aliases=['RESUME','Resume'])
+	async def resume(self,ctx):
+		if ctx.voice_state.is_playing and ctx.voice_state.voice.is_paused:
+			message = await ctx.send("resuming...")
+			await asyncio.sleep(3)
+			await message.edit(content="Resumed!")
+			ctx.voice_state.voice.resume()
+			await ctx.message.add_reaction("⏯")
+		
+
+	@commands.command(aliases=['STOP','Stop'])
+	async def stop(self,ctx):
+
+		ctx.voice_state.songs.clear()
+
+		if ctx.voice_state.is_playing:
+			message = await ctx.send("stopping...")
+			await asyncio.sleep(3)
+			await message.edit(content="Stopped!")
+			ctx.voice_state.voice.stop()
+			await ctx.message.add_reaction("⏹")
+			
 
 	@commands.command(name="play",aliases=['PLAY','Play'])
 	async def _play(self, ctx: commands.Context, *, search: str):
@@ -373,7 +405,51 @@ class Music(commands.Cog):
 
 				await ctx.voice_state.songs.put(song)
 				await ctx.send("Enqueued {}".format(str(source)))
+
+	@commands.command(aliases=['SKIP','Skip'])
+	async def skip(self,ctx):
+		if not ctx.voice_state.is_playing:
+			await ctx.send(':thinking: I think now i shall skip the next time u ask me to play music')
+
+		voter = ctx.author.id
+		if voter == ctx.voice_state.current.requester:
+			message = await ctx.send('skipping...')
+			asyncio.sleep(2)
+			await message.edit(content = 'Skipped!')
+			await ctx.message.add_reaction("⏭")
+			ctx.voice_state.skip()
+
+		
+		elif voter not in ctx.voice_state.skip_votes:
+			ctx.voice_state.skip_votes.add(voter)
+			total_votes = len(ctx.voice_state.skip_votes)
+
+			channel = ctx.author.voice.channel
+			memberss = []
+			for member in channel.members:
+
+				memberss.append(member)
+
 			
+
+			if total_votes >= round((len(memberss)-1)/2):
+				message = await ctx.send('skipping...')
+				asyncio.sleep(2)
+				await message.edit(content = 'Skipped!')
+				await ctx.message.add_reaction("⏭")
+				ctx.voice_state.skip()
+
+			else:
+				message = await ctx.send('Adding skip vote...')
+				asyncio.sleep(2)
+				await message.edit(content = f'Added Skip Vote! votes currently at {total_votes}/{round((len(memberss)-1)/2)}')
+
+
+		else:
+			await ctx.send('You have already voted!')
+
+			
+
 	@_join.before_invoke
 	@_play.before_invoke
 	async def ensure_voice_state(self, ctx: commands.Context):

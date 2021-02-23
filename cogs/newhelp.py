@@ -10,7 +10,7 @@ class Help(commands.Cog):
     if choice == None:
 
       embed=discord.Embed(title='Help Me!',description='this command helps you by providing you commands',colour=discord.Colour.blue())
-      embed.add_field(name='Type these for more information',value='`help general`\n`help starwars`\n`help fun`\n`help games`\n`help animals```\n`help admin`\n`help ChatBot`\n`help economy`\n`help rank`')
+      embed.add_field(name='Type these for more information',value='`help general`\n`help starwars`\n`help fun`\n`help games`\n`help animals`\n`help admin`\n`help ChatBot`\n`help economy`\n`help rank`\n`help music`')
       # embed.set_image(url='https://thumbs.dreamstime.com/b/help-me-abstract-colorful-background-bokeh-design-illustration-isolated-yellow-red-banner-154777299.jpg')
       embed.set_footer(text='Use command prefix "~~" ')
       await ctx.send(embed=embed)
@@ -78,6 +78,12 @@ class Help(commands.Cog):
     elif choice.lower() == 'rank':
       embed=discord.Embed(title='Help Rank',description='Rank commands',colour=discord.Colour.blue())
       embed.add_field(name='commands...',value='`rank - shows the rank of a person`\n`leaderboard - shows the leaderboard of top 5 people`')
+      embed.set_footer(text='Use command prefix "~~" ',icon_url=ctx.author.avatar_url)
+      await ctx.send(embed=embed)
+
+    elif choice.lower() == 'music':
+      embed=discord.Embed(title='Help Music',description='Music commands',colour=discord.Colour.blue())
+      embed.add_field(name='commands...',value='`join - joins vc of the vc u r in`\n`leave - leaves the vc it is in`\n`play - plays a song`\n`skip - skips the current song`\n`queue - shows ur queue`\n`pause - pauses the song`\n`resume - resumes the song`\n`stop - stops the song and clears your queue`')
       embed.set_footer(text='Use command prefix "~~" ',icon_url=ctx.author.avatar_url)
       await ctx.send(embed=embed)
 
