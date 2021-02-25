@@ -74,14 +74,15 @@ class Info(commands.Cog):
 
  
 
-    fields = [("ID", 800219427928801290, False),
-              ("Owner",'<@!793433316258480128>', True),
-              ("Second developer","<@!747451011484090479>",True),
+    fields = [("🆔ID", 800219427928801290, True),
+              ("👑Owner",'<@!793433316258480128>', True),
+              ("🤴Second developer","<@!747451011484090479>",True),
               ("🤖Name", "Gaara",True),
               ("😀No. of servers", int(len(list(self.client.guilds))),True),
               ("📝Invite me","[Click Here to Add Me](https://discord.com/api/oauth2/authorize?client_id=800219427928801290&permissions=8&scope=bot)",True),
-              ('Helping',f'{mh} members',True),
-              ("Join My server","[Click Here To Join](https://discord.gg/RSz98FM7c5)",False)
+              ("⛭GitHub","[Click Here to See GitHub](https://github.com/Nishank1212/Gaara-discord-bot)",True),
+              ('🦮Helping',f'{mh} members',True),
+              ("🦮Join My server","[Click Here To Join](https://discord.gg/RSz98FM7c5)",True)
               ]
               
 
@@ -96,10 +97,15 @@ class Info(commands.Cog):
     embed=discord.Embed(title='Invite Me here',description='[Click Here to Add me](https://discord.com/api/oauth2/authorize?client_id=810818178464612363&permissions=8&scope=bot)',colour=discord.Colour.blue())  
     await ctx.send(embed=embed)
 
-  # @commands.command(aliases=['JOIN','Join'])
-  # async def join(self,ctx):
-  #   embed=discord.Embed(title='Join my Server',description='[Click Here to Join](https://discord.gg/RSz98FM7c5)',colour=discord.Colour.blue())  
-  #   await ctx.send(embed=embed)
+  @commands.command(aliases=['SERVER','Server'])
+  async def server(self,ctx):
+    embed=discord.Embed(title='Join my Server',description='[Click Here to Join](https://discord.gg/RSz98FM7c5)',colour=discord.Colour.blue())  
+    await ctx.send(embed=embed)
+
+  @commands.command(aliases=['GIT','Git','GITHUB','GitHub','Github','github'])
+  async def git(self,ctx):
+    embed=discord.Embed(title='GitHub(star repo)',description='[Click Here to See GitHub](https://github.com/Nishank1212/Gaara-discord-bot)',colour=discord.Colour.blue())  
+    await ctx.send(embed=embed)
 
   @commands.command(aliases=['VOTE','Vote'])
   async def vote(self,ctx):

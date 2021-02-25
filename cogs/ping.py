@@ -20,8 +20,8 @@ class Ping(commands.Cog):
 
   @commands.command(aliases=['INTRODUCTION','Introduction','intro','INTRO','Intro'])
   async def introduction(self,ctx):
-    embed=discord.Embed(title='A little bit about me...',description='Hi I am Grogu, I am made by Nishank I am a multipurpose bot,looking forward for working with you my friend....', colour=discord.Colour.blue())
-    embed.set_image(url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu2-YpR5b5CGTfsCA1JvbD122qPOg0z5206g&usqp=CAU")
+    embed=discord.Embed(title='A little bit about me...',description='Hi I am Gaara, I am made by Nishank I am a multipurpose bot,looking forward for working with you my friend....', colour=discord.Colour.blue())
+    embed.set_image(url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7DKj9PEtmKS7pWPDDEcV3WCt_pB-b7KnbIw&usqp=CAU")
     embed.set_footer(text=f'{ctx.author.name} asked me...Dont Blame me',icon_url=f'{ctx.author.avatar_url}')
     await ctx.send(embed=embed)
 

@@ -1,24 +1,26 @@
 import discord
 from os import getenv 
 from discord.ext import commands, tasks
-# from discore import Utils
-# from discore.ImageManipulation import ImageManipulation
 from itertools import cycle
 from keep_alive import keep_alive
 import os
-# import discore.Utils as dsu
 from PIL import Image
 from io import BytesIO
-import asyncio
+
+import json
 
 # import youtube_dl
 # from youtube_search import YoutubeSearch
 
+def get_prefix(client, message):
+    with open("prefixes.json", "r") as f:
+        prefixes = json.load(f)
+    return prefixes.get(str(message.guild.id), "~~")
 
 
 intents = discord.Intents.all()
 intents.members = True
-client = commands.Bot(command_prefix = '~~',
+client = commands.Bot(command_prefix = get_prefix,
 intents=intents, owner_ids={793433316258480128})
 status = cycle(['Gaara|Ping for more info','Gaara|Ping for more info'])
 client.sniped_messages = {}
@@ -46,9 +48,7 @@ async def on_message(message):
     return
 
 
-  prefix = '~'
-  func_name = message.content.split(' ')[0].replace(prefix, '')
-  # IM = ImageManipulation(message, client, prefix + func_name)
+
   # try:
   # 	await message.channel.send(file=discord.File(await eval(f'IM.{func_name}()')))
   # except:
@@ -70,9 +70,13 @@ async def on_message(message):
 
   if message.content == f'<@!{client.user.id}>':
       
+      with open('prefixes.json','r') as f:
+        prefixes = json.load(f)
+
+      pre = prefixes[str(message.guild.id)]
 
       embed=discord.Embed(colour=discord.Colour.blue())
-      embed.set_author(name='My command prefix is `~~`,type `~~help` for more info',icon_url=message.author.avatar_url)
+      embed.set_author(name=f'My command prefix for this server is `{pre}`,type `{pre}help` for more info',icon_url=message.author.avatar_url)
       await message.channel.send(embed=embed)
 	
   await client.process_commands(message)
@@ -161,25 +165,35 @@ async def snipe(ctx,member:discord.Member=None):
   
 
   if member == None:
-    contents, author, channel_name, time = client.sniped_messages1[ctx.guild.id]
 
-    embed=discord.Embed(description = contents, colour=discord.Colour.blue(),timestamp=time)
-    embed.set_author(name=f'{author.name}#{author.discriminator}',icon_url=author.avatar_url)
-    embed.set_footer(text=f'Deleted in : #{channel_name}')
-    await ctx.send(embed=embed)
-    
-    await ctx.send(f'{author.name} has beened sniped 🔫')
+    try:
+
+      contents, author, channel_name, time = client.sniped_messages1[ctx.guild.id]
+
+      embed=discord.Embed(description = contents, colour=discord.Colour.blue(),timestamp=time)
+      embed.set_author(name=f'{author.name}#{author.discriminator}',icon_url=author.avatar_url)
+      embed.set_footer(text=f'Deleted in : #{channel_name}')
+      await ctx.send(embed=embed)
+      
+      await ctx.send(f'{author.name} has beened sniped 🔫')
+
+    except:
+      await ctx.send('No message to snipe!')
 
   else:
 
-    contents, author, channel_name, time = client.sniped_messages[ctx.guild.id][member.id]
+    try:
+      contents, author, channel_name, time = client.sniped_messages[ctx.guild.id][member.id]
 
-    embed=discord.Embed(description = contents, colour=discord.Colour.blue(),timestamp=time)
-    embed.set_author(name=f'{member.name}#{member.discriminator}',icon_url=member.avatar_url)
-    embed.set_footer(text=f'Deleted in : #{channel_name}')
-    await ctx.send(embed=embed)
-    
-    await ctx.send(f'{member.name} has beened sniped 🔫')
+      embed=discord.Embed(description = contents, colour=discord.Colour.blue(),timestamp=time)
+      embed.set_author(name=f'{member.name}#{member.discriminator}',icon_url=member.avatar_url)
+      embed.set_footer(text=f'Deleted in : #{channel_name}')
+      await ctx.send(embed=embed)
+      
+      await ctx.send(f'{member.name} has beened sniped 🔫')
+
+    except:
+      await ctx.send('No message to snipe!')
 
 
 
@@ -223,11 +237,6 @@ async def admin(ctx,member1:discord.Member,member2:discord.Member,member3:discor
     im.save('adminned.jpg')
     await ctx.send(file=discord.File('adminned.jpg'))
 
-@client.command()
-async def test(ctx):
-  message = await ctx.send("hello")
-  await asyncio.sleep(5)
-  await message.edit(content="newcontent")
 
 @client.command()
 async def team(ctx,member1:discord.Member,member2:discord.Member,member3:discord.Member,member4:discord.Member,member5:discord.Member,member6:discord.Member,member7:discord.Member,member8:discord.Member):
@@ -288,6 +297,40 @@ async def team(ctx,member1:discord.Member,member2:discord.Member,member3:discord
     im.save('teamed.jpg')
     await ctx.send(file=discord.File('teamed.jpg'))
 
+@client.event
+async def on_guild_join(guild):
+
+  with open("prefixes.json",'r') as f:
+    prefixes = json.load(f)
+
+  prefixes[str(guild.id)] = '~~'
+
+  with open('prefixes.json','w'):
+    json.dump(prefixes,f,indent=4)
+
+
+@client.command()
+@commands.has_permissions(administrator = True)
+async def setprefix(ctx,prefix):
+
+  with open('prefixes.json','r') as f:
+    prefixes = json.load(f)
+
+  prefixes[str(ctx.guild.id)] = prefix
+
+  with open('prefixes.json','w') as f:
+    json.dump(prefixes,f)
+
+  await ctx.send(f'The prefix was changed to {prefix}')
+
+@client.command(aliases=['cre','Cre','CRE','Creditz','CREDITZ','creditz','CREDITS','Credits'])
+async def credits(ctx):
+  embed=discord.Embed(title='Credits',description='Contributors for the bot',colour=discord.Colour.blue())
+  embed.add_field(name=':eyes: Nishank',value='Creator/owner')
+  embed.add_field(name=':slight_smile: Dr_Gamer',value='Helping Mostly in Music!!! ')
+  embed.add_field(name=':sunglasses: oklahoma_bot',value='Helping in rank system and other problems...')
+  embed.add_field(name=':eyes: Entropy',value='Helping in chatbot and debugging...')
+  await ctx.send(embed=embed)
 
 keep_alive()
 

@@ -48,8 +48,11 @@ class secret(commands.Cog):
 
         # Check for level promotion
         if exp in level_check_point:
-            update_level(message.author.id)
-            await message.channel.send(f'Congratulations {message.author.mention} You are now level {lvl}🎉🥳!!!')
+            if exp == 0:
+              pass
+            else:
+              update_level(message.author.id)
+              await message.channel.send(f'Congratulations {message.author.mention} You are now level {lvl}🎉🥳!!!')
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):

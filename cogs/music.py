@@ -326,7 +326,7 @@ class Music(commands.Cog):
 
 		await ctx.voice_state.stop()
 		embed = discord.Embed(
-		title="Left! sorry for upseting you :pleading_face:", color=0xFF0000
+		title="Left! sorry for upseting you :pleading_face:", color=discord.Colour.blue()
 		)
 		await ctx.send(embed=embed)
 
@@ -398,7 +398,7 @@ class Music(commands.Cog):
 				ctx, search, loop=self.client.loop
 					)
 			except YTDLError as e:
-				await ctx.send("**An error occured **: {}".format(str(e)))
+				await ctx.send("**Bruh**: {}".format(str(e)))
 
 			else:
 				song = Song(source)

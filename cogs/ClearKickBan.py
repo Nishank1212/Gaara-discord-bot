@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import asyncio
 
 class eightball(commands.Cog):
   def __init__(self,client):
@@ -9,6 +10,9 @@ class eightball(commands.Cog):
   @commands.has_permissions(manage_messages=True)
   async def clear(self,ctx, amount : int):
     await ctx.channel.purge(limit= amount+1)
+    message = await ctx.send(f'{amount} messages deleted by Me on Command of {ctx.author.mention}')
+    await asyncio.sleep(3)
+    await message.delete()
 
 
   @commands.command(aliases=['Kick','KICK'])
