@@ -6,6 +6,7 @@ from keep_alive import keep_alive
 import os
 from PIL import Image
 from io import BytesIO
+import random
 
 import json
 
@@ -81,20 +82,32 @@ async def on_message(message):
 	
   await client.process_commands(message)
 
-@client.event
-async def on_member_remove(member):
-	embed=discord.Embed(title='We will miss you...',description='Hope you come back',colour=discord.Colour.blue())
-	embed.set_image(url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAO9PYZJ_QJye90N9bgbnp0CiUXM5SkvyDVA&usqp=CAU')
-	await member.send(embed=embed)
-
 
 @client.event
 async def on_member_join(member):
-  #await member.channel.send(f'{member.mention} left the server')
-  embed=discord.Embed(title='Welcome to Our Group',description='Hope you Enjoy here',colour=discord.Colour.blue())
-  embed.set_image(url='https://image.freepik.com/free-vector/colorful-welcome-composition-with-origami-style_23-2147907810.jpg')
+  
+      with open('welcome.json','r') as f:
+        message = json.load(f)
 
-  await member.send(embed=embed)
+      messages = message[str(member.guild.id)]
+      print(messages)
+     
+      with open('channel.json','r') as f:
+        channelid = json.load(f)
+
+      channel = channelid[str(member.guild.id)]
+      print(channel)
+
+      await client.get_channel(int(channel)).send(f"{member.mention}\n{messages}")
+
+      
+      
+    
+
+
+async def on_member_remove(member):
+    channel = discord.utils.get(member.guild.text_channels, name="welcome")
+    await channel.send(f"{member} has left :-(!")
 
 
 # @client.event
@@ -313,15 +326,33 @@ async def on_guild_join(guild):
 @commands.has_permissions(administrator = True)
 async def setprefix(ctx,prefix):
 
-  with open('prefixes.json','r') as f:
-    prefixes = json.load(f)
+  # letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 
-  prefixes[str(ctx.guild.id)] = prefix
+  # letter = prefix.split()
 
-  with open('prefixes.json','w') as f:
-    json.dump(prefixes,f)
+  # if letter[-1] in letters:
+  #   with open('prefixes.json','r') as f:
+  #     prefixes = json.load(f)
 
-  await ctx.send(f'The prefix was changed to {prefix}')
+  #   prefixes[str(ctx.guild.id)+ ' '] = prefix 
+
+  #   with open('prefixes.json','w') as f:
+  #     json.dump(prefixes,f)
+
+  #   await ctx.send(f'The prefix was changed to {prefix}')
+
+  # else:
+
+
+    with open('prefixes.json','r') as f:
+      prefixes = json.load(f)
+
+    prefixes[str(ctx.guild.id)] = prefix
+
+    with open('prefixes.json','w') as f:
+      json.dump(prefixes,f)
+
+    await ctx.send(f'The prefix was changed to {prefix}')
 
 @client.command(aliases=['cre','Cre','CRE','Creditz','CREDITZ','creditz','CREDITS','Credits'])
 async def credits(ctx):
@@ -331,6 +362,49 @@ async def credits(ctx):
   embed.add_field(name=':sunglasses: oklahoma_bot',value='Helping in rank system and other problems...')
   embed.add_field(name=':eyes: Entropy',value='Helping in chatbot and debugging...')
   await ctx.send(embed=embed)
+
+@client.command(aliases=['Lenny','LENNY'])
+async def lenny(ctx):
+  lenny = ['( ͡° ͜ʖ ͡°)','( ‾ʖ̫‾)','(☭ ͜ʖ ☭)','(ᴗ ͜ʖ ᴗ)','(° ͜ʖ °)','( ಠ ͜ʖಠ)','( ° ͜ʖ °)','(⟃ ͜ʖ ⟄) ','( ‾ ʖ̫ ‾)','(͠≖ ͜ʖ͠≖)','( ✧≖ ͜ʖ≖)','(✿❦ ͜ʖ ❦)','(▀̿Ĺ̯▀̿ ̿)']
+
+  await ctx.send(random.choice(lenny))
+
+@client.command()
+@commands.has_permissions(administrator=True)
+async def set_welcome_message(ctx,*,message):
+  with open("welcome.json",'r') as f:
+    welcome = json.load(f)
+
+  welcome[str(ctx.guild.id)] = message
+
+  with open('welcome.json','w') as f:
+    json.dump(welcome,f)
+  
+  await ctx.send(f'Welcome message set to ```welcome member! {message}```')
+
+
+@client.command()
+@commands.has_permissions(administrator=True)
+async def set_welcome_channel(ctx,id:int):
+  ids = []
+  for i in ctx.guild.channels:
+    ids.append(i.id)
+
+  if id in ids:
+    await ctx.send('Welcome Channel Set!')
+
+    with open("channel.json",'r') as f:
+      channel = json.load(f)
+
+    channel[str(ctx.guild.id)] = id
+
+    with open("channel.json",'w') as f:
+      json.dump(channel,f)
+
+  else:
+    await ctx.send('invalid id provided')
+
+
 
 keep_alive()
 

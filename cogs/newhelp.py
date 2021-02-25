@@ -30,7 +30,7 @@ class Help(commands.Cog):
       embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
 
   
-      embed.add_field(name='cmds part 2',value='`invertgrey - inverts a persons avatar to grey scale`\n`blue - gives a blue tint of an avatar of a member`\n`bright - brightens the colours of the members avatar`\n`bye - says bye to a person`\n`remind - reminds you by pinging after specific amount of time`\n`userinfo - sends info about a person`\n`serverinfo - sends info about server`\n`mem - Shares the total amount of people in the server`\n`credits - shows the credits of the bot`\n`botinfo -tells about the bot`',inline='False')
+      embed.add_field(name='cmds part 2',value='`invertgrey - inverts a persons avatar to grey scale`\n`blue - gives a blue tint of an avatar of a member`\n`bright - brightens the colours of the members avatar`\n`bye - says bye to a person`\n`remind - reminds you by pinging after specific amount of time`\n`userinfo - sends info about a person`\n`serverinfo - sends info about server`\n`mem - Shares the total amount of people in the server`\n`credits - shows the credits of the bot`\n`botinfo -tells about the bot`\n`lenny - returns a lenny face`',inline='False')
       await ctx.send(embed=embed)
      
 

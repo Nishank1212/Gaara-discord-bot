@@ -204,6 +204,18 @@ version = "1.0.1"
 
 [[package]]
 category = "main"
+description = "A versatile LavaLink wrapper for Discord.py"
+name = "wavelink"
+optional = false
+python-versions = ">=3.7"
+version = "0.9.8"
+
+[package.dependencies]
+aiohttp = ">=3.6.0,<3.8.0"
+"discord.py" = ">=1.2.5"
+
+[[package]]
+category = "main"
 description = "The comprehensive WSGI web application library."
 name = "werkzeug"
 optional = false
@@ -235,7 +247,7 @@ python-versions = "*"
 version = "2021.2.4.1"
 
 [metadata]
-content-hash = "05cac07d0d52e74016377cbb86c611678890dc017e755183e2c149226ec3729e"
+content-hash = "7479f58f247ab3dfdb613b6eacec8c45ad0edd591e360d59261ef6f8ace91806"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -492,6 +504,10 @@ typing-extensions = [
 ]
 utils = [
     {file = "utils-1.0.1-py2.py3-none-any.whl", hash = "sha256:ff04549b95deb2fd7a82ddaea077e2f41209079e2482df231c358770b27b72a7"},
+]
+wavelink = [
+    {file = "wavelink-0.9.8-py3-none-any.whl", hash = "sha256:448687feb51d7dcc9150dd10d121853ee5acc44627977d183337513dcb9f73d7"},
+    {file = "wavelink-0.9.8.tar.gz", hash = "sha256:7eecd82817993c858b8e97751834392c2821987b9ae4d3f26638781f1d5d9c3b"},
 ]
 werkzeug = [
     {file = "Werkzeug-1.0.1-py2.py3-none-any.whl", hash = "sha256:2de2a5db0baeae7b2d2664949077c2ac63fbd16d98da0ff71837f7d1dea3fd43"},
