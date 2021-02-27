@@ -118,7 +118,7 @@ class Economy(commands.Cog):
 
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
 
-  @commands.command(aliases=['SLOTS','Slots'])
+  @commands.command(aliases=['SLOTS','Slots'],cooldown_after_parsing=True)
   @commands.cooldown(1, 20, commands.BucketType.user)
   async def slots(self,ctx,amount:int):
 
@@ -161,7 +161,7 @@ class Economy(commands.Cog):
         collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
       
 
-  @commands.command(aliases=['ROB','Rob'])
+  @commands.command(aliases=['ROB','Rob'],cooldown_after_parsing=True)
   
   @commands.cooldown(1,120, commands.BucketType.user)
   async def rob(self,ctx,member:discord.Member = None):

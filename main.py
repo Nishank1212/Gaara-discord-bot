@@ -7,8 +7,10 @@ import os
 from PIL import Image
 from io import BytesIO
 import random
-
+import wikipedia
 import json
+import aiohttp
+import requests
 
 # import youtube_dl
 # from youtube_search import YoutubeSearch
@@ -35,12 +37,23 @@ chat_author_id = 0
 
 @client.event
 async def on_ready():
-  
-    
-
-
   change_status.start()
   print('Bot is ready')
+
+
+@client.command()
+async def wiki(ctx, *, msg):
+  try:
+      content = wikipedia.summary(msg, auto_suggest=False, redirect=True)
+
+      embed = discord.Embed(title="Wikipedia", colour=discord.Colour.blue())
+      chunks = [content[i : i + 1024] for i in range(0, len(content), 2000)]
+      for chunk in chunks:
+          embed.add_field(name="\u200b", value=chunk, inline=False)
+      await ctx.send(embed=embed)
+  except:
+      await ctx.send("**Failed to get information**")
+
 
 @client.event
 async def on_message(message):
@@ -59,6 +72,7 @@ async def on_message(message):
 
     if message.author.id == 793433316258480128:
       await message.channel.send('no u')
+
 #Entropy was here!
   # if message.content.lower() == 'lol' or message.content.lower() == 'lmao':
   #    await message.channel.send('lol so funny hahaha')
@@ -70,11 +84,18 @@ async def on_message(message):
   #    await message.channel.send('bye! May the force be with you')
 
   if message.content == f'<@!{client.user.id}>':
-      
-      with open('prefixes.json','r') as f:
-        prefixes = json.load(f)
 
-      pre = prefixes[str(message.guild.id)]
+      try:
+      
+        with open('prefixes.json','r') as f:
+          prefixes = json.load(f)
+
+        pre = prefixes[str(message.guild.id)]
+
+      except:
+        pre ='~~'
+
+    
 
       embed=discord.Embed(colour=discord.Colour.blue())
       embed.set_author(name=f'My command prefix for this server is `{pre}`,type `{pre}help` for more info',icon_url=message.author.avatar_url)
@@ -99,31 +120,6 @@ async def on_member_join(member):
       print(channel)
 
       await client.get_channel(int(channel)).send(f"{member.mention}\n{messages}")
-
-      
-      
-    
-
-
-async def on_member_remove(member):
-    channel = discord.utils.get(member.guild.text_channels, name="welcome")
-    await channel.send(f"{member} has left :-(!")
-
-
-# @client.event
-# async def on_message(message):
-
-#   if message.author == client.user:
-#     return
-
-#   prefix = '~'
-#   func_name = message.content.split(' ')[0].replace(prefix, '')
-#   IM = ImageManipulation(message, client, prefix + func_name)
-#   try:
-#     await message.channel.send(file=discord.File(await eval(f'IM.{func_name}()')))
-#   except:
-#     pass
-
 
 @tasks.loop(seconds=3600)
 async def change_status():
@@ -171,7 +167,7 @@ async def gaara(ctx):
 
 @client.event
 async def on_message_delete(message):
-  client.sniped_messages[message.guild.id] = {message.author.id:(message.content,message.author,message.channel.name,message.created_at)}
+  client.sniped_messages[message.guild.id][message.author.id] = (message.content,message.author,message.channel.name,message.created_at)
   client.sniped_messages1[message.guild.id] = (message.content,message.author,message.channel.name,message.created_at)
 @client.command()
 async def snipe(ctx,member:discord.Member=None):
@@ -203,10 +199,11 @@ async def snipe(ctx,member:discord.Member=None):
       embed.set_footer(text=f'Deleted in : #{channel_name}')
       await ctx.send(embed=embed)
       
-      await ctx.send(f'{member.name} has beened sniped 🔫')
+      await ctx.send(f'{member.name} has been sniped 🔫')
 
-    except:
-      await ctx.send('No message to snipe!')
+    except KeyError:
+      await ctx.send('No message found')
+
 
 
 
@@ -369,42 +366,83 @@ async def lenny(ctx):
 
   await ctx.send(random.choice(lenny))
 
+@client.command(aliases=['ASCII','Ascii'])
+async def ascii(ctx,word):
+
+     async with aiohttp.ClientSession() as session:
+                #
+                async with session.get(
+                    f"https://artii.herokuapp.com/make?text={word}"
+                ) as response:
+                    #
+                    fancy_text = await response.text()
+                    await ctx.send(f"```{fancy_text}```")
+                    await ctx.send(f"{ctx.author.mention}")
+
 @client.command()
-@commands.has_permissions(administrator=True)
-async def set_welcome_message(ctx,*,message):
-  with open("welcome.json",'r') as f:
-    welcome = json.load(f)
+async def calc(ctx,*,expression):
+  calculator = expression.replace("+", "%2B")
+  calculator = calculator.replace('x','*')
+  async with aiohttp.ClientSession() as session:
+                #
+    async with session.get(f"https://api.mathjs.org/v4/?expr={calculator}") as response:
 
-  welcome[str(ctx.guild.id)] = message
+      answer = await response.text()
+      embed=discord.Embed(title='Expression',description=f'```{expression}```',colour=discord.Colour.blue())
+      embed.add_field(name='Answer!',value=f'```{answer}```')
 
-  with open('welcome.json','w') as f:
-    json.dump(welcome,f)
-  
-  await ctx.send(f'Welcome message set to ```welcome member! {message}```')
+      embed.set_author(name='Calculator',icon_url='https://www.webretailer.com/wp-content/uploads/2018/10/Flat-calculator-representing-Amazon-FBA-calculators.png')
 
+      await ctx.send(embed=embed)
 
-@client.command()
-@commands.has_permissions(administrator=True)
-async def set_welcome_channel(ctx,id:int):
-  ids = []
-  for i in ctx.guild.channels:
-    ids.append(i.id)
+@client.command(aliases=["lyrics"])
+async def ly(ctx, *, lyrics):
+    if lyrics is None:
+        await ctx.send("You forgot lyrcis")
+    else:
+        words = "+".join(lyrics.split(" "))
+        print(words)
+        URL = f"https://some-random-api.ml/lyrics?title={words}"
 
-  if id in ids:
-    await ctx.send('Welcome Channel Set!')
+        def check_valid_status_code(request):
+            if request.status_code == 200:
+                return request.json()
 
-    with open("channel.json",'r') as f:
-      channel = json.load(f)
+            return False
 
-    channel[str(ctx.guild.id)] = id
+        def get_song():
+            request = requests.get(URL)
+            data = check_valid_status_code(request)
 
-    with open("channel.json",'w') as f:
-      json.dump(channel,f)
+            return data
 
-  else:
-    await ctx.send('invalid id provided')
+        song = get_song()
+        if not song:
+            await ctx.channel.send("Couldn't get lyrcis from API. Try again later.")
 
+        else:
+            music = song["lyrics"]
+            ti = song["title"]
+            au = song["author"]
 
+            embed = discord.Embed(
+                timestamp=ctx.message.created_at,
+                Title="Title: Song",
+                color=discord.Colour.blue()
+            )
+
+            embed.add_field(name=f"Title: {ti}", value=f"Author: {au}")
+            embed.set_thumbnail(url=song['thumbnail']['genius'])
+            chunks = [music[i : i + 1024] for i in range(0, len(music), 2000)]
+            for chunk in chunks:
+                embed.add_field(name="\u200b", value=chunk, inline=False)
+
+            # embed.add_field(name='Song',value=f'{music}', inline=True)
+            embed.set_footer(
+                text=f"{song['links']['genius']}",
+                icon_url=f"{ctx.author.avatar_url}",
+            )
+            await ctx.send(embed=embed)
 
 keep_alive()
 

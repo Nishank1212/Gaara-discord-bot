@@ -14,6 +14,7 @@ utils = "^1.0.1"
 youtube-dl = "^2021.2.4"
 replit = "^2.0.0"
 wavelink = "^0.9.8"
+wikipedia = "^1.4.0"
 
 [tool.poetry.dev-dependencies]
 

@@ -8,17 +8,11 @@ class Info(commands.Cog):
   def __init__(self,client):
     self.client = client
 
-  # @commands.Cog.listener()
-  # async def on_member_join(self, member):
-  #   ment = member.mention
-  #   await self.client.get_channel(796555862487203880).send(f"{ment} has joined the server Welcome!.")
-  #   print(f"{member} has joined the server.")
-
-  # @commands.Cog.listener()
-  # async def on_member_remove(self, member):
-  #   ment = member.mention
-  #   await self.client.get_channel(796555862487203880).send(f"{ment} has Left the server :-(!.")
-  #   print(f"{member} has left the server.")
+  @commands.Cog.listener()
+  async def on_member_remove(self, member):
+    ment = member.mention
+    await self.client.get_channel(796555862487203880).send(f"{ment} has Left/removed the server :-(!.")
+    print(f"{member} has left the server.")
 
   @commands.command(aliases=['UI','ui','Ui','USERINFO','Userinfo','info','INFO','Info','UserInfo'])
   async def userinfo(self,ctx, target: Optional[Member]):
@@ -28,13 +22,13 @@ class Info(commands.Cog):
 
     embed.set_thumbnail(url=target.avatar_url)
 
-    fields = [("ID", target.id, False),
-              ("Name", str(target),True),
-              ("Bot?", target.bot, True),
-              ("Top role",target.top_role.mention, True),
-              ("Status", str(target.status).title(), True),
-              ("Created at", target.created_at.strftime("%d/%m/%Y %H:%M:%S"), True),
-              ("Joined at", target.joined_at.strftime("%d/%m/%Y %H:%M:%S"), True)]
+    fields = [("🆔ID", target.id, False),
+              ("🤴Name", str(target),True),
+              ("🤖Bot?", target.bot, True),
+              (":crown:Top role",target.top_role.mention, True),
+              (":blue_circle:Status", str(target.status).title(), True),
+              (":clock10:Created at", str(target.created_at)[0:11], True),
+              (":clock1:Joined at", str(target.joined_at)[0:11], True)]
 
     for name,value,inline in fields:
       embed.add_field(name=name,value=value,inline=inline)
@@ -48,20 +42,20 @@ class Info(commands.Cog):
 
     embed.set_thumbnail(url=ctx.guild.icon_url)
 
-    fields = [("ID",ctx.guild.id, True),
-              ("Owner",ctx.guild.owner.mention, True),
-              ("Region",ctx.guild.region, True),
-              ("Created at",ctx.guild.created_at.strftime("%d/%m/%Y %H:%M:%S"), True),
-              ("Members",len(ctx.guild.members), True),
-              ("Humans",len(list(filter(lambda m: not m.bot,ctx.guild.members))),True),
-              ("Bots",len(list(filter(lambda m:m.bot,ctx.guild.members))),True),
-              ("Banned members",len(await ctx.guild.bans()),True),
+    fields = [("🆔ID",ctx.guild.id, True),
+              ("👑Owner",ctx.guild.owner.mention, True),
+              (":earth_asia:Region",ctx.guild.region, True),
+              (":alarm_clock:Created at",str(ctx.guild.created_at)[0:11], True),
+              (":100:Members",len(ctx.guild.members), True),
+              (":man::woman:Humans",len(list(filter(lambda m: not m.bot,ctx.guild.members))),True),
+              ("🤖Bots",len(list(filter(lambda m:m.bot,ctx.guild.members))),True),
+              ("❌Banned members",len(await ctx.guild.bans()),True),
              
-              ("Text Channels",len(ctx.guild.text_channels),True),
-              ("Voice Channels",len(ctx.guild.voice_channels),True),
-              ("Categories",len(ctx.guild.categories),True),
-              ("Roles",len(ctx.guild.roles),True),
-              ("Invites",len(await ctx.guild.invites()),True),
+              ("📜Text Channels",len(ctx.guild.text_channels),True),
+              ("🎵Voice Channels",len(ctx.guild.voice_channels),True),
+              ("🗃️Categories",len(ctx.guild.categories),True),
+              ("🤴Roles",len(ctx.guild.roles),True),
+              ("📝Invites",len(await ctx.guild.invites()),True),
               ("\u200b","\u200b",True),]
 
     for name,value,inline in fields:

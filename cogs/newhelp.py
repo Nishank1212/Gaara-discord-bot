@@ -9,15 +9,20 @@ class Help(commands.Cog):
 
   @commands.command(aliases=['HELP','Help'])
   async def help(self,ctx,choice=None):
-    with open('prefixes.json','r') as f:
-        prefixes = json.load(f)
 
-    pre = prefixes[str(ctx.guild.id)]
+    try:
+      with open('prefixes.json','r') as f:
+          prefixes = json.load(f)
+
+      pre = prefixes[str(ctx.guild.id)]
+
+    except:
+      pre = '~~'
 
     if choice == None:
 
       embed=discord.Embed(title='Help Me!',description='this command helps you by providing you commands',colour=discord.Colour.blue())
-      embed.add_field(name='Type these for more information',value='`help general`\n`help starwars`\n`help fun`\n`help games`\n`help animals`\n`help admin`\n`help ChatBot`\n`help economy`\n`help rank`\n`help music`\n`help bot`')
+      embed.add_field(name='Type these for more information',value='`help general`\n`help fun`\n`help games`\n`help animals`\n`help admin`\n`help ChatBot`\n`help economy`\n`help rank`\n`help music`\n`help bot`')
       # embed.set_image(url='https://thumbs.dreamstime.com/b/help-me-abstract-colorful-background-bokeh-design-illustration-isolated-yellow-red-banner-154777299.jpg')
       embed.set_footer(text=f'Use command prefix "{pre}" ')
       await ctx.send(embed=embed)
@@ -25,12 +30,12 @@ class Help(commands.Cog):
     elif choice.lower() == 'general':
 
       embed=discord.Embed(title='Help General',description='This shows all the general commands',colour=discord.Colour.blue())
-      embed.add_field(name='Commands',value='`welcome - Welcomes a person to the group`\n`hi - Says hi to a person`\n`Avatar - Sends the avatar of a person`\n`intro - Introduces the bot`\n`totalcmds - says the total number of commands in the bot`\n`ping - Sends the latency of bot`\n`say - Says what you want Grogu to say`\n`invert - Inverts the colours of the avatar of specified person`\n`wasted - Wastes a picture of any persons avatar you choose`')
+      embed.add_field(name='Commands',value='`welcome - Welcomes a person to the group`\n`hi - Says hi to a person`\n`Avatar - Sends the avatar of a person`\n`intro - Introduces the bot`\n`totalcmds - says the total number of commands in the bot`\n`ping - Sends the latency of bot`\n`say - Says what you want Grogu to say`\n`invert - Inverts the colours of the avatar of specified person`\n`wasted - Wastes a picture of any persons avatar you choose`\n`calc-calculates an expression`\n`lyrics - shares the lyrics of the song`\n`ascii - asciis any text`\n`wiki = searches anything in wikipedia`')
       #embed.set_image(url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUUE1iPh_mNvgXUQi7oQ2rhJ-0Enf5NZWrrA&usqp=CAU')
       embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
 
   
-      embed.add_field(name='cmds part 2',value='`invertgrey - inverts a persons avatar to grey scale`\n`blue - gives a blue tint of an avatar of a member`\n`bright - brightens the colours of the members avatar`\n`bye - says bye to a person`\n`remind - reminds you by pinging after specific amount of time`\n`userinfo - sends info about a person`\n`serverinfo - sends info about server`\n`mem - Shares the total amount of people in the server`\n`credits - shows the credits of the bot`\n`botinfo -tells about the bot`\n`lenny - returns a lenny face`',inline='False')
+      embed.add_field(name='cmds part 2',value='`invertgrey - inverts a persons avatar to grey scale`\n`blue - gives a blue tint of an avatar of a member`\n`bright - brightens the colours of the members avatar`\n`bye - says bye to a person`\n`remind - reminds you by pinging after specific amount of time`\n`userinfo - sends info about a person`\n`serverinfo - sends info about server`\n`mem - Shares the total amount of people in the server`\n`credits - shows the credits of the bot`\n`botinfo -tells about the bot`\n`lenny - returns a lenny face`\n`swd - returns star wars dialogues`',inline='False')
       await ctx.send(embed=embed)
      
 
@@ -50,13 +55,6 @@ class Help(commands.Cog):
       embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
       await ctx.send(embed=embed)
 
-    elif choice.lower() == 'starwars':
-      embed=discord.Embed(title='Help Star Wars',description='This shows all the star wars commands',colour=discord.Colour.blue())
-      embed.add_field(name='Commands',value='`starwarsdialogues`\n`starwars  - shows info on famous characters on starwars(working..)`')
-      #embed.set_image(url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1LrwuUhm18xvpPQcqjcD_fs9z2f9DF2_cQ&usqp=CAU')
-      embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
-      await ctx.send(embed=embed)
-
     elif choice.lower() == 'animals':
       embed=discord.Embed(title='Help Animals',description='This shows all the animal commands',colour=discord.Colour.blue())
       embed.add_field(name='Commands',value='`cat - Shows a picture of a cat`\n`dog - Shows a picture of a dog`\n`fox - shows a picture of a fox`\n`panda - shows a picture or a panda`\n`koala - shows a picture of a koala`\n`bird - shows a picture of a bird`')
@@ -66,7 +64,7 @@ class Help(commands.Cog):
 
     elif choice.lower() == 'admin':
       embed=discord.Embed(title='Help Admin',description='admin commands',colour=discord.Colour.blue())
-      embed.add_field(name='commands...',value='`kick - Kicks a person out of server`\n`ban - Bans a person from the server`\n`unban - Unbans a person from a server if he is banned`\n`warn - warns a person(5 warns = banned)`\n`case - shows how many warns`\n`cw - clears all warns`\n`setprefix - sets the prefix to anything you want`\n`addrole - adds a role to any person`\n`unrole - removes a role from a person`')
+      embed.add_field(name='commands...',value='`kick - Kicks a person out of server`\n`ban - Bans a person from the server`\n`unban - Unbans a person from a server if he is banned`\n`warn - warns a person(5 warns = banned)`\n`case - shows how many warns`\n`cw - clears all warns`\n`setprefix - sets the prefix to anything you want`\n`addrole - adds a role to any person`\n`unrole - removes a role from a person`\n`set_welcome_message(swm) - sets a welcome message for new members`\n`set_welcome_channel(swc) - provide a chanel id where it will send the welcome message`')
       embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
       await ctx.send(embed=embed)
 
