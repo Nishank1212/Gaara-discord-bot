@@ -8,12 +8,6 @@ class Info(commands.Cog):
   def __init__(self,client):
     self.client = client
 
-  @commands.Cog.listener()
-  async def on_member_remove(self, member):
-    ment = member.mention
-    await self.client.get_channel(796555862487203880).send(f"{ment} has Left/removed the server :-(!.")
-    print(f"{member} has left the server.")
-
   @commands.command(aliases=['UI','ui','Ui','USERINFO','Userinfo','info','INFO','Info','UserInfo'])
   async def userinfo(self,ctx, target: Optional[Member]):
     target = target or ctx.author

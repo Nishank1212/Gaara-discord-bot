@@ -73,6 +73,8 @@ class secret(commands.Cog):
              await ctx.send(embed=embed)
 
 
+
+
         else:
           raise error
 

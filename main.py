@@ -11,6 +11,7 @@ import wikipedia
 import json
 import aiohttp
 import requests
+from aiohttp import ClientSession
 
 # import youtube_dl
 # from youtube_search import YoutubeSearch
@@ -58,50 +59,72 @@ async def wiki(ctx, *, msg):
 @client.event
 async def on_message(message):
 
-  if message.author == client.user:
-    return
 
 
+    if message.author == client.user:
+      return
 
-  # try:
-  # 	await message.channel.send(file=discord.File(await eval(f'IM.{func_name}()')))
-  # except:
-  #   None
-	
-  if message.content.lower() == 'no u':
+  #   with open('moderation.json','r') as f:
 
-    if message.author.id == 793433316258480128:
-      await message.channel.send('no u')
+  #     mod = json.load(f)
 
-#Entropy was here!
-  # if message.content.lower() == 'lol' or message.content.lower() == 'lmao':
-  #    await message.channel.send('lol so funny hahaha')
+  # #try:
+  #   moderation = mod[str(message.guild.id)]
+  #   msg  = message.content.replace(' ','')
+  #   a = list(msg)
+  #   caps = 0
+  #   for m in a:
+  #     #try:
+  #       if m.isupper():
+  #         caps += 1
+  #         if str(moderation).isdigit():
+  #           if caps >= int(moderation):
 
-  # if message.content.lower() == 'hi':
-  #    await message.channel.send('HI DA')
+  #             #try:
+  #               await message.delete()
+  #               msg1 = await message.channel.send(f"{message.author}'s message got deleted cause of too many caps!!!")
+  #               await asyncio.sleep(5)
+  #               await msg1.delete()
 
-  # if message.content.lower() == 'bye':
-  #    await message.channel.send('bye! May the force be with you')
+  #             #except:
+  #               pass#await message.channel.send('I do not have perms but too many caps are being used')
 
-  if message.content == f'<@!{client.user.id}>':
+  #           else:
+  #             pass
+            
+  #     #except:
+  #       #pass
 
-      try:
+  # #except:
+  #   #pass
+
+
+    if message.content.lower() == 'no u':
+
+      if message.author.id == 793433316258480128:
+        await message.channel.send('no u')
+
+    if message.content == f'<@!{client.user.id}>':
+
+        try:
+        
+          with open('prefixes.json','r') as f:
+            prefixes = json.load(f)
+
+          pre = prefixes[str(message.guild.id)]
+
+        except:
+          pre ='~~'
+
       
-        with open('prefixes.json','r') as f:
-          prefixes = json.load(f)
 
-        pre = prefixes[str(message.guild.id)]
-
-      except:
-        pre ='~~'
+        embed=discord.Embed(colour=discord.Colour.blue())
+        embed.set_author(name=f'My command prefix for this server is `{pre}`,type `{pre}help` for more info',icon_url=message.author.avatar_url)
+        await message.channel.send(embed=embed)
 
     
-
-      embed=discord.Embed(colour=discord.Colour.blue())
-      embed.set_author(name=f'My command prefix for this server is `{pre}`,type `{pre}help` for more info',icon_url=message.author.avatar_url)
-      await message.channel.send(embed=embed)
-	
-  await client.process_commands(message)
+    
+    await client.process_commands(message)
 
 
 @client.event
@@ -165,147 +188,62 @@ async def gaara(ctx):
 
   await ctx.send(embed=embed)
 
-@client.event
-async def on_message_delete(message):
-  client.sniped_messages[message.guild.id][message.author.id] = (message.content,message.author,message.channel.name,message.created_at)
-  client.sniped_messages1[message.guild.id] = (message.content,message.author,message.channel.name,message.created_at)
+# @client.event
+# async def on_message_delete(message):
+#   client.sniped_messages[message.author.id] = (message.content,message.author,message.channel.name,message.created_at)
+#   client.sniped_messages1[message.guild.id] = (message.content,message.author,message.channel.name,message.created_at)
+
 @client.command()
-async def snipe(ctx,member:discord.Member=None):
+@commands.has_permissions(administrator=True)
+async def create(ctx,typ,*,name):
+  if typ.lower() == 'text':
+     name.replace(' ','-')
+     await ctx.guild.create_text_channel(f'{name}')
+     await ctx.send(f'Text channel created by name {name}')
   
+@client.command()
+@commands.has_permissions(administrator=True)
+async def delete(ctx,typ,*,name):
+  if typ.lower() == 'text':
+     name.replace(' ','-')
+     existing_channel = discord.utils.get(ctx.guild.channels, name=name)
+     if existing_channel is not None:
 
-  if member == None:
+      await  existing_channel.delete()
+      await ctx.send(f'Text channel deleted by name {name}')
 
-    try:
+     else:
+      await ctx.send(f'No Text channel by name {name}')
 
-      contents, author, channel_name, time = client.sniped_messages1[ctx.guild.id]
+  elif typ.lower() == 'voice':
+  
+    existing_channel = discord.utils.get(ctx.guild.channels, name=name)
+    if existing_channel is not None:
 
-      embed=discord.Embed(description = contents, colour=discord.Colour.blue(),timestamp=time)
-      embed.set_author(name=f'{author.name}#{author.discriminator}',icon_url=author.avatar_url)
-      embed.set_footer(text=f'Deleted in : #{channel_name}')
-      await ctx.send(embed=embed)
-      
-      await ctx.send(f'{author.name} has beened sniped 🔫')
+      await  existing_channel.delete()
+      await ctx.send(f'Text channel deleted by name {name}')
 
-    except:
-      await ctx.send('No message to snipe!')
-
-  else:
-
-    try:
-      contents, author, channel_name, time = client.sniped_messages[ctx.guild.id][member.id]
-
-      embed=discord.Embed(description = contents, colour=discord.Colour.blue(),timestamp=time)
-      embed.set_author(name=f'{member.name}#{member.discriminator}',icon_url=member.avatar_url)
-      embed.set_footer(text=f'Deleted in : #{channel_name}')
-      await ctx.send(embed=embed)
-      
-      await ctx.send(f'{member.name} has been sniped 🔫')
-
-    except KeyError:
-      await ctx.send('No message found')
-
-
+    else:
+      await ctx.send(f'No voice channel by name {name}')
 
 
 @client.command()
-async def admin(ctx,member1:discord.Member,member2:discord.Member,member3:discord.Member,member4:discord.Member,member5:discord.Member):
-
-    #await ctx.send('HAHA U CANT SLAP TOO GOOD PEOPLE TRY TO SLAP SOMEONE ELSE LOL')
-
+@commands.has_permissions(manage_channels=True)
+async def slowmode(ctx,amount:int):
+  try:
+    await ctx.channel.edit(reason='Bot Command Slowmode', slowmode_delay=int(amount))
   
-    im = Image.open('admin.jpg')
-    asset = member1.avatar_url_as(format=None, static_format='jpg', size=128)
-    data = BytesIO(await asset.read())
-    pfp = Image.open(data)
-    asset2 = member2.avatar_url_as(format=None, static_format='jpg', size=128)
-    data2 = BytesIO(await asset2.read())
-    pfp2 = Image.open(data2)
-    asset3 = member3.avatar_url_as(format=None, static_format='jpg', size=128)
-    data3 = BytesIO(await asset3.read())
-    pfp3 = Image.open(data3)
-    asset4 = member4.avatar_url_as(format=None, static_format='jpg', size=128)
-    data4 = BytesIO(await asset4.read())
-    pfp4 = Image.open(data4)
-    asset5 = member5.avatar_url_as(format=None, static_format='jpg', size=128)
-    data5 = BytesIO(await asset5.read())
-    pfp5 = Image.open(data5)
+  except:
+    await ctx.send('I do not have Permissions')
 
-    #pasting and resizing
-    pfp = pfp.resize((565,589))
-    pfp2 = pfp2.resize((243,240))
-    pfp3 = pfp3.resize((283,313))
-    pfp4 = pfp4.resize((237,279))
-    pfp5 = pfp5.resize((337,361))
-
-
-    im = im.copy()
-    im.paste(pfp, (713,291))
-    im.paste(pfp2, (173,37))
-    im.paste(pfp3, (53,621))
-    im.paste(pfp4, (1643,215))
-    im.paste(pfp5, (1423,531))
-    im.save('adminned.jpg')
-    await ctx.send(file=discord.File('adminned.jpg'))
-
-
-@client.command()
-async def team(ctx,member1:discord.Member,member2:discord.Member,member3:discord.Member,member4:discord.Member,member5:discord.Member,member6:discord.Member,member7:discord.Member,member8:discord.Member):
-
-    #await ctx.send('HAHA U CANT SLAP TOO GOOD PEOPLE TRY TO SLAP SOMEONE ELSE LOL')
-
+@client.command(aliases=['disSlowMode','disableslowmode'])
+@commands.has_permissions(manage_channels=True)
+async def slowmode_disable(ctx):
+  try:
+    await ctx.channel.edit(reason='Bot Command Slowmode', slowmode_delay=0)
   
-    im = Image.open('team.jpg')
-    asset = member1.avatar_url_as(format=None, static_format='jpg', size=128)
-    data = BytesIO(await asset.read())
-    pfp = Image.open(data)
-    asset2 = member2.avatar_url_as(format=None, static_format='jpg', size=128)
-    data2 = BytesIO(await asset2.read())
-    pfp2 = Image.open(data2)
-    asset3 = member3.avatar_url_as(format=None, static_format='jpg', size=128)
-    data3 = BytesIO(await asset3.read())
-    pfp3 = Image.open(data3)
-    asset4 = member4.avatar_url_as(format=None, static_format='jpg', size=128)
-    data4 = BytesIO(await asset4.read())
-    pfp4 = Image.open(data4)
-    asset5 = member5.avatar_url_as(format=None, static_format='jpg', size=128)
-    data5 = BytesIO(await asset5.read())
-    pfp5 = Image.open(data5)
-
-    asset6 = member6.avatar_url_as(format=None, static_format='jpg', size=128)
-    data6 = BytesIO(await asset6.read())
-    pfp6 = Image.open(data6)
-
-    asset7 = member7.avatar_url_as(format=None, static_format='jpg', size=128)
-    data7 = BytesIO(await asset7.read())
-    pfp7 = Image.open(data7)
-
-    asset8 = member8.avatar_url_as(format=None, static_format='jpg', size=128)
-    data8 = BytesIO(await asset8.read())
-    pfp8 = Image.open(data8)
-
-    #pasting and resizing
-    pfp = pfp.resize((197,165))
-    pfp2 = pfp2.resize((213,175))
-    pfp3 = pfp3.resize((203,167))
-    pfp4 = pfp4.resize((177,165))
-    pfp5 = pfp5.resize((169,143))
-    pfp6 = pfp6.resize((233,173))
-    pfp7 = pfp7.resize((169,155))
-    pfp8 = pfp8.resize((163,147))
-    
-
-
-    im = im.copy()
-    im.paste(pfp, (823,725))
-    im.paste(pfp2, (285,651))
-    im.paste(pfp3, (569,371))
-    im.paste(pfp4, (1275,439))
-    im.paste(pfp5, (803,357))
-    im.paste(pfp6, (1413,627))
-    im.paste(pfp7, (611,49))
-    im.paste(pfp8, (961,43))
-    im.save('teamed.jpg')
-    await ctx.send(file=discord.File('teamed.jpg'))
+  except:
+    await ctx.send('I do not have Permissions')
 
 @client.event
 async def on_guild_join(guild):
@@ -322,23 +260,6 @@ async def on_guild_join(guild):
 @client.command()
 @commands.has_permissions(administrator = True)
 async def setprefix(ctx,prefix):
-
-  # letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-
-  # letter = prefix.split()
-
-  # if letter[-1] in letters:
-  #   with open('prefixes.json','r') as f:
-  #     prefixes = json.load(f)
-
-  #   prefixes[str(ctx.guild.id)+ ' '] = prefix 
-
-  #   with open('prefixes.json','w') as f:
-  #     json.dump(prefixes,f)
-
-  #   await ctx.send(f'The prefix was changed to {prefix}')
-
-  # else:
 
 
     with open('prefixes.json','r') as f:
@@ -367,7 +288,7 @@ async def lenny(ctx):
   await ctx.send(random.choice(lenny))
 
 @client.command(aliases=['ASCII','Ascii'])
-async def ascii(ctx,word):
+async def ascii(ctx,*,word):
 
      async with aiohttp.ClientSession() as session:
                 #
@@ -443,6 +364,67 @@ async def ly(ctx, *, lyrics):
                 icon_url=f"{ctx.author.avatar_url}",
             )
             await ctx.send(embed=embed)
+
+@client.command()
+@commands.has_permissions(administrator=True)
+async def modon(ctx,amount:int):
+    with open('moderation.json','r') as f:
+      mod = json.load(f)
+
+    if mod[ctx.guild.id]:
+      pass
+
+    mod[ctx.guild.id] = int(amount)
+
+    with open('moderation.json','w') as f:
+      json.dump(mod,f)
+
+    await ctx.send(f'From now on if anyone types more than {amount} caps in this server the message will be deleted\nYou can type modoff to switch this off')
+
+@client.command()
+@commands.has_permissions(administrator=True)
+async def modoff(ctx):
+
+  #try:
+    with open('moderation.json','r') as f:
+      mod = json.load(f)
+
+    mod.pop(ctx.guild.id)
+    with open('moderation.json','w') as f:
+      json.dump(mod,f)
+
+    await ctx.send('moderation switched off')
+
+  #except KeyError:
+    #await ctx.send('mod was never on')
+
+
+@client.command()
+@commands.has_permissions(administrator=True)
+async def chnick(ctx,member:discord.Member,*,nick):
+  await member.edit(nick=nick)
+  await ctx.send(f'Nickname was changed for {member.mention} ')
+
+@client.command()
+async def mhs(ctx, member : discord.Member, *, message : str):
+
+        await ctx.message.delete()
+
+        url = None
+        webhooks = await ctx.channel.webhooks()
+        for webhook in webhooks:
+            if webhook.name == 'Nishank':
+                url = webhook.url
+
+        if url is None:
+            webhook = await ctx.channel.create_webhook(name = 'Nishank')
+            url = webhook.url
+
+        async with ClientSession() as session:
+            webhook = discord.Webhook.from_url(url, adapter = discord.AsyncWebhookAdapter(session))
+
+
+            await webhook.send(content = message, username = member.name, avatar_url = member.avatar_url)
 
 keep_alive()
 
