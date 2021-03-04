@@ -18,7 +18,7 @@ import asyncio
 # from youtube_search import YoutubeSearch
 
 def get_prefix(client, message):
-    with open("prefixes.json", "r") as f:
+    with open("prefixes.json", "r") as f:#why u copy paste
         prefixes = json.load(f)
     return prefixes.get(str(message.guild.id), "~~")
 
@@ -486,11 +486,6 @@ async def mhs(ctx, member : discord.Member, *, message : str):
 
 
             await webhook.send(content = message, username = member.name, avatar_url = member.avatar_url)
-
-@client.command()
-async def eval(ctx,*,code):
-  result = eval(code)
-  await ctx.send(result)
 
 keep_alive()
 
