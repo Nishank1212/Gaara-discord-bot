@@ -3,6 +3,7 @@ import sys
 from discord.ext import commands
 from replit import db
 from PIL import Image, ImageColor
+import json
 
 class secret(commands.Cog):
     def __init__(self, client):
@@ -30,29 +31,41 @@ class secret(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.channel)
     async def rankdoor(self, message):
 
-        if message.author.bot:
-            return
-            
-        exp, lvl = get_stats(message.author.id)
+        with open('lvle.json','r') as f:
+          a = json.load(f)
 
-        if lvl > 10:
-
-          add_exp(message.author.id,1)
-
-        else:
-
-          add_exp(message.author.id,2)
-
-
+        try:
         
+          m = a[str(message.guild.id)]
 
-        # Check for level promotion
-        if exp in level_check_point:
-            if exp == 0:
-              pass
-            else:
-              update_level(message.author.id)
-              await message.channel.send(f'Congratulations {message.author.mention} You are now level {lvl}🎉🥳!!!')
+        except:
+          return #raise
+
+        if m == 'enabled':
+
+          if message.author.bot:
+              return
+              
+          exp, lvl = get_stats(message.author.id)
+
+          if lvl > 10:
+
+            add_exp(message.author.id,1)
+
+          else:
+
+            add_exp(message.author.id,2)
+
+
+          
+
+          # Check for level promotion
+          if exp in level_check_point:
+              if exp == 0:
+                pass
+              else:
+                update_level(message.author.id)
+                await message.channel.send(f'Congratulations {message.author.mention} You are now level {lvl}🎉🥳!!!')
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -208,6 +221,40 @@ class secret(commands.Cog):
         else:
             await ctx.send('You are not eligible for this command')
 
+
+    @commands.command(aliases=['el','levelenable'])
+    @commands.has_permissions(administrator=True)
+    async def enableleveling(self,ctx):
+      with open('lvle.json','r') as f:
+        a = json.load(f)
+
+      try:
+        m = a[str(ctx.guild.id)]
+        return await ctx.send('Already enabled Type leveldisable to disable it')
+      except:
+
+        a[ctx.guild.id] = 'enabled'
+
+      with open('lvle.json','w') as f:
+        json.dump(a,f)
+      await ctx.send('Leveling disabled for this server')
+
+    @commands.command(aliases=['de','leveldisable'])
+    @commands.has_permissions(administrator=True)
+    async def disableleveling(self,ctx):
+      with open('lvle.json','r') as f:
+        a = json.load(f)
+
+      try:
+
+        del a[str(ctx.guild.id)]
+
+      except:
+        return await ctx.send('Already disabled by default type levelenable to enable it')
+
+      with open('lvle.json','w') as f:
+        json.dump(a,f)
+      await ctx.send('Leveling disabled for this server')
 
 # Helper functions below
 

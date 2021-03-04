@@ -64,7 +64,7 @@ class Help(commands.Cog):
 
     elif choice.lower() == 'admin':
       embed=discord.Embed(title='Help Admin',description='admin commands',colour=discord.Colour.blue())
-      embed.add_field(name='commands...',value='`kick - Kicks a person out of server`\n`ban - Bans a person from the server`\n`unban - Unbans a person from a server if he is banned`\n`warn - warns a person(5 warns = banned)`\n`case - shows how many warns`\n`cw - clears all warns`\n`setprefix - sets the prefix to anything you want`\n`addrole - adds a role to any person`\n`unrole - removes a role from a person`\n`set_welcome_message(swm) - sets a welcome message for new members`\n`set_welcome_channel(swc) - provide a chanel id where it will send the welcome message`\n `create (voice or text) <channelname> - creates a channel`\n`delete - removes the channel`\n`slowmode <num> - enables slow mode for num seconds`')
+      embed.add_field(name='commands...',value='`kick - Kicks a person out of server`\n`ban - Bans a person from the server`\n`unban - Unbans a person from a server if he is banned`\n`warn - warns a person(5 warns = banned)`\n`case - shows how many warns`\n`cw - clears all warns`\n`setprefix - sets the prefix to anything you want`\n`addrole - adds a role to any person`\n`unrole - removes a role from a person`\n`set_welcome_message(swm) - sets a welcome message for new members`\n`set_welcome_channel(swc) - provide a chanel id where it will send the welcome message`\n `create (voice or text) <channelname> - creates a channel`\n`delete - removes the channel`\n`slowmode <num> - enables slow mode for num seconds`\n`modon <num> - after this any person who does more cpas in the message than <num> the message will be deleted`\n`modoff - switches the modon to off`')
       embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
       await ctx.send(embed=embed)
 
@@ -82,7 +82,7 @@ class Help(commands.Cog):
 
     elif choice.lower() == 'rank':
       embed=discord.Embed(title='Help Rank',description='Rank commands',colour=discord.Colour.blue())
-      embed.add_field(name='commands...',value='`rank - shows the rank of a person`\n`leaderboard - shows the leaderboard of top 5 people`')
+      embed.add_field(name='commands...',value='`rank - shows the rank of a person`\n`leaderboard - shows the leaderboard of top 5 people`\n`levelenable - enables leveling system(default switched off)`\n`leveldisable - disables level system (default switched off)`')
       embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
       await ctx.send(embed=embed)
 

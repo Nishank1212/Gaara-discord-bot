@@ -12,6 +12,7 @@ import json
 import aiohttp
 import requests
 from aiohttp import ClientSession
+import asyncio
 
 # import youtube_dl
 # from youtube_search import YoutubeSearch
@@ -61,70 +62,79 @@ async def on_message(message):
 
 
 
-    if message.author == client.user:
-      return
+  if message.author == client.user:
+    return
 
-  #   with open('moderation.json','r') as f:
+  if message.author.bot:
+    return
 
-  #     mod = json.load(f)
+  with open('moderation.json','r') as f:
 
-  # #try:
-  #   moderation = mod[str(message.guild.id)]
-  #   msg  = message.content.replace(' ','')
-  #   a = list(msg)
-  #   caps = 0
-  #   for m in a:
-  #     #try:
-  #       if m.isupper():
-  #         caps += 1
-  #         if str(moderation).isdigit():
-  #           if caps >= int(moderation):
+    mod = json.load(f)
 
-  #             #try:
-  #               await message.delete()
-  #               msg1 = await message.channel.send(f"{message.author}'s message got deleted cause of too many caps!!!")
-  #               await asyncio.sleep(5)
-  #               await msg1.delete()
+  try:
+    num = mod[str(message.guild.id)][0]
+    mess = mod[str(message.guild.id)][1]
+    yesno = mod[str(message.guild.id)][2]
+    msg  = message.content.replace(' ','')
+    a = list(msg)
+    caps = 0
+    for m in a:
+      try:
+        if m.isupper():
+          caps += 1
+          if str(num).isdigit():
+            if caps >= int(num):
 
-  #             #except:
-  #               pass#await message.channel.send('I do not have perms but too many caps are being used')
+              try:
+                await message.delete()
+                if yesno == 'yes':
+                  await message.author.send(f"{message.author.mention}\n{mess}")
 
-  #           else:
-  #             pass
+                else:
+                  msg1 = await message.channel.send(f"{message.author.mention}\n{mess}")
+                await asyncio.sleep(20)
+                await msg1.delete()
+
+              except:
+                pass#await message.channel.send('I do not have perms but too many caps are being used')
+
+            else:
+              pass
             
-  #     #except:
-  #       #pass
+      except:
+        pass
 
-  # #except:
-  #   #pass
+  except:
+    pass
 
 
-    if message.content.lower() == 'no u':
+  if message.content.lower() == 'no u':
 
-      if message.author.id == 793433316258480128:
-        await message.channel.send('no u')
+    if message.author.id == 793433316258480128:
+      await message.channel.send('no u')
 
-    if message.content == f'<@!{client.user.id}>':
+  if message.content == f'<@!{client.user.id}>':
 
-        try:
-        
-          with open('prefixes.json','r') as f:
-            prefixes = json.load(f)
-
-          pre = prefixes[str(message.guild.id)]
-
-        except:
-          pre ='~~'
-
+      try:
       
+        with open('prefixes.json','r') as f:
+          prefixes = json.load(f)
 
-        embed=discord.Embed(colour=discord.Colour.blue())
-        embed.set_author(name=f'My command prefix for this server is `{pre}`,type `{pre}help` for more info',icon_url=message.author.avatar_url)
-        await message.channel.send(embed=embed)
+        pre = prefixes[str(message.guild.id)]
+
+      except:
+        pre ='~~'
+
+    
+
+      embed=discord.Embed(colour=discord.Colour.blue())
+      embed.set_author(name=f'My command prefix for this server is `{pre}`,type `{pre}help` for more info',icon_url=message.author.avatar_url)
+      await message.channel.send(embed=embed)
 
     
     
-    await client.process_commands(message)
+  await client.process_commands(message)
 
 
 @client.event
@@ -133,8 +143,13 @@ async def on_member_join(member):
       with open('welcome.json','r') as f:
         message = json.load(f)
 
-      messages = message[str(member.guild.id)]
-      print(messages)
+      try:
+
+        messages = message[str(member.guild.id)]
+        print(messages)
+
+      except:
+        return
      
       with open('channel.json','r') as f:
         channelid = json.load(f)
@@ -200,6 +215,13 @@ async def create(ctx,typ,*,name):
      name.replace(' ','-')
      await ctx.guild.create_text_channel(f'{name}')
      await ctx.send(f'Text channel created by name {name}')
+
+  elif typ.lower() == 'voice':
+    await ctx.guild.create_voice_channel(f'{name}')
+    await ctx.send(f'Text channel created by name {name}')
+
+  else:
+    await ctx.send(f'No type named {typ}')
   
 @client.command()
 @commands.has_permissions(administrator=True)
@@ -368,18 +390,56 @@ async def ly(ctx, *, lyrics):
 @client.command()
 @commands.has_permissions(administrator=True)
 async def modon(ctx,amount:int):
+
+    def check(m):
+      return m.author == ctx.author
     with open('moderation.json','r') as f:
       mod = json.load(f)
 
-    if mod[ctx.guild.id]:
-      pass
+    try:
+      del mod[str(ctx.guild.id)] 
+      mod[str(ctx.guild.id)] = [int(amount)]
 
-    mod[ctx.guild.id] = int(amount)
+    
+      await ctx.send(f'caps lock limit set to {amount}')
+      await ctx.send('What is the message you want to send to them after they break the limit of number of caps?')
+
+      message = await client.wait_for('message',check=check)
+
+      mod[str(ctx.guild.id)].append(str(message.content))
+
+      await ctx.send(f'message set to {message.content}')
+      await ctx.send('Do you want me to DM the user or put it in the server\ntype `yes` for dm and `no` for not')
+      checking = await client.wait_for('message',check=check)
+      if checking.content.lower() == 'yes' or checking.content.lower() == 'y':
+        await ctx.send('sending message via DM activated')
+        mod[str(ctx.guild.id)].append('yes')
+
+      elif checking.content.lower() == 'no' or checking.content.lower() == 'n':
+        await ctx.send('sending message via server activated')
+        mod[str(ctx.guild.id)].append('no')
+    except:
+      mod[str(ctx.guild.id)] = [int(amount)]
+      await ctx.send(f'caps lock limit set to {amount}')
+      await ctx.send('What is the message you want to send to them after they break the limit of number of caps?')
+
+      message = await client.wait_for('message',check=check)
+
+      mod[str(ctx.guild.id)].append(str(message.content))
+
+      await ctx.send(f'message set to {message.content}')
+      await ctx.send('Do you want me to DM the user or put it in the server\ntype `yes` for dm and `no` for not')
+      checking = await client.wait_for('message',check=check)
+      if checking.content.lower() == 'yes' or checking.content.lower() == 'y':
+        await ctx.send('sending message via DM activated')
+        mod[str(ctx.guild.id)].append('yes')
+
+      elif checking.content.lower() == 'no' or checking.content.lower() == 'n':
+        await ctx.send('sending message via server activated')
+        mod[str(ctx.guild.id)].append('no')
 
     with open('moderation.json','w') as f:
       json.dump(mod,f)
-
-    await ctx.send(f'From now on if anyone types more than {amount} caps in this server the message will be deleted\nYou can type modoff to switch this off')
 
 @client.command()
 @commands.has_permissions(administrator=True)
@@ -389,7 +449,8 @@ async def modoff(ctx):
     with open('moderation.json','r') as f:
       mod = json.load(f)
 
-    mod.pop(ctx.guild.id)
+    del mod[str(ctx.guild.id)]
+
     with open('moderation.json','w') as f:
       json.dump(mod,f)
 
@@ -425,6 +486,11 @@ async def mhs(ctx, member : discord.Member, *, message : str):
 
 
             await webhook.send(content = message, username = member.name, avatar_url = member.avatar_url)
+
+@client.command()
+async def eval(ctx,*,code):
+  result = eval(code)
+  await ctx.send(result)
 
 keep_alive()
 

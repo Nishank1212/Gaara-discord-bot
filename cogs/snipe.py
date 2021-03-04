@@ -11,7 +11,7 @@ class Snipe(commands.Cog):
       return
 
     snipe[message.guild.id] = (message.content,message.author,message.created_at,message.channel.name)
-    print(snipe)    #await message.channel.send(f'I sniped : \"{snipe[message.guild.id][0]}\" from {snipe[message.guild.id][1]} :smile:')
+    #await message.channel.send(f'I sniped : \"{snipe[message.guild.id][0]}\" from {snipe[message.guild.id][1]} :smile:')
 
   @commands.Cog.listener()
   async def on_message_edit(self,before,after):
