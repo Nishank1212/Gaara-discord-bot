@@ -11,14 +11,13 @@ import wikipedia
 import json
 import aiohttp
 import requests
-from aiohttp import ClientSession
 import asyncio
 
 # import youtube_dl
 # from youtube_search import YoutubeSearch
 
 def get_prefix(client, message):
-    with open("prefixes.json", "r") as f:#why u copy paste
+    with open("prefixes.json", "r") as f:#why u copy paste mine was giving error even tho it was literraly the same thing as urs so i deleted and put it again
         prefixes = json.load(f)
     return prefixes.get(str(message.guild.id), "~~")
 
@@ -26,7 +25,7 @@ def get_prefix(client, message):
 intents = discord.Intents.all()
 intents.members = True
 client = commands.Bot(command_prefix = get_prefix,
-intents=intents, owner_ids={793433316258480128})
+intents=intents, owner_ids={569105874912804874,793433316258480128,790459205038506055})
 status = cycle(['Gaara|Ping for more info','Gaara|Ping for more info'])
 client.sniped_messages = {}
 client.sniped_messages1 = {}
@@ -466,26 +465,33 @@ async def chnick(ctx,member:discord.Member,*,nick):
   await member.edit(nick=nick)
   await ctx.send(f'Nickname was changed for {member.mention} ')
 
-@client.command()
-async def mhs(ctx, member : discord.Member, *, message : str):
+# @client.command()
+# async def mhs(ctx, member : discord.Member, *, message : str):
 
-        await ctx.message.delete()
+#         await ctx.message.delete()
 
-        url = None
-        webhooks = await ctx.channel.webhooks()
-        for webhook in webhooks:
-            if webhook.name == 'Nishank':
-                url = webhook.url
+#         url = None
+#         webhooks = await ctx.channel.webhooks()
+#         for webhook in webhooks:
+#             if webhook.name == 'Nishank':
+#                 url = webhook.url
 
-        if url is None:
-            webhook = await ctx.channel.create_webhook(name = 'Nishank')
-            url = webhook.url
+#         if url is None:
+#             webhook = await ctx.channel.create_webhook(name = 'Nishank')
+#             url = webhook.url
 
-        async with ClientSession() as session:
-            webhook = discord.Webhook.from_url(url, adapter = discord.AsyncWebhookAdapter(session))
+#         async with ClientSession() as session:
+#             webhook = discord.Webhook.from_url(url, adapter = discord.AsyncWebhookAdapter(session))
 
 
-            await webhook.send(content = message, username = member.name, avatar_url = member.avatar_url)
+#             await webhook.send(content = message, username = member.name, avatar_url = member.avatar_url)
+
+
+@client.command(hidden=True)
+@commands.is_owner()
+async def cl(ctx,member1:discord.Member,member2:discord.Member,member3:discord.Member):
+  await ctx.send(f'`1){member1.name} - 5 points`\n`2){member2.name} - 3 points`\n`3){member3.name} - 1 points`')
+
 
 keep_alive()
 

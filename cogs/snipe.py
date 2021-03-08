@@ -39,7 +39,7 @@ class Snipe(commands.Cog):
       await ctx.send(embed=embed)
 
   @commands.command(aliases=['edits','le'])
-  async def edit(self,ctx):
+  async def editss(self,ctx):
 
     try:
       content,author,channel,timee,after = edit[ctx.guild.id]

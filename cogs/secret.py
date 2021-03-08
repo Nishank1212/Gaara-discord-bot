@@ -79,11 +79,11 @@ class secret(commands.Cog):
             embed=discord.Embed(title='Missing Permissions',description='You are missing permissions to run this command buddy',colour=discord.Colour.blue())
             await ctx.send(embed=embed)
 
-        elif isinstance(error, commands.CommandNotFound):
+        # elif isinstance(error, commands.CommandNotFound):
 
       
-             embed=discord.Embed(title='Missing Command',description='Command Not Found buddy! :thinking:',colour=discord.Colour.blue())
-             await ctx.send(embed=embed)
+        #      embed=discord.Embed(title='Missing Command',description='Command Not Found buddy! :thinking:',colour=discord.Colour.blue())
+        #      await ctx.send(embed=embed)
 
 
 
@@ -237,7 +237,7 @@ class secret(commands.Cog):
 
       with open('lvle.json','w') as f:
         json.dump(a,f)
-      await ctx.send('Leveling disabled for this server')
+      await ctx.send('Leveling Enabled for this server')
 
     @commands.command(aliases=['de','leveldisable'])
     @commands.has_permissions(administrator=True)

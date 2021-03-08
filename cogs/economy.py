@@ -20,7 +20,7 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": member.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": member.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": member.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{member.name} is new, opening new bank account.')
       return
     else:
@@ -40,7 +40,7 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
       return
 
@@ -68,7 +68,7 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
       return
 
@@ -96,7 +96,7 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
       return
 
@@ -125,7 +125,7 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
       return
 
@@ -172,14 +172,14 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
       return
 
     bankinfo1 = collection.find_one({"user": member.id})
     if not bankinfo1:
       #make new entry
-      collection.insert_one({"user": member.id, "wallet": 0, "bank": 0})
+      collection.insert_one({"user": member.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{member.name} is new, opening new bank account.')
       return
 
@@ -241,7 +241,7 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
       return
 
@@ -306,14 +306,14 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
       return
 
     bankinfo1 = collection.find_one({"user": member.id})
     if not bankinfo1:
       #make new entry
-      collection.insert_one({"user": member.id, "wallet": 0, "bank": 0})
+      collection.insert_one({"user": member.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{member.name} is new, opening new bank account.')
       return
 
@@ -334,15 +334,16 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
       return
 
     else:
       if thing.lower() == 'fishing pole':
+
         
-        if 'fishing pole' in bankinfo['inventory']:
-          await ctx.send('You already own this item')
+        if ctx.author.bot:
+          return
 
         else:
 
@@ -350,37 +351,49 @@ class Economy(commands.Cog):
           if bankinfo['wallet'] >= 500:
             await ctx.send('You have succesfully bought a fishing pole for 500 fluxes')
             bankinfo['wallet'] -= 500
-            bankinfo['inventory'].append('fishing pole')
+            if 'fishing pole' in bankinfo['inventory'].keys():
+              bankinfo['inventory']['fishing pole'] += 1
+
+            else:
+            
+              bankinfo['inventory']['fishing pole'] = 1
 
           else:
             await ctx.send('far out! you dont have that much money')
 
       elif thing.lower() == 'hunting rifle' or thing.lower() == 'rifle':
 
-        if 'rifle' in bankinfo['inventory']:
-          await ctx.send('You already own this item')
-
-
+        if ctx.author.bot:
+          return
         else:
 
 
           if bankinfo['wallet'] >= 500:
             await ctx.send('You have succesfully bought a rifle for 500 fluxes')
-            bankinfo['wallet'] -= 500
-            bankinfo['inventory'].append('rifle')
+            if 'rifle' in bankinfo['inventory'].keys():
+              bankinfo['inventory']['rifle'] += 1
+
+            else:
+            
+              bankinfo['inventory']['rifle'] = 1
 
           else:
             await ctx.send('far out! you dont have that much money')
 
       elif thing.lower() == 'laptop':
-        if 'laptop' in bankinfo['inventory']:
-          await ctx.send('You already own this item')
+        
+        if ctx.author.bot:
+          return
 
         else:
           if bankinfo['wallet'] >= 1000:
             await ctx.send('You have succesfully bought a laptop for 1000 fluxes')
-            bankinfo['wallet'] -= 1000
-            bankinfo['inventory'].append('laptop')
+            if 'laptop' in bankinfo['inventory'].keys():
+              bankinfo['inventory']['laptop'] += 1
+
+            else:
+            
+              bankinfo['inventory']['laptop'] = 1
 
           else:
             await ctx.send('far out! you dont have that much money')      
@@ -393,24 +406,32 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
       return
 
     else:
       caught = random.choice([0,1])
 
-      if 'fishing pole' not in bankinfo['inventory']:
+      if 'fishing pole' not in bankinfo['inventory'].keys():
         await ctx.send('First buy a fishing pole!')
 
       else:
+
+        if not bankinfo['inventory']['fishing pole'] >= 1:
+          return await ctx.send('First buy a fishing pole!')
 
         if caught == 0:
           await ctx.send('LOL you are BAD You couldnt find anything')
 
         else:
-          await ctx.send('You brough back 1 fish 🐟!')
-          bankinfo['inventory'].append('fish')
+          fishes = random.randint(1,5)
+          await ctx.send(f'You brough back {fishes} fish 🐟!')
+          if 'fish' in bankinfo['inventory'].keys():
+            bankinfo['inventory']['fish'] += fishes
+
+          else:
+            bankinfo['inventory']['fish'] = fishes
 
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
 
@@ -421,17 +442,20 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
       return
 
     else:
       caught = random.choice([0,1])
 
-      if 'rifle' not in bankinfo['inventory']:
+      if 'rifle' not in bankinfo['inventory'].keys():
         await ctx.send('First buy a rifle!')
 
       else:
+
+        if not bankinfo['inventory']['rifle'] >=1:
+          return await ctx.send('First buy a rifle!')
 
         if caught == 0:
           await ctx.send('LOL you are BAD You couldnt find anything')
@@ -439,63 +463,144 @@ class Economy(commands.Cog):
         else:
           animals = ['rabbit🐇','deer🦌','horse🐎'] 
           animal = random.choice(animals)
-          await ctx.send(f'You brough back 1 {animal}!')
+          animalnum = random.randint(1,3)
+          await ctx.send(f'You brough back {animalnum} {animal}!')
           if animal == 'rabbit🐇':
-            bankinfo['inventory'].append('rabbit')
+            if 'rabbit' in bankinfo['inventory'].keys():
+              bankinfo['inventory']['rabbit'] += animalnum
+
+            else:
+              bankinfo['inventory']['rabbit'] = animalnum
 
           if animal == 'deer🦌':
-            bankinfo['inventory'].append('deer')
+            if 'deer' in bankinfo['inventory'].keys():
+              bankinfo['inventory']['deer'] += animalnum
+
+            else:
+              bankinfo['inventory']['deer'] = animalnum
 
           if animal == 'horse🐎':
-            bankinfo['inventory'].append('horse')
+            if 'horse' in bankinfo['inventory'].keys():
+              bankinfo['inventory']['horse'] += animalnum
+
+            else:
+              bankinfo['inventory']['horse'] = animalnum
 
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
 
 
   @commands.command(aliases=['SELL','Sell'])
-  async def sell(self,ctx,thing):
+  async def sell(self,ctx,thing,amount):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
       return
 
 
     else:
-      if thing in bankinfo['inventory']:
+      if thing in bankinfo['inventory'].keys():
         if thing.lower() == 'fish':
-          await ctx.send('Succesfully sold 1 fish 🐟 for 50 fluxes')
+          if amount.isdigit():
+            
+            if 'fish' in bankinfo['inventory'].keys():
+              if bankinfo['inventory']['fish'] >= int(amount):
+                await ctx.send(f'Succesfully sold {int(amount)} fish 🐟 for {int(amount)*50} fluxes')
+                bankinfo['inventory']['fish'] -= int(amount)
+                bankinfo['wallet'] += int(amount) * 50
+                
 
-          bankinfo['wallet'] += 50
 
-          bankinfo['inventory'].remove('fish')
+              else:
+                await ctx.send(f'you do not have {amount} fishes!')
+
+          elif str(amount) == 'all':
+            num = bankinfo['inventory']['fish']
+            if num >= 1:
+              bankinfo['wallet'] += 50 * int(num)
+
+              bankinfo['inventory']['fish'] -= num
+
+            else:
+              await ctx.send('You do not have any fish!!!')
 
         if thing.lower() == 'rabbit':
 
-          await ctx.send('Succesfully sold 1 rabbit 🐇 for 100 fluxes')
+          if amount.isdigit():
+            
+            if 'rabbit' in bankinfo['inventory'].keys():
+              if bankinfo['inventory']['rabbit'] >= int(amount):
+                await ctx.send(f'Succesfully sold {int(amount)} rabbit 🐇 for {int(amount)*100} fluxes')
+                bankinfo['inventory']['rabbit'] -= int(amount)
+                bankinfo['wallet'] += int(amount) * 100
+                
 
-          bankinfo['wallet'] += 100
 
-          bankinfo['inventory'].remove('rabbit')
+              else:
+                await ctx.send(f'you do not have {amount} rabbits!')
+
+          elif str(amount) == 'all':
+            num = bankinfo['inventory']['rabbit']
+            if num >= 1:
+              await ctx.send(f'Succesfully sold {num} rabbit 🐇 for {num * 100} fluxes')
+              bankinfo['wallet'] += 100 * int(num)
+
+              bankinfo['inventory']['rabbit'] -= num
+
+            else:
+              await ctx.send('You do not have any rabbit!!!')
 
 
         if thing.lower() == 'horse':
 
-          await ctx.send('Succesfully sold 1 horse 🐎 for 100 fluxes')
+          if amount.isdigit():
+            
+            if 'horse' in bankinfo['inventory'].keys():
+              if bankinfo['inventory']['horse'] >= int(amount):
+                await ctx.send(f'Succesfully sold {int(amount)} horse 🐎 for {int(amount)*100} fluxes')
+                bankinfo['inventory']['fish'] -= int(amount)
+                bankinfo['wallet'] += int(amount) * 100
+                
 
-          bankinfo['wallet'] += 100
 
-          bankinfo['inventory'].remove('horse')
+              else:
+                await ctx.send(f'you do not have {amount} horses!')
+
+          elif str(amount) == 'all':
+            num = bankinfo['inventory']['horses']
+            if num >= 1:
+              bankinfo['wallet'] += 100 * int(num)
+
+              bankinfo['inventory']['horse'] -= num
+
+            else:
+              await ctx.send('You do not have any fish!!!')
 
         if thing.lower() == 'deer':
 
-          await ctx.send('succesfully sold 1 deer 🦌 for 100 fluxes')
+          if amount.isdigit():
+            
+            if 'deer' in bankinfo['inventory'].keys():
+              if bankinfo['inventory']['deer'] >= int(amount):
+                await ctx.send(f'Succesfully sold {int(amount)} deer🦌 for {int(amount)*100} fluxes')
+                bankinfo['inventory']['deer'] -= int(amount)
+                bankinfo['wallet'] += int(amount) * 100
+                
 
-          bankinfo['wallet'] += 100
 
-          bankinfo['inventory'].remove('deer')
+              else:
+                await ctx.send(f'you do not have {amount} deers!')
 
+          elif str(amount) == 'all':
+            num = bankinfo['inventory']['deer']
+            if num >= 1:
+              bankinfo['wallet'] += 100 * int(num)
+
+              bankinfo['inventory']['deer'] -= num
+
+            else:
+              await ctx.send('You do not have any deer!!!')
       else:
         await ctx.send('You dont own the item?')
 
@@ -509,15 +614,16 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": member.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": member.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": member.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{member.name} is new, opening new bank account.')
       return
 
     else:
-      sellable_collectable = {'fishing pole':'object','rabbit':'sellable','deer':'sellable','horse':'sellable','fish':'sellable','rifle':'object','laptop':'object'}
+      sellable_collectable = {'fishing pole':'object/sellable','rabbit':'sellable','deer':'sellable','horse':'sellable','fish':'sellable','rifle':'object/sellable','laptop':'object/sellable'}
       embed=discord.Embed(title=f"{member.name}'s Inventory'",colour=discord.Colour.blue())
-      for i in bankinfo['inventory']:
-        embed.add_field(name=f'{i}',value=f'{sellable_collectable[i]}',inline=True)
+      for i in bankinfo['inventory'].keys():
+        if bankinfo['inventory'][i] >= 1:
+          embed.add_field(name=f'{i}',value=f'{sellable_collectable[i]},amount = {bankinfo["inventory"][i]}',inline=True)
 
       await ctx.send(embed=embed)
 
@@ -527,7 +633,7 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
       return
 
@@ -545,15 +651,18 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
       return
 
     else:
-      if 'laptop' not in bankinfo['inventory']:
+      if 'laptop' not in bankinfo['inventory'].keys():
         await ctx.send('You need to buy a laptop for this!')
 
       else:
+        if bankinfo['inventory']['laptop'] < 1:
+          return await ctx.send('You need to buy a laptop for this!')
+
         await ctx.send('What type of meme do you want to post online:\n`a`Kind Meme\n`b`Inspirational Meme\n`c`Copypasta\n`d`Fresh Meme\n`e`Random Meme')
 
         def check(m):
@@ -660,7 +769,7 @@ class Economy(commands.Cog):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
       #make new entry
-      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":[]})
+      collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
       await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
       return
 
