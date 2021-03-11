@@ -22,7 +22,7 @@ class Help(commands.Cog):
     if choice == None:
 
       embed=discord.Embed(title='Help Me!',description='this command helps you by providing you commands',colour=discord.Colour.blue())
-      embed.add_field(name='Type these for more information',value='`help general`\n`help fun`\n`help games`\n`help animals`\n`help admin`\n`help ChatBot`\n`help economy`\n`help rank`\n`help music`\n`help bot`')
+      embed.add_field(name='Type these for more information',value='`help general`\n`help fun`\n`help games`\n`help animals`\n`help admin`\n`help ChatBot`\n`help economy`\n`help rank`\n`help music`\n`help bot`\n`help image`')
       # embed.set_image(url='https://thumbs.dreamstime.com/b/help-me-abstract-colorful-background-bokeh-design-illustration-isolated-yellow-red-banner-154777299.jpg')
       embed.set_footer(text=f'Use command prefix "{pre}" ')
       await ctx.send(embed=embed)
@@ -30,12 +30,12 @@ class Help(commands.Cog):
     elif choice.lower() == 'general':
 
       embed=discord.Embed(title='Help General',description='This shows all the general commands',colour=discord.Colour.blue())
-      embed.add_field(name='Commands',value='`welcome - Welcomes a person to the group`\n`hi - Says hi to a person`\n`Avatar - Sends the avatar of a person`\n`intro - Introduces the bot`\n`totalcmds - says the total number of commands in the bot`\n`ping - Sends the latency of bot`\n`say - Says what you want Grogu to say`\n`invert - Inverts the colours of the avatar of specified person`\n`wasted - Wastes a picture of any persons avatar you choose`\n`calc-calculates an expression`\n`lyrics - shares the lyrics of the song`\n`ascii - asciis any text`\n`wiki = searches anything in wikipedia`\n`edits - shows the last edit in server`')
+      embed.add_field(name='Commands',value='`welcome - Welcomes a person to the group`\n`hi - Says hi to a person`\n`Avatar - Sends the avatar of a person`\n`intro - Introduces the bot`\n`totalcmds - says the total number of commands in the bot`\n`ping - Sends the latency of bot`\n`say - Says what you want Grogu to say`\n`calc-calculates an expression`\n`lyrics - shares the lyrics of the song`\n`ascii - asciis any text`\n`wiki = searches anything in wikipedia`\n`edits - shows the last edit in server`')
       #embed.set_image(url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUUE1iPh_mNvgXUQi7oQ2rhJ-0Enf5NZWrrA&usqp=CAU')
       embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
 
   
-      embed.add_field(name='cmds part 2',value='`invertgrey - inverts a persons avatar to grey scale`\n`blue - gives a blue tint of an avatar of a member`\n`bright - brightens the colours of the members avatar`\n`bye - says bye to a person`\n`remind - reminds you by pinging after specific amount of time`\n`userinfo - sends info about a person`\n`serverinfo - sends info about server`\n`mem - Shares the total amount of people in the server`\n`credits - shows the credits of the bot`\n`botinfo -tells about the bot`\n`lenny - returns a lenny face`\n`swd - returns star wars dialogues`',inline='False')
+      embed.add_field(name='cmds part 2',value='`bye - says bye to a person`\n`remind - reminds you by pinging after specific amount of time`\n`userinfo - sends info about a person`\n`serverinfo - sends info about server`\n`mem - Shares the total amount of people in the server`\n`credits - shows the credits of the bot`\n`botinfo -tells about the bot`\n`lenny - returns a lenny face`\n`swd - returns star wars dialogues`',inline='False')
       await ctx.send(embed=embed)
      
 
@@ -43,7 +43,7 @@ class Help(commands.Cog):
 
     elif choice.lower() == 'fun':
       embed=discord.Embed(title='Help Fun',description='This shows all the fun commands',colour=discord.Colour.blue())
-      embed.add_field(name='Commands',value='`joke - Sends a joke to server`\n`meme - Sends a meme to server`\n`Good Joke - Sends a good joke :D`\n`pat - Sends a pat`\n`spoonfeeding - Sends something about spoonfeeding`\n`8ball - Ask a yes or no question! Gaara will answer`\n`inspire - Sends a inspirational quote`\n`spam - spams what you want it to spam`\n`DM - dms anyone you want to`\n`slap - slaps a person`\n`stab-stabs a person`\n`rip - kills a person`\n`gaara - send info on gaara`\n`hehe boi- sends a pic of hehe boi`\n`khopi told - sends a pic of khopdi told`\n`shoot - shoots a person`\n`snipe - shows the last deleted message`\n`admin - sends a pic of 5 people(need to mention all)`\n`team - sends a pic of 8 people(all need to be mentioned or cmd wont work)`\n`mhs - check it out (mhs <member>(message))`')
+      embed.add_field(name='Commands',value='`joke - Sends a joke to server`\n`meme - Sends a meme to server`\n`Good Joke - Sends a good joke :D`\n`pat - Sends a pat`\n`spoonfeeding - Sends something about spoonfeeding`\n`8ball - Ask a yes or no question! Gaara will answer`\n`inspire - Sends a inspirational quote`\n`spam - spams what you want it to spam`\n`DM - dms anyone you want to`\n`gaara - send info on gaara`\n`hehe boi- sends a pic of hehe boi`\n`khopi told - sends a pic of khopdi told`\n`snipe - shows the last deleted message`')
       #embed.set_image(url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGC0ViA9_darzbBsNjkPGGZBi8nKlIiOdQlA&usqp=CAU')
       embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
       await ctx.send(embed=embed)
@@ -64,7 +64,7 @@ class Help(commands.Cog):
 
     elif choice.lower() == 'admin':
       embed=discord.Embed(title='Help Admin',description='admin commands',colour=discord.Colour.blue())
-      embed.add_field(name='commands...',value='`kick - Kicks a person out of server`\n`ban - Bans a person from the server`\n`unban - Unbans a person from a server if he is banned`\n`warn - warns a person(5 warns = banned)`\n`case - shows how many warns`\n`cw - clears all warns`\n`setprefix - sets the prefix to anything you want`\n`addrole - adds a role to any person`\n`unrole - removes a role from a person`\n`set_welcome_message(swm) - sets a welcome message for new members`\n`set_welcome_channel(swc) - provide a chanel id where it will send the welcome message`\n `create (voice or text) <channelname> - creates a channel`\n`delete - removes the channel`\n`slowmode <num> - enables slow mode for num seconds`\n`modon <num> - after this any person who does more cpas in the message than <num> the message will be deleted`\n`modoff - switches the modon to off`')
+      embed.add_field(name='commands...',value='`kick - Kicks a person out of server`\n`ban - Bans a person from the server`\n`unban - Unbans a person from a server if he is banned`\n`warn - warns a person(5 warns = banned)`\n`case - shows how many warns`\n`cw - clears all warns`\n`setprefix - sets the prefix to anything you want`\n`addrole - adds a role to any person`\n`unrole - removes a role from a person`\n`set_welcome_message(swm) - sets a welcome message for new members`\n`set_welcome_channel(swc) - provide a chanel id where it will send the welcome message`\n `create (voice or text) <channelname> - creates a channel`\n`delete - removes the channel`\n`slowmode <num> - enables slow mode for num seconds`\n`modon <num> - after this any person who does more cpas in the message than <num> the message will be deleted`\n`modoff - switches the modon to off`\n`filteron - filter for bad words`\n`filteroff - turns filter off`\n`mute - mutes a person`\n`unmute - unmutes a person`')
       embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
       await ctx.send(embed=embed)
 
@@ -94,7 +94,13 @@ class Help(commands.Cog):
 
     elif choice.lower() == 'bot':
       embed=discord.Embed(title='Help bot',description='Info commands',colour=discord.Colour.blue())
-      embed.add_field(name='commands...',value="`server - joins officialserver of bot`\n`invite - invite Gaara to your server`\n`GitHub - see Gaara's GitHub page and star repo`")
+      embed.add_field(name='commands...',value="`server - joins official server of bot`\n`invite - invite Gaara to your server`\n`GitHub - see Gaara's GitHub page and star repo`")
+      embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
+      await ctx.send(embed=embed)
+
+    elif choice.lower() == 'image':
+      embed=discord.Embed(title='Help Image',description='Image commands',colour=discord.Colour.blue())
+      embed.add_field(name='commands...',value="`mando,team(8),admin(5),slapmore,slap,shoot,stab,bounty,monkey,punch,rip,worthless,note,inspired,savehumanity,brain,trash,saymyname @anyone name,internal,invertgrey,blue,bright,invert,wasted`")
       embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
       await ctx.send(embed=embed)
 

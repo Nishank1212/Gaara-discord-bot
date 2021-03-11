@@ -43,14 +43,30 @@ class eightball(commands.Cog):
         await ctx.send(user + ' has been unbanned')
         return
 
-  @commands.command()
-  @commands.has_permissions(administrator=True)
-  async def mute(self,ctx,member:discord.Member):
-    muted_role = ctx.guild.get_role(812650737150197770)
+  @commands.command(description="Mutes the specified user.")
+  @commands.has_permissions(manage_messages=True)
+  async def mute(self,ctx, member: discord.Member, *, reason=None):
+    guild = ctx.guild
+    mutedRole = discord.utils.get(guild.roles, name="Muted")
 
-    await member.add_roles(muted_role)
+    if not mutedRole:
+        mutedRole = await guild.create_role(name="Muted")
 
-    await ctx.send(member.mention + ' Has been muted lol')
+        for channel in guild.channels:
+            await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
+    embed = discord.Embed(title="muted", description=f"{member.mention} was muted ", colour=discord.Colour.blue())
+    embed.add_field(name="reason:", value=reason, inline=False)
+    await ctx.send(embed=embed)
+    await member.add_roles(mutedRole, reason=reason)
+
+  @commands.command(description="Unmutes a specified user.")
+  @commands.has_permissions(manage_messages=True)
+  async def unmute(self,ctx, member: discord.Member):
+    mutedRole = discord.utils.get(ctx.guild.roles, name="Muted")
+
+    await member.remove_roles(mutedRole)
+    embed = discord.Embed(title="unmute", description=f" unmuted-{member.mention}",colour=discord.Colour.blue())
+    await ctx.send(embed=embed)
 
 def setup(client):
   client.add_cog(eightball(client))    

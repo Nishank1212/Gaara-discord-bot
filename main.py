@@ -1,18 +1,21 @@
 import discord
 from os import getenv 
+from typing import Optional
 from discord.ext import commands, tasks
 from itertools import cycle
 from keep_alive import keep_alive
 import os
 from PIL import Image
 from io import BytesIO
+import typing
 import random
 import wikipedia
 import json
 import aiohttp
 import requests
 import asyncio
-
+import unicodedata
+from PIL import Image,ImageFont,ImageDraw,ImageFilter
 # import youtube_dl
 # from youtube_search import YoutubeSearch
 
@@ -67,6 +70,10 @@ async def on_message(message):
   if message.author.bot:
     return
 
+  with open('filter.json','r') as f:
+
+    filtered = json.load(f)
+
   with open('moderation.json','r') as f:
 
     mod = json.load(f)
@@ -106,6 +113,29 @@ async def on_message(message):
 
   except:
     pass
+
+  try:
+    listt = filtered[str(message.guild.id)][0]
+    mess = filtered[str(message.guild.id)][1]
+    yesno = filtered[str(message.guild.id)][2]
+    msg  = message.content.replace(' ','')
+    a = list(msg.split(' '))
+    
+    for i in a:
+      if i in listt:
+        await message.delete()
+
+        if yesno == 'no':
+
+          await message.channel.send(f'{message.author.mention}\n{mess}')
+
+        if yesno == 'yes':
+
+          await message.author.send(f'{message.author.mention}\n{mess}')
+
+  except:
+    pass
+
 
 
   if message.content.lower() == 'no u':
@@ -266,17 +296,6 @@ async def slowmode_disable(ctx):
   except:
     await ctx.send('I do not have Permissions')
 
-@client.event
-async def on_guild_join(guild):
-
-  with open("prefixes.json",'r') as f:
-    prefixes = json.load(f)
-
-  prefixes[str(guild.id)] = '~~'
-
-  with open('prefixes.json','w'):
-    json.dump(prefixes,f,indent=4)
-
 
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -387,7 +406,7 @@ async def ly(ctx, *, lyrics):
             await ctx.send(embed=embed)
 
 @client.command()
-@commands.has_permissions(administrator=True)
+@commands.has_permissions(manage_messages=True)
 async def modon(ctx,amount:int):
 
     def check(m):
@@ -417,6 +436,9 @@ async def modon(ctx,amount:int):
       elif checking.content.lower() == 'no' or checking.content.lower() == 'n':
         await ctx.send('sending message via server activated')
         mod[str(ctx.guild.id)].append('no')
+
+      else:
+        return await ctx.send('mission failed\n yes or no should have been said...')
     except:
       mod[str(ctx.guild.id)] = [int(amount)]
       await ctx.send(f'caps lock limit set to {amount}')
@@ -437,14 +459,17 @@ async def modon(ctx,amount:int):
         await ctx.send('sending message via server activated')
         mod[str(ctx.guild.id)].append('no')
 
+      else:
+        return await ctx.send('mission failed\n yes or no should have been said...')
+
     with open('moderation.json','w') as f:
       json.dump(mod,f)
 
 @client.command()
-@commands.has_permissions(administrator=True)
+@commands.has_permissions(manage_messages=True)
 async def modoff(ctx):
 
-  #try:
+  try:
     with open('moderation.json','r') as f:
       mod = json.load(f)
 
@@ -455,12 +480,12 @@ async def modoff(ctx):
 
     await ctx.send('moderation switched off')
 
-  #except KeyError:
-    #await ctx.send('mod was never on')
+  except KeyError:
+    await ctx.send('mod was never on')
 
 
 @client.command()
-@commands.has_permissions(administrator=True)
+@commands.has_permissions(change_nickname=True)
 async def chnick(ctx,member:discord.Member,*,nick):
   await member.edit(nick=nick)
   await ctx.send(f'Nickname was changed for {member.mention} ')
@@ -493,7 +518,429 @@ async def cl(ctx,member1:discord.Member,member2:discord.Member,member3:discord.M
   await ctx.send(f'`1){member1.name} - 5 points`\n`2){member2.name} - 3 points`\n`3){member3.name} - 1 points`')
 
 
+@client.command(pass_context=True)
+async def giphy(ctx, *, search):
+    embed = discord.Embed(colour=discord.Colour.blue())
+    session = aiohttp.ClientSession()
+
+    if search == '':
+        response = await session.get(f'https://api.giphy.com/v1/gifs/random?api_key={getenv("gify")}')
+        data = json.loads(await response.text())
+        embed.set_image(url=data['data']['images']['original']['url'])
+    else:
+        search.replace(' ', '+')
+        response = await session.get('http://api.giphy.com/v1/gifs/search?q=' + search + f'&api_key={getenv("gify")}')
+        data = json.loads(await response.text())
+        gif_choice = random.randint(0, 9)
+        embed.set_image(url=data['data'][gif_choice]['images']['original']['url'])
+
+    await session.close()
+
+    await ctx.send(embed=embed)
+
+
+@client.command()
+@commands.has_permissions(manage_messages=True)
+async def filteron(ctx):
+  await ctx.send('Please send a list of words u want to filter and dont forget to put commas between them with no space... (ex: hi,bye) but these should be bad words u wanna filter...')
+
+  def check(m):
+        return ctx.author == m.author
+
+  # def check(m):
+  #   return m.author==ctx.author
+
+  # msg = await client.wait_for('message',check=check)
+
+  # # try:
+  # filtered1 = list(msg.content.split(','))
+  # with open('filter.json','r') as f:
+  #   filtered = json.load(f)
+
+  # filtered[ctx.guild.id] = filtered1
+
+  # await ctx.send('DONE')
+
+# except:
+#   raise 
+  #await ctx.send('an error occured\ntry again or check your message..')
+
+  with open('filter.json','r') as f:
+    mod = json.load(f)
+
+  try:
+
+      del mod[str(ctx.guild.id)] 
+      mod[str(ctx.guild.id)] = []
+    
+      messaze = await client.wait_for('message',check=check)
+
+      mod[str(ctx.guild.id)].append(list(messaze.content.split(',')))
+
+      await ctx.send('What message do you want to send if they use a word in the filterred words?')
+      messaxe = await client.wait_for('message',check=check)
+
+      mod[str(ctx.guild.id)].append(messaxe.content)
+
+
+      await ctx.send('Do you want me to DM the user or put it in the server\ntype `yes` for dm and `no` for not')
+      checking = await client.wait_for('message',check=check)
+      if checking.content.lower() == 'yes' or checking.content.lower() == 'y':
+        await ctx.send('sending message via DM activated')
+        mod[str(ctx.guild.id)].append('yes')
+
+      elif checking.content.lower() == 'no' or checking.content.lower() == 'n':
+        await ctx.send('sending message via server activated')
+        mod[str(ctx.guild.id)].append('no')
+
+      else:
+        return await ctx.send('mission failed\n yes or no should have been said...')
+    
+  except:
+      mod[str(ctx.guild.id)] = []
+    
+      messaze = await client.wait_for('message',check=check)
+
+      mod[str(ctx.guild.id)].append(list(messaze.content.split(',')))
+
+      await ctx.send('What message do you want to send if they use a word in the filtered words?')
+      messaxe = await client.wait_for('message',check=check)
+
+      mod[str(ctx.guild.id)].append(messaxe.content)
+
+
+      await ctx.send('Do you want me to DM the user or put it in the server\ntype `yes` for dm and `no` for not')
+      checking = await client.wait_for('message',check=check)
+      if checking.content.lower() == 'yes' or checking.content.lower() == 'y':
+        await ctx.send('sending message via DM activated')
+        mod[str(ctx.guild.id)].append('yes')
+
+      elif checking.content.lower() == 'no' or checking.content.lower() == 'n':
+        await ctx.send('sending message via server activated')
+        mod[str(ctx.guild.id)].append('no')
+
+      else:
+        return await ctx.send('mission failed\n yes or no should have been said...')
+
+  with open('filter.json','w') as f:
+      json.dump(mod,f)
+
+@client.command()
+@commands.has_permissions(manage_messages=True)
+async def filteroff(ctx):
+
+  try:
+    with open('filter.json','r') as f:
+      mod = json.load(f)
+
+    del mod[str(ctx.guild.id)]
+
+    with open('filter.json','w') as f:
+      json.dump(mod,f)
+
+    await ctx.send('filtering switched off')
+
+  except KeyError:
+    await ctx.send('mod was never on')
+
+def mask_circle(im):
+    bigsize = (im.size[0] * 3, im.size[1] * 3)
+    mask = Image.new('L', bigsize, 0)
+    draw = ImageDraw.Draw(mask)
+    draw.ellipse((0, 0) + bigsize, fill=255)
+    mask = mask.resize(im.size, Image.ANTIALIAS)
+    im.putalpha(mask)
+
+    return im
+
+@client.command()
+async def note(ctx,member:discord.Member=None, *,text = "No text entered"):
+
+    if member == None:
+      member = ctx.author
+
+    im = Image.open ("note.png")
+
+    draw = ImageDraw.Draw(im)
+    font = ImageFont.truetype("Pacifico.ttf", 30)
+
+    draw.text((396,511), text, (0,0,0),font = font)
+    
+    asset = member.avatar_url_as(format=None, static_format='jpg', size=128)
+    data = BytesIO(await asset.read())
+    pfp = Image.open(data)
+    asset2 = ctx.author.avatar_url_as(format=None, static_format='jpg', size=128)
+    data2 = BytesIO(await asset2.read())
+    pfp2 = Image.open(data2)
+    pfp = pfp.resize((198,209))
+    mask_circle(pfp)
+    pfp2 = pfp2.resize((96, 93))
+    mask_circle(pfp2)
+    # im.paste(pfp, (108, 388))
+    im.alpha_composite(pfp, dest=(108,388))
+    pfp = pfp.resize((97,97))
+    mask_circle(pfp)
+    # im.paste(pfp, (488, 20))
+    # im.paste(pfp2, (122, 48))
+    im.alpha_composite(pfp, dest=(488,20))
+    im.alpha_composite(pfp2, dest=(122,48))
+    im.save("noteoutput.png")
+
+    await ctx.send(file = discord.File("noteoutput.png"))
+
+
+@client.command()
+async def worthless(ctx, victim : Optional[discord.User] = None, message : str = None):
+    im = Image.open ("meme.jpg")
+
+    draw = ImageDraw.Draw(im)
+    font = ImageFont.truetype("Pacifico.ttf", 20)
+    if victim == None:
+
+      draw.text((98,93), message, (0,0,0),font = font)
+      
+      im = convert_mode(im)
+      asset = ctx.author.avatar_url_as(format=None, static_format='png', size=128)
+      data = BytesIO(await asset.read())
+      pfp = Image.open(data)
+      pfp = convert_mode(pfp)
+      pfp = pfp.resize((117, 117))
+      mask_circle(pfp)
+      im.alpha_composite(pfp, dest=(157,304))
+      im.save("worthless1.png")
+
+      return await ctx.send(file = discord.File("worthless1.png"))
+
+    else:
+      #draw.text((98,93), message, (0,0,0),font = font)
+      
+      im = convert_mode(im)
+      asset = ctx.author.avatar_url_as(format=None, static_format='png', size=128)
+      data = BytesIO(await asset.read())
+      pfp = Image.open(data)
+      pfp = convert_mode(pfp)
+      pfp = pfp.resize((117, 117))
+      asset2 = victim.avatar_url_as(format=None, static_format='png', size=128)
+      data2 = BytesIO(await asset2.read())
+      pfp2 = Image.open(data2)
+      pfp2 = convert_mode(pfp2)
+      pfp2 = pfp2.resize((131, 131))
+      mask_circle(pfp)
+      mask_circle(pfp2)
+      im.alpha_composite(pfp, dest=(157,304))
+      im.alpha_composite(pfp2, dest=(139,81))
+      im.save("worthless1.png")
+
+      return await ctx.send(file = discord.File("worthless1.png"))
+def convert_mode(im):
+    if im.mode != 'RGBA':
+        im = im.convert('RGBA')
+        im.putalpha(255)
+    return im
+
+@client.command()
+async def inspired(ctx,member:discord.Member=None, *,text = "No text entered"):
+
+    if member == None:
+      member = ctx.author
+
+    im = Image.open ("inspired.png")
+
+    draw = ImageDraw.Draw(im)
+    font = ImageFont.truetype("Pacifico.ttf", 20)
+
+    draw.text((93,613), text, (0,0,0),font = font)
+    
+    asset = member.avatar_url_as(format=None, static_format='jpg', size=128)
+    data = BytesIO(await asset.read())
+    pfp = Image.open(data)
+    mask_circle(pfp)
+    pfp = pfp.resize((170,170))
+    mask_circle(pfp)
+    im.alpha_composite(pfp, dest=(724,731))
+    im.save("inspiredoutput.png")
+
+    await ctx.send(file = discord.File("inspiredoutput.png"))
+
+
+@client.command()
+async def brain(ctx,text1=None,text2=None,text3=None,text4=None):
+
+    
+
+      if text1 == None or text2 == None or text3 == None or text4 == None:
+          text1 = 'You Need'
+          text2 = '4 Values'
+          text3 = 'Seperated by '
+          text4 = 'Spaces'
+
+          im = Image.open ("brain.png")
+
+          draw = ImageDraw.Draw(im)
+          font = ImageFont.truetype("Pacifico.ttf", 15)
+
+          draw.text((6, 4), text1, (0,0,0),font = font)
+          draw.text((6, 73), text2, (0,0,0),font = font)
+          draw.text((6, 141), text3, (0,0,0),font = font)
+          draw.text((6, 204), text4, (0,0,0),font = font)
+          
+          im.save('brained.png')
+
+          return await ctx.send(file = discord.File("brained.png"))
+
+
+      im = Image.open ("brain.png")
+
+      draw = ImageDraw.Draw(im)
+      font = ImageFont.truetype("Pacifico.ttf", 15)
+
+      draw.text((6, 16), text1, (0,0,0),font = font)
+      draw.text((6, 83), text2, (0,0,0),font = font)
+      draw.text((6, 150), text3, (0,0,0),font = font)
+      draw.text((6, 211), text4, (0,0,0),font = font)
+      
+      im.save('brained.png')
+
+      await ctx.send(file = discord.File("brained.png"))
+
+    
+
+
+
+
+@client.command()
+async def savehumanity(ctx, *,text = "No text entered"):
+
+   
+
+    im = Image.open ("savee.png")
+
+    draw = ImageDraw.Draw(im)
+    font = ImageFont.truetype("Pacifico.ttf", 20)
+
+    draw.text((488,446), text, (0,0,0),font = font)
+
+    im.save("savehumanty.png")
+
+    await ctx.send(file = discord.File("savehumanty.png"))
+
+
+@client.command()
+async def trash(ctx,member:discord.Member=None):
+  if member == None:
+    member = ctx.author
+
+  im = Image.open('trash.png')
+
+  asset = member.avatar_url_as(format=None, static_format='jpg', size=128)
+  data = BytesIO(await asset.read())
+  pfp = Image.open(data)
+  pfp = pfp.filter(ImageFilter.BLUR)
+  pfp = pfp.resize((480,480))
+
+  im.paste(pfp, (480,0))
+
+  im.save('trashed.png')
+
+  await ctx.send(file=discord.File('trashed.png'))
+
+  
+@client.command()
+async def saymyname(ctx,member:discord.Member=None,*,name=None):
+
+
+    if name == None:
+      return await ctx.send('Send the name and the person who tells your name')
+
+    text = 'Say My Name'
+    text1 = "You're goddamn right!"
+
+    im = Image.open ("saymyname.png")
+
+    im = convert_mode(im)
+
+    draw = ImageDraw.Draw(im)
+    font = ImageFont.truetype("Pacifico.ttf", 20)
+
+    draw.text((16,133), text, (0,0,0),font = font)
+    draw.text((5,660), text1, (0,0,0),font = font)
+    draw.text((291,318), name, (0,0,0),font = font)
+    
+    asset = member.avatar_url_as(format=None, static_format='jpg', size=128)
+    data = BytesIO(await asset.read())
+    pfp = Image.open(data)
+    mask_circle(pfp)
+    pfp = pfp.resize((101,125))
+    mask_circle(pfp)
+
+    asset2 = ctx.author.avatar_url_as(format=None, static_format='jpg', size=128)
+    data2 = BytesIO(await asset2.read())
+    pfp2 = Image.open(data2)
+    mask_circle(pfp2)
+    pfp2 = pfp2.resize((187,206))
+    mask_circle(pfp2)
+
+    im.alpha_composite(pfp, dest=(158,260))
+    im.alpha_composite(pfp2, dest=(260,0))
+    pfp2 = pfp2.resize((231,220))
+    im.alpha_composite(pfp2, dest=(218,469))
+    im.save("sayed.png")
+
+    await ctx.send(file = discord.File("sayed.png"))
+  
+
+@client.command()
+async def internal(ctx,member:discord.Member=None):
+
+
+    if member == None:
+      member=ctx.author
+
+
+    im = Image.open ("internal.jpg")
+
+    im = convert_mode(im)
+    
+    asset = member.avatar_url_as(format=None, static_format='jpg', size=128)
+    data = BytesIO(await asset.read())
+    pfp = Image.open(data)
+    pfp = pfp.resize((71,101))
+    mask_circle(pfp)
+    im.alpha_composite(pfp, dest=(323,45))
+    pfp = pfp.resize((71,101))
+    mask_circle(pfp)
+    im.alpha_composite(pfp, dest=(323,311))
+    pfp = pfp.resize((119,129))
+    mask_circle(pfp)
+    im.alpha_composite(pfp, dest=(278,525))
+    im.save('internalled.png')
+
+    await ctx.send(file=discord.File('internalled.png'))
+
+@client.command()
+async def trigger(ctx, member: discord.Member = None):
+    if member is None:
+        member = ctx.author
+        a = member.avatar_url
+    else:
+        a = member.avatar_url
+
+    thisurl = ('https://some-random-api.ml/canvas/triggered/?avatar=' + "{}".format(a))
+    final_url = thisurl.replace("webp", "png")
+    print(final_url)
+    embed = discord.Embed(title='Triggered!! Image', colour=discord.Colour.blue())
+    embed.set_image(url = final_url)
+    await ctx.send(embed=embed)
+
+@client.command(aliases=['NUKE','Nuke'])
+async def nuke(ctx):
+  mannel = await ctx.channel.clone()
+  await ctx.channel.delete()
+  message = await mannel.send(f'Nuked channel by command from {ctx.author.mention}')
+  await asyncio.sleep(10)
+  await message.delete()
+
 keep_alive()
 
 
-client.run(getenv('TOKEN'))
+client.run(getenv('TOKEN')) 

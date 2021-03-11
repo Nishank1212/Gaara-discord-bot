@@ -74,7 +74,7 @@ class Info(commands.Cog):
 
  
 
-    fields = [("🆔ID", 800219427928801290, True),
+    fields = [("🆔ID", 810818178464612363, True),
               ("👑Owner",'<@!793433316258480128>', True),
               ("🤴Second developer","<@!747451011484090479>",True),
               ("🤖Name", "Gaara",True),
