@@ -30,7 +30,7 @@ class Help(commands.Cog):
     elif choice.lower() == 'general':
 
       embed=discord.Embed(title='Help General',description='This shows all the general commands',colour=discord.Colour.blue())
-      embed.add_field(name='Commands',value='`welcome - Welcomes a person to the group`\n`hi - Says hi to a person`\n`Avatar - Sends the avatar of a person`\n`intro - Introduces the bot`\n`totalcmds - says the total number of commands in the bot`\n`ping - Sends the latency of bot`\n`say - Says what you want Grogu to say`\n`calc-calculates an expression`\n`lyrics - shares the lyrics of the song`\n`ascii - asciis any text`\n`wiki = searches anything in wikipedia`\n`edits - shows the last edit in server`')
+      embed.add_field(name='Commands',value='`welcome - Welcomes a person to the group`\n`hi - Says hi to a person`\n`Avatar - Sends the avatar of a person`\n`intro - Introduces the bot`\n`totalcmds - says the total number of commands in the bot`\n`ping - Sends the latency of bot`\n`say - Says what you want Grogu to say`\n`calc-calculates an expression`\n`lyrics - shares the lyrics of the song`\n`ascii - asciis any text`\n`wiki = searches anything in wikipedia`\n`edits - shows the last edit in server`\n`bots - shares the number of bots in server`\n`humans - shares the number of humans in server`')
       #embed.set_image(url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUUE1iPh_mNvgXUQi7oQ2rhJ-0Enf5NZWrrA&usqp=CAU')
       embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
 
@@ -43,7 +43,7 @@ class Help(commands.Cog):
 
     elif choice.lower() == 'fun':
       embed=discord.Embed(title='Help Fun',description='This shows all the fun commands',colour=discord.Colour.blue())
-      embed.add_field(name='Commands',value='`joke - Sends a joke to server`\n`meme - Sends a meme to server`\n`Good Joke - Sends a good joke :D`\n`pat - Sends a pat`\n`spoonfeeding - Sends something about spoonfeeding`\n`8ball - Ask a yes or no question! Gaara will answer`\n`inspire - Sends a inspirational quote`\n`spam - spams what you want it to spam`\n`DM - dms anyone you want to`\n`gaara - send info on gaara`\n`hehe boi- sends a pic of hehe boi`\n`khopi told - sends a pic of khopdi told`\n`snipe - shows the last deleted message`')
+      embed.add_field(name='Commands',value='`joke - Sends a joke to server`\n`meme - Sends a meme to server`\n`Good Joke - Sends a good joke :D`\n`pat - Sends a pat`\n`spoonfeeding - Sends something about spoonfeeding`\n`8ball - Ask a yes or no question! Gaara will answer`\n`inspire - Sends a inspirational quote`\n`spam - spams what you want it to spam`\n`DM - dms anyone you want to`\n`gaara - send info on gaara`\n`hehe boi- sends a pic of hehe boi`\n`khopi told - sends a pic of khopdi told`\n`snipe - shows the last deleted message`\n`spoiler - check it out...`')
       #embed.set_image(url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGC0ViA9_darzbBsNjkPGGZBi8nKlIiOdQlA&usqp=CAU')
       embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
       await ctx.send(embed=embed)
@@ -76,7 +76,7 @@ class Help(commands.Cog):
 
     elif choice.lower() == 'economy':
       embed=discord.Embed(title='Help Economy',description='Economy commands',colour=discord.Colour.blue())
-      embed.add_field(name='commands...',value='`bal - tells the balance of a person`\n`beg - begs a person for an amount`\n`dep - deposits an amount to the bank`\n`with - withdraws an amount from bank`\n`slots - plays slots and u can bet a money on it also`\n`rob - robs any person`\n`search - searches for money`\n`give - gives money to any person you choose`\n`buy - buy an object from shop`\n`fish - fishes`\n`hunt - hunts for animals`\n`sell - you can sell any animal or fish via this cmd`\n`inv - shares the inventory of a person`\n`shop - shows the shop`\n`postmeme - posts a meme`\n`gamble - gambles an amount you choose`')
+      embed.add_field(name='commands...',value='`bal - tells the balance of a person`\n`beg - begs a person for an amount`\n`dep - deposits an amount to the bank`\n`with - withdraws an amount from bank`\n`slots - plays slots and u can bet a money on it also`\n`rob - robs any person`\n`search - searches for money`\n`give - gives money to any person you choose`\n`buy - buy an object from shop`\n`fish - fishes`\n`hunt - hunts for animals`\n`sell - you can sell any animal or fish via this cmd`\n`inv - shares the inventory of a person`\n`shop - shows the shop`\n`postmeme - posts a meme`\n`gamble - gambles an amount you choose`\n`enable rob - enables rob(disbled by default)`\n`disable rob - disable rob(disbled by default)`')
       embed.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
       await ctx.send(embed=embed)
 

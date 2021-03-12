@@ -69,11 +69,8 @@ class secret(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
-            embed = discord.Embed(
-                title='Cooldown!', description=f'woah! slow it down buddy, this command is in a cooldown you can try after {round(error.retry_after)} seconds', colour=discord.Colour.blue())
-            await ctx.send(embed=embed)
-        elif isinstance(error, commands.MissingPermissions):
+        
+        if isinstance(error, commands.MissingPermissions):
 
       
             embed=discord.Embed(title='Missing Permissions',description='You are missing permissions to run this command buddy',colour=discord.Colour.blue())

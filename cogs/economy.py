@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 from pymongo import MongoClient
 import random
+import json
 
 cluster = MongoClient(getenv("ECONOMY_PASS")) # Don't include "<" and ">" fill in those with your credentials
 collection = cluster.economy1.economy1
@@ -12,7 +13,6 @@ class Economy(commands.Cog):
     self.client = client
 
   @commands.command(aliases=['BAL','Bal','BALANCE','Balance','balance'])
-  @commands.cooldown(1, 10, commands.BucketType.user)
   async def bal(self,ctx,member: discord.Member=None):
     if member == None:
       member=ctx.author
@@ -62,6 +62,13 @@ class Economy(commands.Cog):
 
         print(bankinfo["wallet"])
         await ctx.send(f'{random.choice(people)} gave you {result} fluxes!')
+
+  @beg.error
+  async def beg_error(self,ctx,error):
+    if isinstance(error,commands.CommandOnCooldown):
+      embed=discord.Embed(title='Woah Slow it down buddy',description=f'You can try this command after {round(error.retry_after)} seconds, The people aint walking in the road, default cooldown - 20 seconds',colour=discord.Colour.blue())
+      await ctx.send(embed=embed)
+
 
   @commands.command(aliases=['DEPOSIT','Deposit','Dep','DEP','deposit'])
   async def dep(self,ctx,amount:str):
@@ -159,12 +166,31 @@ class Economy(commands.Cog):
           await ctx.send(f'You Got {a},{b},{c} and you lost {amount} fluxes! :cry:')
 
         collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
+
+  @slots.error
+  async def slots_error(self,ctx,error):
+    if isinstance(error,commands.CommandOnCooldown):
+      embed=discord.Embed(title='Woah Slow it down buddy',description=f'You can try this command after {round(error.retry_after)} seconds, there is a line..., default cooldown - 20 seconds',colour=discord.Colour.blue())
+      await ctx.send(embed=embed)
       
 
   @commands.command(aliases=['ROB','Rob'],cooldown_after_parsing=True)
-  
   @commands.cooldown(1,120, commands.BucketType.user)
   async def rob(self,ctx,member:discord.Member = None):
+
+    with open('rob.json') as f:
+      rob = json.load(f)
+
+    try:
+      if rob[str(ctx.guild.id)]=='disabled':
+        return await ctx.send('Robbing is disabled for this server...')
+
+      else:
+        pass
+
+    except:
+       return await ctx.send('Robbing is disabled for this server...')
+      
 
     if member == None:
       await ctx.send('Try to run the command after 2 minutes again but this time actually mention who u want to rob :rolling_eyes:')
@@ -234,6 +260,12 @@ class Economy(commands.Cog):
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
       collection.replace_one({"user": bankinfo1['user']},{"user": bankinfo1['user'], "wallet": bankinfo1['wallet'], "bank": bankinfo1['bank'],"inventory" : bankinfo1['inventory']})
 
+  @rob.error
+  async def tob_error(self,ctx,error):
+    if isinstance(error,commands.CommandOnCooldown):
+      embed=discord.Embed(title='Woah Slow it down buddy',description=f'You can try this command after {round(error.retry_after)} seconds, the police are still looking for you, default cooldown - 20 seconds',colour=discord.Colour.blue())
+      await ctx.send(embed=embed)
+
 
   @commands.command(aliases=['SEARCH','Search'])
   @commands.cooldown(1,30, commands.BucketType.user)
@@ -295,6 +327,12 @@ class Economy(commands.Cog):
 
 
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
+
+  @search.error
+  async def slots_error(self,ctx,error):
+    if isinstance(error,commands.CommandOnCooldown):
+      embed=discord.Embed(title='Woah Slow it down buddy',description=f'You can try this command after {round(error.retry_after)} seconds,You already scouted this area, default cooldown - 20 seconds',colour=discord.Colour.blue())
+      await ctx.send(embed=embed)
 
 
   @commands.command(aliases=['GIVE','GIB','Gib','gib','Give'])
@@ -804,6 +842,95 @@ class Economy(commands.Cog):
         await ctx.send(embed=embed)
   
         collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
+
+  @commands.command()
+  @commands.has_permissions(manage_guild=True)
+  async def enable(self,ctx,what):
+    if what.lower() == 'rob':
+      with open('rob.json','r') as f:
+        rob = json.load(f)
+
+      try:
+        del rob[str(ctx.guild.id)]
+        rob[str(ctx.guild.id)] = 'enabled'
+        await ctx.send('Rob already enabled...')
+
+      except:
+        rob[str(ctx.guild.id)] = 'enabled'
+        await ctx.send('Rob Enabled!!!')
+
+      with open('rob.json','w') as f:
+        json.dump(rob,f)
+
+  @commands.command()
+  @commands.has_permissions(manage_guild=True)
+  async def disable(self,ctx,what):
+    if what.lower() == 'rob':
+      with open('rob.json','r') as f:
+        rob = json.load(f)
+
+      try:
+        del rob[str(ctx.guild.id)]
+        await ctx.send('Rob Disabled...')
+
+      except:
+        await ctx.send('Rob was already disabled!!!')
+
+      with open('rob.json','w') as f:
+        json.dump(rob,f)
+
+  
+  # @commands.command(aliases=['DAILY','Daily'])
+  # @commands.cooldown(1, 86400, commands.BucketType.user) 
+  # async def daily(self,ctx):
+  #   bankinfo = collection.find_one({"user": ctx.author.id})
+  #   if not bankinfo:
+  #     #make new entry
+  #     collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
+  #     await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
+  #     return
+
+  #   else:
+  #     bankinfo['wallet'] += 1000
+
+  #   await ctx.send('Daily Reward claimed for 1000 fluxes!!!')
+    
+  #   collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
+
+  # @commands.command(aliases=['MONTHLY','Monthly'])
+  # @commands.cooldown(1, 2628288 , commands.BucketType.user) 
+  # async def monthly(self,ctx):
+  #   bankinfo = collection.find_one({"user": ctx.author.id})
+  #   if not bankinfo:
+  #     #make new entry
+  #     collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
+  #     await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
+  #     return
+
+  #   else:
+  #     bankinfo['wallet'] += 10000
+
+  #   await ctx.send('Daily Reward claimed for 10000 fluxes!!!')
+    
+  #   collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
+
+  # @commands.command(aliases=['WEEKLY','Weekly'])
+  # @commands.cooldown(1, 604800, commands.BucketType.user) 
+  # async def weekly(self,ctx):
+  #   bankinfo = collection.find_one({"user": ctx.author.id})
+  #   if not bankinfo:
+  #     #make new entry
+  #     collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0,"inventory":{}})
+  #     await ctx.send(f'{ctx.author.name} is new, opening new bank account.')
+  #     return
+
+  #   else:
+  #     bankinfo['wallet'] += 5000
+
+  #   await ctx.send('Daily Reward claimed for 5000 fluxes!!!')
+    
+  #   collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
+
 
           
 def slots(a,b,c):

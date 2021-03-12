@@ -933,12 +933,30 @@ async def trigger(ctx, member: discord.Member = None):
     await ctx.send(embed=embed)
 
 @client.command(aliases=['NUKE','Nuke'])
+@commands.has_permissions(manage_messages=True)
 async def nuke(ctx):
   mannel = await ctx.channel.clone()
   await ctx.channel.delete()
   message = await mannel.send(f'Nuked channel by command from {ctx.author.mention}')
   await asyncio.sleep(10)
   await message.delete()
+
+@client.command()
+async def spoiler(ctx,*,arg):
+  spoilers = list(arg)
+  newlist = []
+  for i in spoilers:
+    newlist.append(f'||{i}||')
+
+  await ctx.send(''.join(newlist))
+
+@client.command()
+async def humans(ctx):
+  await ctx.send(f'{len([i for i in ctx.members if not i.bot])} Humans in {ctx.guild.name}')
+
+@client.command()
+async def bots(ctx):
+  await ctx.send(f'{len([i for i in ctx.members if i.bot])} Bots in {ctx.guild.name}')
 
 keep_alive()
 
