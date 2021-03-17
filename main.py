@@ -12,10 +12,13 @@ import random
 import wikipedia
 import json
 import aiohttp
+import shutil
+import urllib.parse
 import requests
 import asyncio
 import unicodedata
 from PIL import Image,ImageFont,ImageDraw,ImageFilter
+from aiohttp import ClientSession
 # import youtube_dl
 # from youtube_search import YoutubeSearch
 
@@ -122,12 +125,14 @@ async def on_message(message):
     a = list(msg.split(' '))
     
     for i in a:
-      if i in listt:
+      if i.lower() in listt:
         await message.delete()
 
         if yesno == 'no':
 
-          await message.channel.send(f'{message.author.mention}\n{mess}')
+          lolz = await message.channel.send(f'{message.author.mention}\n{mess}')
+          await asyncio.sleep(10)
+          await lolz.delete()
 
         if yesno == 'yes':
 
@@ -161,7 +166,8 @@ async def on_message(message):
       embed.set_author(name=f'My command prefix for this server is `{pre}`,type `{pre}help` for more info',icon_url=message.author.avatar_url)
       await message.channel.send(embed=embed)
 
-    
+  if message.content == f'<@!797519687147585546>':
+     await message.channel.send('Hokage is my best friend!!!\nWe both were made by our masters...') 
     
   await client.process_commands(message)
 
@@ -490,26 +496,26 @@ async def chnick(ctx,member:discord.Member,*,nick):
   await member.edit(nick=nick)
   await ctx.send(f'Nickname was changed for {member.mention} ')
 
-# @client.command()
-# async def mhs(ctx, member : discord.Member, *, message : str):
+@client.command()
+async def mhs(ctx, member : discord.Member, *, message : str):
 
-#         await ctx.message.delete()
+        await ctx.message.delete()
 
-#         url = None
-#         webhooks = await ctx.channel.webhooks()
-#         for webhook in webhooks:
-#             if webhook.name == 'Nishank':
-#                 url = webhook.url
+        url = None
+        webhooks = await ctx.channel.webhooks()
+        for webhook in webhooks:
+            if webhook.name == 'Nishank':
+                url = webhook.url
 
-#         if url is None:
-#             webhook = await ctx.channel.create_webhook(name = 'Nishank')
-#             url = webhook.url
+        if url is None:
+            webhook = await ctx.channel.create_webhook(name = 'Nishank')
+            url = webhook.url
 
-#         async with ClientSession() as session:
-#             webhook = discord.Webhook.from_url(url, adapter = discord.AsyncWebhookAdapter(session))
+        async with ClientSession() as session:
+            webhook = discord.Webhook.from_url(url, adapter = discord.AsyncWebhookAdapter(session))
 
 
-#             await webhook.send(content = message, username = member.name, avatar_url = member.avatar_url)
+            await webhook.send(content = message, username = member.name, avatar_url = member.avatar_url)
 
 
 @client.command(hidden=True)
@@ -917,20 +923,6 @@ async def internal(ctx,member:discord.Member=None):
 
     await ctx.send(file=discord.File('internalled.png'))
 
-@client.command()
-async def trigger(ctx, member: discord.Member = None):
-    if member is None:
-        member = ctx.author
-        a = member.avatar_url
-    else:
-        a = member.avatar_url
-
-    thisurl = ('https://some-random-api.ml/canvas/triggered/?avatar=' + "{}".format(a))
-    final_url = thisurl.replace("webp", "png")
-    print(final_url)
-    embed = discord.Embed(title='Triggered!! Image', colour=discord.Colour.blue())
-    embed.set_image(url = final_url)
-    await ctx.send(embed=embed)
 
 @client.command(aliases=['NUKE','Nuke'])
 @commands.has_permissions(manage_messages=True)
@@ -950,13 +942,106 @@ async def spoiler(ctx,*,arg):
 
   await ctx.send(''.join(newlist))
 
+@client.command(aliases=['triggered'])
+async def trigger(ctx, *,user=None):
+
+		if user:
+				try:
+						user = await commands.converter.MemberConverter().convert(ctx,user)
+				except:
+						await ctx.send(f"I don\'t know {user}, lets just use your avatar ...")
+						user = ctx.author
+		else:
+				user = ctx.author
+
+		getVars = {'avatar': user.avatar_url_as(format='png')}
+		url = 'https://some-random-api.ml/canvas/triggered/?'
+		response = requests.get(
+				url + urllib.parse.urlencode(getVars), stream=True)
+
+		if response.status_code != 200:
+				await ctx.send('Well ... that did not work for some reason.')
+				return
+
+		response.raw.decode_content = True
+		with open('triggered.gif', 'wb') as out_file:
+				shutil.copyfileobj(response.raw, out_file)
+		del response
+
+		await ctx.send(file=discord.File('triggered.gif'))
+
 @client.command()
 async def humans(ctx):
-  await ctx.send(f'{len([i for i in ctx.members if not i.bot])} Humans in {ctx.guild.name}')
+  await ctx.send(f'{len([i for i in ctx.guild.members if not i.bot])} Humans in {ctx.guild.name}')
 
 @client.command()
 async def bots(ctx):
-  await ctx.send(f'{len([i for i in ctx.members if i.bot])} Bots in {ctx.guild.name}')
+  await ctx.send(f'{len([i for i in ctx.guild.members if i.bot])} Bots in {ctx.guild.name}')
+
+@client.command()
+async def prank(ctx):
+  await ctx.send(f'Are you sure you want to delete {ctx.guild.name}? send yes or no')
+  def check(m):
+    return m.author == ctx.author
+  lolz = await client.wait_for('message',check=check)
+  if lolz.content.lower() == 'yes':
+    await ctx.send('Deleting server...')
+    await ctx.guild.owner.send('You server Was deleted...')
+
+@client.command(aliases=['findMyFriend'])
+async def fmf(ctx,member:discord.Member):
+  await ctx.send(f'{member.mention} is {ctx.author.name} close to you?\nDo you approve me of showing him servers common between us both?\ntype `yes` or `y` to approve...')
+  def check(m):
+    return m.author == member
+
+  approval = await client.wait_for('message',check=check)
+  if approval.content.lower() == 'yes' or approval.content.lower() == 'y':
+    edit = await ctx.send('Looking at my servers...')
+    nope = []
+    for i in client.guilds:
+      if member in i.members and ctx.author not in i.members:
+        nope.append(i.name)
+      else:
+        continue
+
+    await edit.edit(content='Looking if he is there in any of my servers...')
+    await asyncio.sleep(3)
+    await edit.edit(content='Looking if you arent there in that server...')
+    await asyncio.sleep(3)
+    await edit.edit(content=f'Process executed Check your DM {ctx.author.name}')
+    await edit.add_reaction('\u2705')
+    if nope == []:
+      await ctx.author.send('He is there in all servers you are there where I am...')
+
+    else:
+      embed=discord.Embed(title='The servers...',colour=discord.Colour.blue())
+      count = 1
+      for m in nope:
+        embed.add_field(name=count,value=m)
+        count+=1
+
+      await ctx.author.send(embed=embed)
+
+  else:
+    await ctx.send('OOF! you got rejected...')
+
+@client.command()
+@commands.has_permissions(view_audit_log=True)
+async def audit(ctx,num:int=5):
+  if num>10:
+    return await ctx.send('Too many will create spam make sure your num is less than 10')
+  embed=discord.Embed(title='Latest Audit Logs...',colour=discord.Colour.blue())
+  async for entry in ctx.guild.audit_logs(limit=num):
+    if isinstance(entry.target, discord.Object): 
+      blah = entry.target.id
+
+    else:
+      blah = entry.target
+
+    embed.add_field(name='\u200b',value=f'{entry.user} did {str(entry.action).split(".")[1]}  to {blah}')
+
+  await ctx.send(embed=embed)
+    
 
 keep_alive()
 

@@ -20,8 +20,13 @@ class ChatBot(commands.Cog):
 
 		with open('prefixes.json','r') as f:
 			prefixes = json.load(f)
+		try:
 
-		pre = prefixes[str(ctx.guild.id)]
+			pre = prefixes[str(ctx.guild.id)]
+
+		except:
+			
+			pre = '~~'
 
 		global chat, chat_author_id
 		if int(ctx.author.id) == 'lol':

@@ -21,9 +21,8 @@ class Say(commands.Cog):
 
   @commands.command(aliases=['Say','SAY'])
   async def say(self,ctx,*,lines):
-    embed = discord.Embed(title='Saying Your Words...',description=lines,colour=discord.Colour.blue())
-    embed.set_footer(text=f'{ctx.author.name} asked me...Dont Blame me',icon_url=f'{ctx.author.avatar_url}')
-    await ctx.send(embed=embed)
+    
+    await ctx.send(lines)
 
 def setup(client):
   client.add_cog(Say(client))

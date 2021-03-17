@@ -634,7 +634,7 @@ class Economy(commands.Cog):
             num = bankinfo['inventory']['deer']
             if num >= 1:
               bankinfo['wallet'] += 100 * int(num)
-
+              await ctx.send(f'Succesfully sold {int(num)} deer🦌 for {int(num)*100} fluxes')
               bankinfo['inventory']['deer'] -= num
 
             else:
@@ -946,4 +946,3 @@ def slots(a,b,c):
 
 def setup(client):
   client.add_cog(Economy(client))
-
