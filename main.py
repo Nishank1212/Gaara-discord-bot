@@ -36,6 +36,18 @@ status = cycle(['Gaara|Ping for more info','Gaara|Ping for more info'])
 client.sniped_messages = {}
 client.sniped_messages1 = {}
 client.load_extension('jishaku')
+#client.help_command = commands.MinimalHelpCommand()
+
+
+
+# class MyNewHelp(commands.MinimalHelpCommand):
+#     async def send_pages(self):
+#         destination = self.get_destination()
+#         for page in self.paginator.pages:
+#             emby = discord.Embed(description=page)
+#             await destination.send(embed=emby)
+
+# client.help_command = MyNewHelp()
 
 client.remove_command("help")
 global chat, chat_author_id
@@ -44,7 +56,7 @@ chat_author_id = 0
 
 @client.event
 async def on_ready():
-  change_status.start()
+ # change_status.start()
   print('Bot is ready')
 
 
@@ -194,9 +206,29 @@ async def on_member_join(member):
 
       await client.get_channel(int(channel)).send(f"{member.mention}\n{messages}")
 
-@tasks.loop(seconds=3600)
-async def change_status():
-	await client.change_presence(activity=discord.Game(next(status)))
+@client.event
+async def on_member_remove(member):
+    print('someone ;lefttttt')
+    with open('leave.json','r') as f:
+      lolz = json.load(f)
+
+    message = lolz[str(member.guild.id)][0]
+    dmornot = lolz[str(member.guild.id)][1]
+  
+    print(message)
+    print(dmornot)
+    if dmornot == 'DM':
+      await member.send(f'{member.mention} {message}')
+
+    else:
+      channel = client.get_channel(dmornot)
+      await channel.send(f'{member.mention} {message}')
+
+  
+
+# @tasks.loop(seconds=3600)
+# async def change_status():
+# 	await client.change_presence(activity=discord.Game(next(status)))
 
 for filename in os.listdir('./cogs'):
 #if filename.endswith('economy.py'):
@@ -495,6 +527,8 @@ async def modoff(ctx):
 async def chnick(ctx,member:discord.Member,*,nick):
   await member.edit(nick=nick)
   await ctx.send(f'Nickname was changed for {member.mention} ')
+
+
 
 @client.command()
 async def mhs(ctx, member : discord.Member, *, message : str):
@@ -1042,8 +1076,73 @@ async def audit(ctx,num:int=5):
 
   await ctx.send(embed=embed)
     
+@client.command(aliases=['SLM','Slm','slm'])
+async def setleavemessage(ctx):
+  await ctx.send('What is the message you want to send??\n***TYPE THE SUFFIX***(the message will start as a mention to the member...)\nSo example type `has left`')
+  def check(m):
+    return m.author == ctx.author
+  message1 = await client.wait_for('message',check=check)
+  with open('leave.json','r') as f:
+    lolz = json.load(f)
+
+  try:
+    del lolz[str(ctx.guild.id)]
+    lolz[str(ctx.guild.id)] = [message1.content]
+    await ctx.send('Do you want me to send it in a channel or dms???,type `yes` for channel and `no` for dms')
+    message2 = await client.wait_for('message',check=check)
+    if message2.content.lower() == 'yes':
+      await ctx.send('Send the channel ID for sending the message')
+      id = await client.wait_for('message',check=check)
+      id = int(id.content)
+      list1 = []
+      for i in ctx.guild.channels:
+        list1.append(int(i.id))
+      if id in list1:
+
+          lolz[str(ctx.guild.id)].append(id)
+          
+          with open('leave.json','w') as f:
+            json.dump(lolz,f)
+          return await ctx.send('Process Completed!!!')
+
+      return await ctx.send('Invalid ID provided')
+    elif message2.content.lower() == 'no':
+      lolz[str(ctx.guild.id)].append('DM')
+      with open('leave.json','w') as f:
+          json.dump(lolz,f)
+
+  except:
+    lolz[str(ctx.guild.id)] = [message1.content]
+
+    await ctx.send('Do you want me to send it in a channel or dms???,type `yes` for channel and `no` for dms')
+    message2 = await client.wait_for('message',check=check)
+    if message2.content.lower() == 'yes':
+      await ctx.send('Send the channel ID for sending the message')
+      id = await client.wait_for('message',check=check)
+      id = int(id.content)
+      list1 = []
+      for i in ctx.guild.channels:
+        list1.append(int(i.id))
+      if id in list1:
+
+          lolz[str(ctx.guild.id)].append(id)
+          
+          with open('leave.json','w') as f:
+            json.dump(lolz,f)
+          return await ctx.send('Process Completed!!!')
+
+      return await ctx.send('Invalid ID provided')
+
+    elif message2.content.lower() == 'no':
+      lolz[str(ctx.guild.id)].append('DM')
+      with open('leave.json','w') as f:
+            json.dump(lolz,f)
+
+    else:
+      return await ctx.send('yes or no should have been said')
+
 
 keep_alive()
 
 
-client.run(getenv('TOKEN')) 
+client.run(getenv('TOKEN'))

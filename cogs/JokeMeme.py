@@ -3,23 +3,24 @@ from discord.ext import commands
 from os import getenv
 import requests
 
+
+
+
 class Joke(commands.Cog):
   def __init__(self,client):
     self.client = client
 
   @commands.command(aliases=['JOKE','Joke'])
   async def joke(self,ctx):
-    url = "https://joke3.p.rapidapi.com/v1/joke"
 
-    headers = {
-    'x-rapidapi-key': getenv("KEY"),
-    'x-rapidapi-host': "joke3.p.rapidapi.com"
-    }
+    return
 
-    response = requests.request("GET", url, headers=headers).json()
-    joke = response['content']
+    url = "https://official-joke-api.appspot.com/random_joke"
 
-    embed = discord.Embed(title='Joke',description=joke,colour=discord.Colour.blue())
+   
+
+    response = requests.request("GET", url).json()
+    embed = discord.Embed(title='Joke :rofl:',description=f"{response['setup']}\n{response['punchline']}",colour=discord.Colour.blue())
     embed.set_footer(text=f'{ctx.author.name} asked me...Dont Blame me',icon_url=f'{ctx.author.avatar_url}')
     await ctx.send(embed=embed)
 

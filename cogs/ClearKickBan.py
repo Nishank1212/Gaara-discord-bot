@@ -9,6 +9,21 @@ class eightball(commands.Cog):
   @commands.command(aliases=['CLEAR','Clear'])
   @commands.has_permissions(manage_messages=True)
   async def clear(self,ctx, amount : int):
+    if amount >= 100:
+      await ctx.send('you are going to clear 100+ messages...Are you sure you want to?...`type yes or no`')
+      def check(m):
+        return m.author == ctx.author
+      lol = await self.client.wait_for('message',check=check)
+      if lol.content.lower() == 'yes':
+        await ctx.channel.purge(limit= amount+1)
+        message = await ctx.send(f'{amount} messages deleted by Me on Command of {ctx.author.mention}')
+        await asyncio.sleep(3)
+        await message.delete()
+        return
+
+      else:
+        return await ctx.send('Process Stopped :sweat_smile:')
+
     await ctx.channel.purge(limit= amount+1)
     message = await ctx.send(f'{amount} messages deleted by Me on Command of {ctx.author.mention}')
     await asyncio.sleep(3)

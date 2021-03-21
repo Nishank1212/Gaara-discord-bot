@@ -109,7 +109,7 @@ class Info(commands.Cog):
 
   @commands.command(aliases=['VOTE','Vote'])
   async def vote(self,ctx):
-    embed=discord.Embed(title='Vote Gaara!',description='[Vote here](https://voidbots.net/bot/800219427928801290/)',colour=discord.Colour.blue())  
+    embed=discord.Embed(title='Vote Gaara!',description='discordbotlist\n[Vote here](https://discordbotlist.com/bots/gaara/upvote)',colour=discord.Colour.blue())  
     await ctx.send(embed=embed)
 
 def setup(client):

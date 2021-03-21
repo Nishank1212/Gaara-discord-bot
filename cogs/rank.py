@@ -85,21 +85,18 @@ class Rank(commands.Cog):
 
     my_query = { "guild": ctx.guild.id }
     user_dic = collection.find(my_query).sort("xp",-1)
-    print(user_dic)
     positions = []
     for user_data in user_dic:
       positions.append(user_data['member'])
 
     n = None
-    print(positions)
+  
 
     for i in range(1,len(positions)+1):
-      print(positions)
+  
       if positions[i-1] == member.id:
-        print(i-1)
-        print(i)
+        
         n = i
-        print(n)
         break
       else:
         continue
@@ -138,8 +135,13 @@ class Rank(commands.Cog):
 
     if num == None:
       for user_data in user_dic:
-        m = ctx.guild.get_member(user_data['member'])
-        embed.add_field(name=m, value=f"EXP : **{user_data['xp']}** LEVEL : {user_data['level']}", inline=False)
+        try:
+
+          m = ctx.guild.get_member(user_data['member'])
+          embed.add_field(name=m, value=f"EXP : **{user_data['xp']}** LEVEL : {user_data['level']}", inline=False)
+
+        except:
+          continue
 
     else:
 
@@ -160,7 +162,7 @@ class Rank(commands.Cog):
 
 
 level_check_point = [0,20, 100, 200, 350, 500, 700, 900, 1100, 1300, 1500,
-                     1800, 2300, 2700, 3100, 3700, 4300, 5000, 5800, 6700, 7700, 9000, 10300,11600,13000,15000,17000,19000,22000,25000]
+                     1800, 2300, 2700, 3100, 3700, 4300, 5000, 5800, 6700, 7700, 9000, 10300,11600,13000,15000,17000,19000,22000,25000,30000,35000,40000,50000,65000,80000,100000]
 
 
 

@@ -303,7 +303,7 @@ class Music(commands.Cog):
 
 			await ctx.send("An error occurred: {}".format(str(error)))
 
-	@commands.command(name="join", invoke_without_subcommand=True)
+	@commands.command(name="join",aliases=['j','J'],invoke_without_subcommand=True)
 	async def _join(self, ctx: commands.Context):
 
 		destination = ctx.author.voice.channel
@@ -318,7 +318,7 @@ class Music(commands.Cog):
 		
 		await ctx.send(embed=embed)
 
-	@commands.command(name="leave", aliases=["disconnect"])
+	@commands.command(name="leave", aliases=["disconnect",'l','L'])
 	async def _leave(self, ctx: commands.Context):
 
 		if not ctx.voice_state.voice:
@@ -330,7 +330,7 @@ class Music(commands.Cog):
 		)
 		await ctx.send(embed=embed)
 
-	@commands.command(name="queue")
+	@commands.command(name="queue",aliases=['q','Q'])
 	async def _queue(self, ctx: commands.Context, *, page: int = 1):
 
 		if len(ctx.voice_state.songs) == 0:
@@ -363,7 +363,7 @@ class Music(commands.Cog):
 			await ctx.message.add_reaction("⏯")
 			
 	
-	@commands.command(aliases=['RESUME','Resume'])
+	@commands.command(aliases=['RESUME','Resume','r','R'])
 	async def resume(self,ctx):
 		if ctx.voice_state.is_playing and ctx.voice_state.voice.is_paused:
 			message = await ctx.send("resuming...")
@@ -373,7 +373,7 @@ class Music(commands.Cog):
 			await ctx.message.add_reaction("⏯")
 		
 
-	@commands.command(aliases=['STOP','Stop'])
+	@commands.command(aliases=['STOP','Stop','st','ST','St'])
 	async def stop(self,ctx):
 
 		ctx.voice_state.songs.clear()
@@ -386,7 +386,7 @@ class Music(commands.Cog):
 			await ctx.message.add_reaction("⏹")
 			
 
-	@commands.command(name="play",aliases=['PLAY','Play'])
+	@commands.command(name="play",aliases=['PLAY','Play','P','p'])
 	async def _play(self, ctx: commands.Context, *, search: str):
 
 		if not ctx.voice_state.voice:
@@ -406,7 +406,7 @@ class Music(commands.Cog):
 				await ctx.voice_state.songs.put(song)
 				await ctx.send("Enqueued {}".format(str(source)))
 
-	@commands.command(aliases=['SKIP','Skip'])
+	@commands.command(aliases=['SKIP','Skip','s','S'])
 	async def skip(self,ctx):
 		if not ctx.voice_state.is_playing:
 			await ctx.send(':thinking: I think now i shall skip the next time u ask me to play music')

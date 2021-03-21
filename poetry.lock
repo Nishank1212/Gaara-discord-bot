@@ -61,6 +61,17 @@ tests_no_zope = ["coverage (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0
 
 [[package]]
 category = "main"
+description = "Jokes for python"
+name = "axju-jokes"
+optional = false
+python-versions = "*"
+version = "1.0.3"
+
+[package.dependencies]
+requests = "*"
+
+[[package]]
+category = "main"
 description = "Screen-scraping library"
 name = "beautifulsoup4"
 optional = false
@@ -275,6 +286,18 @@ version = "2.20"
 
 [[package]]
 category = "main"
+description = "One line jokes for programmers (jokes as a service)"
+name = "pyjokes"
+optional = false
+python-versions = "*"
+version = "0.6.0"
+
+[package.extras]
+doc = ["mkdocs"]
+test = ["pytest", "coverage", "tox"]
+
+[[package]]
+category = "main"
 description = "Python driver for MongoDB <http://www.mongodb.org>"
 name = "pymongo"
 optional = false
@@ -445,7 +468,7 @@ python-versions = "*"
 version = "2021.2.22"
 
 [metadata]
-content-hash = "d0eddb5fe9a6cab6135abababe613949558328f73cc6224299542cb82d582440"
+content-hash = "c919bba4e15dbbaf6bbcd81fb8e864689b8ae95fef9352774f64b968341afa58"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -503,6 +526,10 @@ async-timeout = [
 attrs = [
     {file = "attrs-20.3.0-py2.py3-none-any.whl", hash = "sha256:31b2eced602aa8423c2aea9c76a724617ed67cf9513173fd3a4f03e3a929c7e6"},
     {file = "attrs-20.3.0.tar.gz", hash = "sha256:832aa3cde19744e49938b91fea06d69ecb9e649c93ba974535d08ad92164f700"},
+]
+axju-jokes = [
+    {file = "axju-jokes-1.0.3.tar.gz", hash = "sha256:3145628ef9e1595ad94a1e1640616e1bbec455d7d646d9e33e0c0f96ad4a7627"},
+    {file = "axju_jokes-1.0.3-py3-none-any.whl", hash = "sha256:a288fec382ecd2ecf785129438bc1a998342573f472023a2bcfaa6ecf4cbdacc"},
 ]
 beautifulsoup4 = [
     {file = "beautifulsoup4-4.9.3-py2-none-any.whl", hash = "sha256:4c98143716ef1cb40bf7f39a8e3eec8f8b009509e74904ba3a7b315431577e35"},
@@ -700,6 +727,10 @@ multidict = [
 pycparser = [
     {file = "pycparser-2.20-py2.py3-none-any.whl", hash = "sha256:7582ad22678f0fcd81102833f60ef8d0e57288b6b5fb00323d101be910e35705"},
     {file = "pycparser-2.20.tar.gz", hash = "sha256:2d475327684562c3a96cc71adf7dc8c4f0565175cf86b6d7a404ff4c771f15f0"},
+]
+pyjokes = [
+    {file = "pyjokes-0.6.0-py2.py3-none-any.whl", hash = "sha256:70b6125186dee5845038505cd16b5e09250da46c730e36b44ffd870e3c81aaaa"},
+    {file = "pyjokes-0.6.0.tar.gz", hash = "sha256:08860eedb78cbfa4618243c8db088f21c39823ece1fdaf0133e52d9c56e981a5"},
 ]
 pymongo = [
     {file = "pymongo-3.11.3-cp27-cp27m-macosx_10_14_intel.whl", hash = "sha256:4d959e929cec805c2bf391418b1121590b4e7d5cb00af7b1ba521443d45a0918"},

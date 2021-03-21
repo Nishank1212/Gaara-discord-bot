@@ -6,51 +6,64 @@ class Poll(commands.Cog):
     self.client=client
 
   @commands.command(aliases=['POLL','Poll'])
-  @commands.cooldown(1, 120, commands.BucketType.user)
+  #@commands.cooldown(1, 120, commands.BucketType.user)
   async def poll(self,ctx):
-    await ctx.send('What is The question you want?(note:there will be only 4 options)')
+    loli = await ctx.send('What is The question you want?(note:there will be only 4 options)')
 
     def check(m):
         return m.author == ctx.author
     msg1 = await self.client.wait_for('message',check=check)
+  
+    await loli.delete()
 
-    await ctx.send('What is option 1?')
+    lol1 = await ctx.send('What is option 1?')
 
     msg2 = await self.client.wait_for('message',check=check)
 
-    await ctx.send('What is option 2?')
+    lol2 = await ctx.send('What is option 2?')
+    await msg1.delete()
+    await lol1.delete()
 
     msg3 = await self.client.wait_for('message',check=check)
 
-    await ctx.send('What is option 3?')
+    await msg2.delete()
+    await lol2.delete()
+
+    lol3 = await ctx.send('What is option 3?')
 
     msg4 = await self.client.wait_for('message',check=check)
 
-    await ctx.send('What is option 4?')
+    await msg3.delete()
+    await lol3.delete()
+
+    lol4 = await ctx.send('What is option 4?')
 
     msg5 = await self.client.wait_for('message',check=check)
+    await msg4.delete()
+    await lol4.delete()
 
-    await ctx.send('How much tome will this poll last for?(answer in a digit)')
+    lol5 = await ctx.send('How much time will this poll last for?(answer in a digit)')
 
     def check1(d):
       return d.author == ctx.author and d.content.isdigit()
 
 
-    time1 = await self.client.wait_for('message',check=check1)
+    time1 = await self.client.wait_for('message',check=check)
+    await msg5.delete()
+    await lol5.delete()
+    if not time1.content.isdigit():
+      return await ctx.send('Poll cancelled\ncontent isnt digit')
 
-    await ctx.send('Minute, second or hour???')
+    lol6 = await ctx.send('Minute or second?\nTry to keep it as low time as possible')
 
     hsr = await self.client.wait_for('message',check=check)
 
+    await time1.delete()
+    await lol6.delete()
+
     if hsr.content.lower() == 'm' or hsr.content.lower() == 'minute' or hsr.content.lower() == 'mins' or hsr.content.lower() == 'minutes' or hsr.content.lower() == 'min':
       delay = time1.content * 60
-      
-
-
-    elif hsr.content.lower() == 'h' or hsr.content.lower() == 'hour' or hsr.content.lower() == 'hrs' or hsr.content.lower() == 'hours' or hsr.content.lower() == 'hr':
-      delay = time1.content * 3600
-      
-
+  
 
     elif hsr.content.lower() == 's' or hsr.content.lower() == 'secs' or hsr.content.lower() == 'sec' or hsr.content.lower() == 'second' or hsr.content.lower() == 'seconds':
       delay = time1.content 
@@ -62,53 +75,47 @@ class Poll(commands.Cog):
 
 
     message = await ctx.send(f'Q){msg1.content}\n:regional_indicator_a:{msg2.content}\n:regional_indicator_b:{msg3.content}\n:regional_indicator_c:{msg4.content}\n:regional_indicator_d:{msg5.content}')
+    await ctx.message.delete()
+    await hsr.delete()
     await message.add_reaction('\U0001f1e6')
     await message.add_reaction('\U0001f1e7')
     await message.add_reaction('\U0001f1e8')
     await message.add_reaction('\U0001f1e9')
-    def reaction_check(e):
-      return e.startswith('\U0001f1e6','\U0001f1e7','\U0001f1e8','\U0001f1e9') 
-
-    res1 = await self.client.wait_for_reaction(emoji="\U0001f1e6", message=message, check=reaction_check)
-    res2 = await self.client.wait_for_reaction(emoji="\U0001f1e7", message=message, check=reaction_check)
-    res3 = await self.client.wait_for_reaction(emoji="\U0001f1e8", message=message, check=reaction_check)
-    res4 = await self.client.wait_for_reaction(emoji="\U0001f1e9", message=message, check=reaction_check)
-
     rec1 = 0
     rec2 = 0
     rec3 = 0
     rec4 = 0
-
-    while res1:
-      rec1 += 1
-
-    while res2:
-      rec2 += 1
-
-    while res3:
-      rec3 += 1
-
-    while res4:
-      rec4 += 1
-
+    
     await asyncio.sleep(int(delay))
+
+    msg = await message.channel.fetch_message(message.id)
+    for i in msg.reactions:
+      if str(i.emoji)=="🇦":
+        rec1 += i.count
+      elif str(i.emoji)=="🇧":
+        rec2 += i.count
+      elif str(i.emoji)=="🇨":
+        rec3 += i.count
+
+      elif str(i.emoji)=="🇩":
+        rec4 += i.count
+      else:
+        continue
     
     if rec1 > rec2 and rec1 > rec3 and rec1 > rec4:
-      await message.reply(f'{msg2.content} is the winner of the pole!')
+      await message.reply(f'{ctx.author.mention} `:regional_indicator_a:{msg2.content}` is the winner of the pole!')
 
     elif rec2 > rec3 and rec2 > rec4 and rec2 > rec1:
-      await message.reply(f'{msg3.content} is the winner of the pole!')
+      await message.reply(f'{ctx.author.mention} `:regional_indicator_b:{msg3.content}` is the winner of the pole!')
 
     elif rec3 > rec1 and rec3 > rec2 and rec3 > rec4:
-      await message.reply(f'{msg4.content} is the winner of the pole!')
+      await message.reply(f'{ctx.author.mention} `:regional_indicator_c:{msg4.content}` is the winner of the pole!')
 
     elif rec4 > rec2 and rec4 > rec3 and rec4 > rec1:
-      await message.reply(f'{msg5.content} is the winner of the pole!')
+      await message.reply(f'{ctx.author.mention} `:regional_indicator_d:{msg5.content}` is the winner of the pole!')
 
     else:
       await message.reply('Noone wins! because of equal reactions')
-
-    await message.reply(f'The Poll is done {ctx.author.mention} check the results')
 
 
 def setup(client):
