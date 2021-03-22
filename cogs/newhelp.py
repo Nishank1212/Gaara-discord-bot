@@ -44,7 +44,7 @@ class Help(commands.Cog):
 
     #elif choice.lower() == 'fun':
       embed10=discord.Embed(title='Help Fun',description='This shows all the fun commands',colour=discord.Colour.blue())
-      embed10.add_field(name='Commands',value='`joke - Sends a joke to server`\n`meme - Sends a meme to server`\n`Good Joke - Sends a good joke :D`\n`pat - Sends a pat`\n`spoonfeeding - Sends something about spoonfeeding`\n`8ball - Ask a yes or no question! Gaara will answer`\n`inspire - Sends a inspirational quote`\n`spam - spams what you want it to spam`\n`DM - dms anyone you want to`\n`gaara - send info on gaara`\n`hehe boi- sends a pic of hehe boi`\n`khopi told - sends a pic of khopdi told`\n`snipe - shows the last deleted message`\n`spoiler - check it out...`')
+      embed10.add_field(name='Commands',value='`joke - Sends a joke to server`\n`meme - Sends a meme to server`\n`Good Joke - Sends a good joke :D`\n`pat - Sends a pat`\n`spoonfeeding - Sends something about spoonfeeding`\n`8ball - Ask a yes or no question! Gaara will answer`\n`inspire - Sends a inspirational quote`\n`DM - dms anyone you want to`\n`gaara - send info on gaara`\n`hehe boi- sends a pic of hehe boi`\n`khopi told - sends a pic of khopdi told`\n`snipe - shows the last deleted message`\n`spoiler - check it out...`\n`mhs - check it out (mhs <member>(message))`\n`fmf - Check out this new command...(fmf <member>)`')
       #embed.set_image(url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGC0ViA9_darzbBsNjkPGGZBi8nKlIiOdQlA&usqp=CAU')
       embed10.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
       #await ctx.send(embed=embed)
