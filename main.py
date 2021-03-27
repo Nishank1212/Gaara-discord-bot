@@ -7,7 +7,6 @@ from keep_alive import keep_alive
 import os
 from PIL import Image
 from io import BytesIO
-import typing
 import random
 import wikipedia
 import json
@@ -16,7 +15,6 @@ import shutil
 import urllib.parse
 import requests
 import asyncio
-import unicodedata
 from PIL import Image,ImageFont,ImageDraw,ImageFilter
 from aiohttp import ClientSession
 # import youtube_dl
@@ -56,7 +54,7 @@ chat_author_id = 0
 
 @client.event
 async def on_ready():
- # change_status.start()
+  change_status.start()
   print('Bot is ready')
 
 
@@ -118,7 +116,7 @@ async def on_message(message):
                 await msg1.delete()
 
               except:
-                pass#await message.channel.send('I do not have perms but too many caps are being used')
+                pass
 
             else:
               pass
@@ -178,7 +176,7 @@ async def on_message(message):
       embed.set_author(name=f'My command prefix for this server is `{pre}`,type `{pre}help` for more info',icon_url=message.author.avatar_url)
       await message.channel.send(embed=embed)
 
-  if message.content == f'<@!797519687147585546>':
+  if message.content == '<@!797519687147585546>':
      await message.channel.send('Hokage is my best friend!!!\nWe both were made by our masters...') 
     
   await client.process_commands(message)
@@ -186,7 +184,8 @@ async def on_message(message):
 
 @client.event
 async def on_member_join(member):
-  
+
+    
       with open('welcome.json','r') as f:
         message = json.load(f)
 
@@ -205,6 +204,13 @@ async def on_member_join(member):
       print(channel)
 
       await client.get_channel(int(channel)).send(f"{member.mention}\n{messages}")
+
+@client.event
+async def on_guild_join(guild):
+  embed=discord.Embed(title=f'Thanks for adding Gaara to {guild}',description='Try using `~~help` for More info or `~~swm` to set a welcome message and `~~slm` to set a leave message you can join our community by tying `~~server`',colour=discord.Colour.blue())
+  channel = guild.text_channels[0]
+  await channel.send(embed=embed)
+
 
 @client.event
 async def on_member_remove(member):
@@ -226,9 +232,9 @@ async def on_member_remove(member):
 
   
 
-# @tasks.loop(seconds=3600)
-# async def change_status():
-# 	await client.change_presence(activity=discord.Game(next(status)))
+@tasks.loop(seconds=3600)
+async def change_status():
+	await client.change_presence(activity=discord.Game(next(status)))
 
 for filename in os.listdir('./cogs'):
 #if filename.endswith('economy.py'):
@@ -321,6 +327,7 @@ async def delete(ctx,typ,*,name):
 async def slowmode(ctx,amount:int):
   try:
     await ctx.channel.edit(reason='Bot Command Slowmode', slowmode_delay=int(amount))
+    await ctx.send(f'SlowMode enabled for {amount} seconds')
   
   except:
     await ctx.send('I do not have Permissions')
@@ -330,6 +337,7 @@ async def slowmode(ctx,amount:int):
 async def slowmode_disable(ctx):
   try:
     await ctx.channel.edit(reason='Bot Command Slowmode', slowmode_delay=0)
+    await ctx.send('SlowMode disabled')
   
   except:
     await ctx.send('I do not have Permissions')
@@ -569,7 +577,7 @@ async def giphy(ctx, *, search):
         embed.set_image(url=data['data']['images']['original']['url'])
     else:
         search.replace(' ', '+')
-        response = await session.get('http://api.giphy.com/v1/gifs/search?q=' + search + f'&api_key={getenv("gify")}')
+        response = await session.get('http://api.giphy.com/v1/gifs/search?q=' + search + f'&api_key={getenv("giphy_key")}')
         data = json.loads(await response.text())
         gif_choice = random.randint(0, 9)
         embed.set_image(url=data['data'][gif_choice]['images']['original']['url'])
@@ -1078,7 +1086,7 @@ async def audit(ctx,num:int=5):
     
 @client.command(aliases=['SLM','Slm','slm'])
 async def setleavemessage(ctx):
-  await ctx.send('What is the message you want to send??\n***TYPE THE SUFFIX***(the message will start as a mention to the member...)\nSo example type `has left`')
+  await ctx.send('What is the message you want to send??\n***TYPE THE SUFFIX***(the message will start as a mention to the member...)\nSo example type `has left` unless you wanna send in DM')
   def check(m):
     return m.author == ctx.author
   message1 = await client.wait_for('message',check=check)
@@ -1140,6 +1148,22 @@ async def setleavemessage(ctx):
 
     else:
       return await ctx.send('yes or no should have been said')
+
+@client.command()
+async def tips(ctx):
+  await ctx.send('')
+
+@client.command()
+@commands.has_permissions(manage_messages=True)
+async def lock(ctx):
+    await ctx.send(f'Locked <#{ctx.channel.id}>')
+    await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=False)
+
+@client.command(manage_server=True)
+@commands.has_permissions(manage_messages=True)
+async def unlock(ctx):
+  await ctx.send(f'Unlocked <#{ctx.channel.id}>')
+  await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=True)
 
 
 keep_alive()

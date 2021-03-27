@@ -13,14 +13,19 @@ class Joke(commands.Cog):
   @commands.command(aliases=['JOKE','Joke'])
   async def joke(self,ctx):
 
-    return
+    
 
-    url = "https://official-joke-api.appspot.com/random_joke"
+    url = "https://v2.jokeapi.dev/joke/pun?$blacklistFlags=nsfw,sexist,racist,religious,explicit"
 
-   
+
 
     response = requests.request("GET", url).json()
-    embed = discord.Embed(title='Joke :rofl:',description=f"{response['setup']}\n{response['punchline']}",colour=discord.Colour.blue())
+    if response['type'] == 'single':
+      embed = discord.Embed(title='Joke :rofl:',description=f"{response['joke']}",colour=discord.Colour.blue())
+      embed.set_footer(text=f'{ctx.author.name} asked me...Dont Blame me',icon_url=f'{ctx.author.avatar_url}')
+      return await ctx.send(embed=embed)
+
+    embed = discord.Embed(title='Joke :rofl:',description=f"{response['setup']}\n{response['delivery']}",colour=discord.Colour.blue())
     embed.set_footer(text=f'{ctx.author.name} asked me...Dont Blame me',icon_url=f'{ctx.author.avatar_url}')
     await ctx.send(embed=embed)
 
