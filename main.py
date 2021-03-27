@@ -1155,15 +1155,33 @@ async def tips(ctx):
 
 @client.command()
 @commands.has_permissions(manage_messages=True)
-async def lock(ctx):
-    await ctx.send(f'Locked <#{ctx.channel.id}>')
+async def lock(ctx,channelid:int=None):
+  if channelid == None:
     await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=False)
+    return await ctx.send(f'Unlocked <#{ctx.channel.id}>')
+  for i in ctx.guild.channels:
+    if i.id == channelid:
+      break
+    else:
+      continue
+  await ctx.send(f'Locked <#{i.channel.id}>')
+  await i.set_permissions(ctx.guild.default_role, send_messages=False)
 
-@client.command(manage_server=True)
+@client.command()
 @commands.has_permissions(manage_messages=True)
-async def unlock(ctx):
+async def unlock(ctx,channelid:int=None):
+  if channelid == None:
+    await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=True)
+
+    await ctx.send(f'Unlocked <#{ctx.channel.id}>')
+    return
+  for i in ctx.guild.channels:
+    if i.id == channelid:
+      break
+    else:
+      continue
   await ctx.send(f'Unlocked <#{ctx.channel.id}>')
-  await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=True)
+  await i.set_permissions(ctx.guild.default_role, send_messages=True)
 
 
 keep_alive()

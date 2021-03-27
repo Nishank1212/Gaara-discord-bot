@@ -9,18 +9,18 @@ class Help(commands.Cog):
 
 
   @commands.command(aliases=['HELP','Help'])
-  async def help(self,ctx,choice=None):
+  async def help(self,ctx):
 
-    try:
-      with open('prefixes.json','r') as f:
-          prefixes = json.load(f)
+      try:
+        with open('prefixes.json','r') as f:
+            prefixes = json.load(f)
 
-      pre = prefixes[str(ctx.guild.id)]
+        pre = prefixes[str(ctx.guild.id)]
 
-    except:
-      pre = '~~'
+      except:
+        pre = '~~'
 
-    if choice == None:
+  
 
       embed=discord.Embed(title='Help Me!',description='this command helps you by providing you commands',colour=discord.Colour.blue())
       embed.add_field(name='Type these for more information',value='`help general`\n`help fun`\n`help games`\n`help animals`\n`help admin`\n`help ChatBot`\n`help economy`\n`help rank`\n`help music`\n`help bot`\n`help image`')
@@ -107,56 +107,56 @@ class Help(commands.Cog):
 
   
 
-    contents = [embed11,embed10,embed9,embed8,embed7,embed6,embed5,embed4,embed3,embed2,embed1]
-    pages = 11
-    cur_page = 1
-    message = await ctx.send(f"Page {cur_page}/{pages}",embed=contents[cur_page-1])
-    # getting the message object for editing and reacting
+      contents = [embed11,embed10,embed9,embed8,embed7,embed6,embed5,embed4,embed3,embed2,embed1]
+      pages = 11
+      cur_page = 1
+      message = await ctx.send(f"Page {cur_page}/{pages}",embed=contents[cur_page-1])
+      # getting the message object for editing and reacting
 
-    await message.add_reaction("◀️")
-    await message.add_reaction("▶️")
-    await message.add_reaction("⏹️")
+      await message.add_reaction("◀️")
+      await message.add_reaction("▶️")
+      await message.add_reaction("⏹️")
 
 
-    def check(reaction, user):
-        return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️","⏹️"]
-        # This makes sure nobody except the command sender can interact with the "menu"
+      def check(reaction, user):
+          return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️","⏹️"]
+          # This makes sure nobody except the command sender can interact with the "menu"
 
-    while True:
-        
-            reaction, user = await self.client.wait_for("reaction_add", check=check)
-            # waiting for a reaction to be added - times out after x seconds, 60 in this
-            # example
+      while True:
+          
+              reaction, user = await self.client.wait_for("reaction_add", check=check)
+              # waiting for a reaction to be added - times out after x seconds, 60 in this
+              # example
 
-            if str(reaction.emoji) == "▶️":
-                if cur_page == pages:
-                  cur_page = 1
-                  await message.edit(content=f"Page {cur_page}/{pages}",embed=contents[cur_page-1])
-                  await message.remove_reaction(reaction, user)
-                else:
+              if str(reaction.emoji) == "▶️":
+                  if cur_page == pages:
+                    cur_page = 1
+                    await message.edit(content=f"Page {cur_page}/{pages}",embed=contents[cur_page-1])
+                    await message.remove_reaction(reaction, user)
+                  else:
 
-                  cur_page += 1
-                  await message.edit(content=f"Page {cur_page}/{pages}",embed=contents[cur_page-1])
-                  await message.remove_reaction(reaction, user)
+                    cur_page += 1
+                    await message.edit(content=f"Page {cur_page}/{pages}",embed=contents[cur_page-1])
+                    await message.remove_reaction(reaction, user)
 
-            elif str(reaction.emoji) == "◀️":
-                if cur_page == 1:
-                  cur_page = pages
-                  await message.edit(content=f"Page {cur_page}/{pages}",embed=contents[cur_page-1])
-                  await message.remove_reaction(reaction, user)
-                else:
+              elif str(reaction.emoji) == "◀️":
+                  if cur_page == 1:
+                    cur_page = pages
+                    await message.edit(content=f"Page {cur_page}/{pages}",embed=contents[cur_page-1])
+                    await message.remove_reaction(reaction, user)
+                  else:
 
-                  cur_page -= 1
-                  await message.edit(content=f"Page {cur_page}/{pages}",embed = contents[cur_page-1])
-                  await message.remove_reaction(reaction, user)
+                    cur_page -= 1
+                    await message.edit(content=f"Page {cur_page}/{pages}",embed = contents[cur_page-1])
+                    await message.remove_reaction(reaction, user)
 
-            elif str(reaction.emoji) == "⏹️":
-              await message.edit(content='Process Stopped!',embed=None)
-              await asyncio.sleep(10)
-              await message.delete()
-              await ctx.message.delete()
-              break
-              return
+              elif str(reaction.emoji) == "⏹️":
+                await message.edit(content='Process Stopped!',embed=None)
+                await asyncio.sleep(10)
+                await message.delete()
+                await ctx.message.delete()
+                break
+                return
 
             
 

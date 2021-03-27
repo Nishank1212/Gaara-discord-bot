@@ -16,10 +16,7 @@ class Error(commands.Cog):
             embed=discord.Embed(title='Missing Permissions',description='You are missing permissions to run this command buddy',colour=discord.Colour.blue())
             await ctx.send(embed=embed)
 
-        elif isinstance(error, commands.CommandInvokeError):
-          embed = discord.Embed(
-        title='Unable to Process Command', description='I dont have the permissions to execute this command', colour=discord.Colour.blue())
-          await ctx.send(embed=embed)
+  
         elif isinstance(error, commands.CommandNotFound):
           embed = discord.Embed(
           title='Commmand Not Found', description="That's not a valid command", colour=discord.Colour.blue())
