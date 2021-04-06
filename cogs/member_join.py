@@ -29,6 +29,10 @@ class Join(commands.Cog):
     await ctx.send(f'Welcome message set to `{message}`')
     await ctx.send('Make sure to use the swc command to set the welcome channel and provide a channel id there')
 
+  @set_welcome_message.error
+  async def set_welcome_message_error(self,ctx,error):
+    await ctx.send('Try it like this\n ~~swm <message you want to send>')
+
 
   @commands.command(aliases=['swc'])
   @commands.has_permissions(manage_messages=True)
@@ -52,6 +56,11 @@ class Join(commands.Cog):
 
     else:
       await ctx.send('invalid id provided')
+
+
+  @set_welcome_channel.error
+  async def set_welcome_channel_error(self,ctx,error):
+    await ctx.send('Try again like:\n~~swc <channel id>')
 
   @commands.command(aliases=['DW','diablewelcome'])
   async def welcomedisable(self,ctx):
