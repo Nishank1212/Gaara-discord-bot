@@ -6,7 +6,7 @@ class Animals(commands.Cog):
   def __init__(self,client):
     self.client = client
   
-  @commands.command(aliases=['DOG','Dog'])
+  @commands.command()
   async def dog(self,ctx):
 
     url = "https://some-random-api.ml/img/dog"
@@ -19,7 +19,7 @@ class Animals(commands.Cog):
     embed.set_image(url=final_dog)
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['Koala','KOALA'])
+  @commands.command()
   async def koala(self,ctx):
 
     url = "https://some-random-api.ml/img/koala"
@@ -32,7 +32,7 @@ class Animals(commands.Cog):
     embed.set_image(url=final_dog)
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['Panda','PANDA'])
+  @commands.command()
   async def panda(self,ctx):
 
     url = "https://some-random-api.ml/img/panda"
@@ -45,7 +45,7 @@ class Animals(commands.Cog):
     embed.set_image(url=final_dog)
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['CAT','Cat'])
+  @commands.command()
   async def cat(self,ctx):
 
     url = "https://some-random-api.ml/img/cat"
@@ -58,7 +58,7 @@ class Animals(commands.Cog):
     embed.set_image(url=final_dog)
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['FOX','Fox'])
+  @commands.command()
   async def fox(self,ctx):
 
     url = "https://some-random-api.ml/img/fox"
@@ -71,7 +71,7 @@ class Animals(commands.Cog):
     embed.set_image(url=final_dog)
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['BIRD','Bird'])
+  @commands.command()
   async def bird(self,ctx):
 
     url = "https://some-random-api.ml/img/birb"

@@ -5,7 +5,7 @@ class Poll(commands.Cog):
   def __init__(self,client):
     self.client=client
 
-  @commands.command(aliases=['POLL','Poll'])
+  @commands.command()
   #@commands.cooldown(1, 120, commands.BucketType.user)
   async def poll(self,ctx):
     loli = await ctx.send('What is The question you want?(note:there will be only 4 options)')

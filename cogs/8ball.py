@@ -6,7 +6,7 @@ class eightball(commands.Cog):
   def __init__(self,client):
     self.client = client
 
-  @commands.command(aliases=['8ball','8BALL'])
+  @commands.command()
   async def _8ball(self,ctx, *, question ):
     responses = [ 'It is certain.',
                   'It is decidedly so.',

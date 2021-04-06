@@ -5,7 +5,7 @@ class Spam(commands.Cog):
   def __init__(self,client):
     self.client = client
 
-  @commands.command(aliases=['SPAM','Spam'])
+  @commands.command()
   @commands.has_permissions(administrator=True)
   @commands.cooldown(1, 600, commands.BucketType.channel)
   async def spam(self,ctx,number = None,*,spam_item = None):

@@ -59,7 +59,7 @@ class Rank(commands.Cog):
 
       
 
-  @commands.command(aliases=['Rank','RANK','LEVEL','LVL','lvl','Lvl','Level','level'])
+  @commands.command(aliases=['Lvl','level'])
   async def rank(self,ctx,member:discord.Member=None):
     
     with open('lvle.json','r') as f:
@@ -122,7 +122,7 @@ class Rank(commands.Cog):
     embed.set_thumbnail(url=member.avatar_url)
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['lb','LB','Lb'])
+  @commands.command(aliases=['lb'])
   async def leaderboard(self,ctx,num:int=None):
     embed = discord.Embed(title=f"{ctx.guild.name} TOP Users", description='(EXPERIENCE POINTS)', colour=discord.Colour.blue())
     embed.set_thumbnail(url=ctx.guild.icon_url_as(size=64))

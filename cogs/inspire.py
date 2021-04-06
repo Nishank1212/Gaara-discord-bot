@@ -7,7 +7,7 @@ class Inspire(commands.Cog):
   def __init__(self,client):
     self.client = client
 
-  @commands.command(aliases=['INSPIRE','Inspire'])
+  @commands.command()
   async def inspire(self,ctx):
     def get_quote():
       response = requests.get("https://zenquotes.io/api/random")

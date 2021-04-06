@@ -7,7 +7,7 @@ class Fight(commands.Cog):
   def __init__(self,client):
     self.client = client
 
-  @commands.command(aliases=['FIGHT','Fight'])
+  @commands.command()
   async def fight(self,ctx,member:discord.Member=None):
 
     if member == None:

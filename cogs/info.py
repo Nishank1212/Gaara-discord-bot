@@ -8,7 +8,7 @@ class Info(commands.Cog):
   def __init__(self,client):
     self.client = client
 
-  @commands.command(aliases=['UI','ui','Ui','USERINFO','Userinfo','info','INFO','Info','UserInfo'])
+  @commands.command(aliases=['UI','info'])
   async def userinfo(self,ctx, target: Optional[Member]):
     target = target or ctx.author
 
@@ -30,7 +30,7 @@ class Info(commands.Cog):
     embed.set_footer(text=f'FBI agent:{ctx.author.name}',icon_url=ctx.author.avatar_url)
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['SI','si','Si','SERVERINFO','Serverinfo','ServerInfo'])
+  @commands.command(aliases=['Si'])
   async def serverinfo(self,ctx):
     embed=discord.Embed(title='Server Information',colour=ctx.guild.owner.colour,timestamp=datetime.utcnow())
 
@@ -43,13 +43,6 @@ class Info(commands.Cog):
               (":100:Members",len(ctx.guild.members), True),
               (":man::woman:Humans",len(list(filter(lambda m: not m.bot,ctx.guild.members))),True),
               ("🤖Bots",len(list(filter(lambda m:m.bot,ctx.guild.members))),True),
-              ("❌Banned members",len(await ctx.guild.bans()),True),
-             
-              ("📜Text Channels",len(ctx.guild.text_channels),True),
-              ("🎵Voice Channels",len(ctx.guild.voice_channels),True),
-              ("🗃️Categories",len(ctx.guild.categories),True),
-              ("🤴Roles",len(ctx.guild.roles),True),
-              ("📝Invites",len(await ctx.guild.invites()),True),
               ("\u200b","\u200b",True),]
 
     for name,value,inline in fields:
@@ -58,7 +51,7 @@ class Info(commands.Cog):
     embed.set_footer(text=f'FBI agent:{ctx.author.name}',icon_url=ctx.author.avatar_url)
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['BI','bi','Bi','BOTINFO','BotInfo'])
+  @commands.command(aliases=['Bi'])
   async def botinfo(self,ctx):
 
     embed=discord.Embed(title='Bot Information',colour=discord.Colour.blue(),timestamp=datetime.utcnow())
@@ -92,22 +85,22 @@ class Info(commands.Cog):
     embed.set_footer(text=f'FBI agent:{ctx.author.name}',icon_url=ctx.author.avatar_url)
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['INVITE','Invite'])
+  @commands.command()
   async def invite(self,ctx):
     embed=discord.Embed(title='Invite Me here',description='[Click Here to Add me](https://discord.com/api/oauth2/authorize?client_id=810818178464612363&permissions=8&scope=bot)',colour=discord.Colour.blue())  
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['SERVER','Server'])
+  @commands.command()
   async def server(self,ctx):
     embed=discord.Embed(title='Join my Server',description='[Click Here to Join](https://discord.gg/RSz98FM7c5)',colour=discord.Colour.blue())  
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['GIT','Git','GITHUB','GitHub','Github','github'])
+  @commands.command(aliases=['github'])
   async def git(self,ctx):
     embed=discord.Embed(title='GitHub(star repo)',description='[Click Here to See GitHub](https://github.com/Nishank1212/Gaara-discord-bot)',colour=discord.Colour.blue())  
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['VOTE','Vote'])
+  @commands.command()
   async def vote(self,ctx):
     embed=discord.Embed(title='Vote Gaara!',description='discordbotlist\n[Vote here](https://discordbotlist.com/bots/gaara/upvote)',colour=discord.Colour.blue())  
     await ctx.send(embed=embed)

@@ -8,7 +8,7 @@ class Help(commands.Cog):
     self.client = client
 
 
-  @commands.command(aliases=['HELP','Help'])
+  @commands.command()
   async def help(self,ctx):
 
       try:
@@ -31,12 +31,22 @@ class Help(commands.Cog):
     #elif choice.lower() == 'general':
 
       embed11=discord.Embed(title='Help General',description='This shows all the general commands',colour=discord.Colour.blue())
-      embed11.add_field(name='Commands',value='`welcome - Welcomes a person to the group`\n`hi - Says hi to a person`\n`Avatar - Sends the avatar of a person`\n`intro - Introduces the bot`\n`totalcmds - says the total number of commands in the bot`\n`ping - Sends the latency of bot`\n`say - Says what you want Grogu to say`\n`calc-calculates an expression`\n`lyrics - shares the lyrics of the song`\n`ascii - asciis any text`\n`wiki = searches anything in wikipedia`\n`edits - shows the last edit in server`\n`bots - shares the number of bots in server`\n`humans - shares the number of humans in server`')
+      embed11.add_field(name='Commands',value=f'`welcome - Welcomes a person to the group`\n`hi - Says hi to a person`\n`Avatar - Sends the avatar of a person`\n`intro - Introduces the bot`\n`totalcmds - says the total number of commands in the bot`\n`ping - Sends the latency of bot`\n`say - Says what you want Grogu to say`\n`calc-calculates an expression`\n`lyrics - shares the lyrics of the song`\n`ascii - asciis any text`\n`wiki = searches anything in wikipedia`\n`edits - shows the last edit in server`\n`bots - shares the number of bots in server`\n`humans - shares the number of humans in server`\n`date - shares the date of today`\n`setbb - if my birthday is 1st feb i will type like {pre}setbb 02-01 Note:the monthh will be first and day second `')
       #embed.set_image(url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUUE1iPh_mNvgXUQi7oQ2rhJ-0Enf5NZWrrA&usqp=CAU')
       embed11.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
 
+      embed111=discord.Embed(title='Help Meme',description='This shows all the Meme commands',colour=discord.Colour.blue())
+      embed111.add_field(name='There are over 100 meme generator fun commands!!! To get these Simply type:',value='`meme_list`')
+      #embed.set_image(url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUUE1iPh_mNvgXUQi7oQ2rhJ-0Enf5NZWrrA&usqp=CAU')
+      embed111.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
+
+      embed112=discord.Embed(title='Help Giveaway',description='This shows all the giveaway commands',colour=discord.Colour.blue())
+      embed112.add_field(name='only reroll and  start command:',value='`start - type it like this:`\n`~~start <some number> {hour/second/minute/day}<required role(optional)> <for what?>`\n`note:do not include the <> and {} and []`\n`reroll - reroll <message id>`')
+      #embed.set_image(url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUUE1iPh_mNvgXUQi7oQ2rhJ-0Enf5NZWrrA&usqp=CAU')
+      embed112.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
+
   
-      embed11.add_field(name='cmds part 2',value='`bye - says bye to a person`\n`remind - reminds you by pinging after specific amount of time`\n`userinfo - sends info about a person`\n`serverinfo - sends info about server`\n`mem - Shares the total amount of people in the server`\n`credits - shows the credits of the bot`\n`botinfo -tells about the bot`\n`lenny - returns a lenny face`\n`swd - returns star wars dialogues`',inline='False')
+      embed11.add_field(name='cmds part 2',value='`bye - says bye to a person`\n`remind - reminds you by pinging after specific amount of time`\n`reminders - Will show you your current reminders`\n`userinfo - sends info about a person`\n`serverinfo - sends info about server`\n`mem - Shares the total amount of people in the server`\n`credits - shows the credits of the bot`\n`botinfo -tells about the bot`\n`lenny - returns a lenny face`\n`swd - returns star wars dialogues`',inline='False')
       #await ctx.send(embed=embed)
      
 
@@ -44,7 +54,7 @@ class Help(commands.Cog):
 
     #elif choice.lower() == 'fun':
       embed10=discord.Embed(title='Help Fun',description='This shows all the fun commands',colour=discord.Colour.blue())
-      embed10.add_field(name='Commands',value='`joke - Sends a joke to server`\n`meme - Sends a meme to server`\n`Good Joke - Sends a good joke :D`\n`pat - Sends a pat`\n`spoonfeeding - Sends something about spoonfeeding`\n`8ball - Ask a yes or no question! Gaara will answer`\n`inspire - Sends a inspirational quote`\n`DM - dms anyone you want to`\n`gaara - send info on gaara`\n`hehe boi- sends a pic of hehe boi`\n`khopi told - sends a pic of khopdi told`\n`snipe - shows the last deleted message`\n`spoiler - check it out...`\n`mhs - check it out (mhs <member>(message))`\n`fmf - Check out this new command...(fmf <member>)`')
+      embed10.add_field(name='Commands',value='`joke - Sends a joke to server`\n`meme - Sends a meme to server`\n`Good Joke - Sends a good joke :D`\n`pat - Sends a pat`\n`spoonfeeding - Sends something about spoonfeeding`\n`8ball - Ask a yes or no question! Gaara will answer`\n`inspire - Sends a inspirational quote`\n`DM - dms anyone you want to`\n`gaara - send info on gaara`\n`hehe boi- sends a pic of hehe boi`\n`khopi told - sends a pic of khopdi told`\n`snipe - shows the last deleted message`\n`spoiler - check it out...`\n`fmf - Check out this new command...(fmf <member>)`')
       #embed.set_image(url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGC0ViA9_darzbBsNjkPGGZBi8nKlIiOdQlA&usqp=CAU')
       embed10.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
       #await ctx.send(embed=embed)
@@ -70,10 +80,7 @@ class Help(commands.Cog):
       #await ctx.send(embed=embed)
 
     #elif choice.lower() == 'chatbot':
-      embed6=discord.Embed(title='Help ChatBot',description='ChatBot commands',colour=discord.Colour.blue())
-      embed6.add_field(name='commands...',value='`chatenable - starts an ai based chatbot with which u can talk too`\n`chatdisable - stops the chat if it is enabled, note: you can also type "gaara go to sleep(without prefix)" and it wil stop`')
-      embed6.set_footer(text=f'Use command prefix "{pre}" ',icon_url=ctx.author.avatar_url)
-      #await ctx.send(embed=embed)
+      
 
     #elif choice.lower() == 'economy':
       embed5=discord.Embed(title='Help Economy',description='Economy commands',colour=discord.Colour.blue())
@@ -107,8 +114,8 @@ class Help(commands.Cog):
 
   
 
-      contents = [embed11,embed10,embed9,embed8,embed7,embed6,embed5,embed4,embed3,embed2,embed1]
-      pages = 11
+      contents = [embed11,embed10,embed9,embed8,embed7,embed5,embed4,embed3,embed2,embed1,embed111,embed112]
+      pages = 12
       cur_page = 1
       message = await ctx.send(f"Page {cur_page}/{pages}",embed=contents[cur_page-1])
       # getting the message object for editing and reacting

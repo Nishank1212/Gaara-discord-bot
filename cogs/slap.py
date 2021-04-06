@@ -14,7 +14,7 @@ class Slap(commands.Cog):
     self.client = client  
 
 
-  @commands.command(aliases=['SLAP','Slap'])
+  @commands.command()
   async def slap(self,ctx, user : discord.Member):
         if user.id in [793433316258480128, 800219427928801290]:
           await ctx.send('HAHA U CANT SLAP TOO GOOD PEOPLE TRY TO SLAP SOMEONE ELSE LOL')
@@ -36,7 +36,7 @@ class Slap(commands.Cog):
           im.save('slapped.png')
           await ctx.send(file=discord.File('slapped.png'))
 
-  @commands.command(aliases=['STAB','Stab'])
+  @commands.command()
   async def stab(self,ctx,member:discord.Member=None):
     if member == None:
       member = ctx.author
@@ -62,7 +62,7 @@ class Slap(commands.Cog):
         
   
 
-  @commands.command(aliases=['RIP','Rip','KILL','Kill','kill'])
+  @commands.command(aliases=['kill'])
   async def rip(self,ctx,user:discord.Member=None):
     if not user:
       user = ctx.author
@@ -81,7 +81,7 @@ class Slap(commands.Cog):
     await ctx.send(file=discord.File('killed.png'))
     await ctx.send(killmessages(user.id, ctx.author.id, 'True'))
 
-  @commands.command(aliases=['BOUNTY','Bounty','WANTED','Wanted','wanted'])
+  @commands.command(aliases=['wanted'])
   async def bounty(self,ctx,user:discord.Member = None):
     if user == None:
       user = ctx.author

@@ -6,7 +6,7 @@ class Starwars(commands.Cog):
   def __init__(self,client):
     self.client = client
 
-  @commands.command(aliases=['STARWARSDIALOGUES','StarWarsDialogues','Starwarsdialogues','swd','Swd','SWD','starwarsdialogues'])
+  @commands.command(aliases=['STARWARSDIALOGUES','SWD'])
   async def star_wars_dialogues(self,ctx):
     dialogues=['Do or donot there is no try','I have the high ground','Hello There!','This is the way','I have spoken','May the force be with you','I can bring you in warm or I can bring you in cold']
     random_dialogue = random.choice(dialogues)
@@ -14,7 +14,7 @@ class Starwars(commands.Cog):
     embed.set_footer(text=f'{ctx.author.name} asked me...Dont Blame me',icon_url=f'{ctx.author.avatar_url}')
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['STARWARS','Starwars','sw','SW','Sw'])
+  @commands.command(aliases=['Sw'])
   async def starwars(self,ctx,message,surname=None):
     if message.lower() == 'luke':
       if surname =='skywalker' or surname == 'SKYWALKER' or surname == 'Skywalker' or surname == None:

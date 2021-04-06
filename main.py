@@ -6,6 +6,8 @@ from itertools import cycle
 from keep_alive import keep_alive
 import os
 from PIL import Image
+import time
+from datetime import date
 from io import BytesIO
 import random
 import wikipedia
@@ -28,12 +30,13 @@ def get_prefix(client, message):
 
 intents = discord.Intents.all()
 intents.members = True
-client = commands.Bot(command_prefix = get_prefix,
+client = commands.Bot(command_prefix = get_prefix,case_insensitive=True, 
 intents=intents, owner_ids={569105874912804874,793433316258480128,790459205038506055})
 status = cycle(['Gaara|Ping for more info','Gaara|Ping for more info'])
 client.sniped_messages = {}
 client.sniped_messages1 = {}
 client.load_extension('jishaku')
+
 #client.help_command = commands.MinimalHelpCommand()
 
 
@@ -48,6 +51,11 @@ client.load_extension('jishaku')
 # client.help_command = MyNewHelp()
 
 client.remove_command("help")
+
+
+
+
+tempo = {}
 global chat, chat_author_id
 chat = 0
 chat_author_id = 0
@@ -55,6 +63,7 @@ chat_author_id = 0
 @client.event
 async def on_ready():
   change_status.start()
+  check.start()
   print('Bot is ready')
 
 
@@ -82,6 +91,7 @@ async def on_message(message):
 
   if message.author.bot:
     return
+
 
   with open('filter.json','r') as f:
 
@@ -212,6 +222,8 @@ async def on_guild_join(guild):
   await channel.send(embed=embed)
 
 
+
+
 @client.event
 async def on_member_remove(member):
     print('someone ;lefttttt')
@@ -243,7 +255,7 @@ for filename in os.listdir('./cogs'):
   else:
 	  None
 
-@client.command(aliases=['SHOOT','Shoot'])
+@client.command()
 async def shoot(ctx,member:discord.Member=None):
 
   if member == None:
@@ -265,7 +277,7 @@ async def shoot(ctx,member:discord.Member=None):
     im.save('shot.png')
     await ctx.send(file=discord.File('shot.png'))
 
-@client.command(aliases=['GAARA','Gaara'])
+@client.command()
 async def gaara(ctx):
   embed=discord.Embed(title='GAARA',description=' number one God',colour = discord.Colour.blue())
   embed.add_field(name='Info...',value="Gaara (我愛羅) is a fictional character in the Naruto manga and anime series created by Masashi Kishimoto. Originally debuting as an antagonist, Gaara is a shinobi affiliated with Sunagakure and is the son of Sunagakure's leader, the Fourth Kazekage. He was born as a demon's host as part of his father's intention to have a weapon to restore their village. However, a combination of being ostracized by the Sunagakure villagers, his early inability to control the Tailed Beast, and the notion that his deceased mother called him her curse on the village caused Gaara to become a ruthless killer who believes his own purpose is to kill his enemies. ",inline=False)
@@ -295,6 +307,24 @@ async def create(ctx,typ,*,name):
 
   else:
     await ctx.send(f'No type named {typ}')
+
+@tasks.loop(seconds=86400)
+async def check():
+  print( str(date.today())[5:])
+  with open('bday.json','r') as f:
+    m = json.load(f)
+
+  for i in m.keys():
+    
+    if str(date.today())[5:] == str(m[i][1]):
+      channel = client.get_channel(m[i][0])
+      await channel.send(f'Happy Birthday <@!{i}>')
+
+    else:
+      continue
+
+      
+
   
 @client.command()
 @commands.has_permissions(administrator=True)
@@ -332,7 +362,7 @@ async def slowmode(ctx,amount:int):
   except:
     await ctx.send('I do not have Permissions')
 
-@client.command(aliases=['disSlowMode','disableslowmode'])
+@client.command()
 @commands.has_permissions(manage_channels=True)
 async def slowmode_disable(ctx):
   try:
@@ -347,6 +377,21 @@ async def slowmode_disable(ctx):
 @commands.has_permissions(administrator = True)
 async def setprefix(ctx,prefix):
 
+    
+    await ctx.send('Do you want tohave a space after the prefix or not? type `yes` for space and anything else for not')
+
+    def check(m):
+      return m.author == ctx.author
+
+    msg = await client.wait_for('message',check=check)
+
+    if msg.content.lower() == 'yes':
+      prefix = f'{prefix} '
+
+    else:
+      pass
+  
+
 
     with open('prefixes.json','r') as f:
       prefixes = json.load(f)
@@ -358,7 +403,7 @@ async def setprefix(ctx,prefix):
 
     await ctx.send(f'The prefix was changed to {prefix}')
 
-@client.command(aliases=['cre','Cre','CRE','Creditz','CREDITZ','creditz','CREDITS','Credits'])
+@client.command(aliases=['cre'])
 async def credits(ctx):
   embed=discord.Embed(title='Credits',description='Contributors for the bot',colour=discord.Colour.blue())
   embed.add_field(name=':eyes: Nishank',value='Creator/owner')
@@ -367,13 +412,13 @@ async def credits(ctx):
   embed.add_field(name=':eyes: Entropy',value='Helping in chatbot and debugging...')
   await ctx.send(embed=embed)
 
-@client.command(aliases=['Lenny','LENNY'])
+@client.command()
 async def lenny(ctx):
   lenny = ['( ͡° ͜ʖ ͡°)','( ‾ʖ̫‾)','(☭ ͜ʖ ☭)','(ᴗ ͜ʖ ᴗ)','(° ͜ʖ °)','( ಠ ͜ʖಠ)','( ° ͜ʖ °)','(⟃ ͜ʖ ⟄) ','( ‾ ʖ̫ ‾)','(͠≖ ͜ʖ͠≖)','( ✧≖ ͜ʖ≖)','(✿❦ ͜ʖ ❦)','(▀̿Ĺ̯▀̿ ̿)']
 
   await ctx.send(random.choice(lenny))
 
-@client.command(aliases=['ASCII','Ascii'])
+@client.command()
 async def ascii(ctx,*,word):
 
      async with aiohttp.ClientSession() as session:
@@ -538,26 +583,26 @@ async def chnick(ctx,member:discord.Member,*,nick):
 
 
 
-@client.command()
-async def mhs(ctx, member : discord.Member, *, message : str):
+# @client.command()
+# async def mhs(ctx, member : discord.Member, *, message : str):
 
-        await ctx.message.delete()
+#         await ctx.message.delete()
 
-        url = None
-        webhooks = await ctx.channel.webhooks()
-        for webhook in webhooks:
-            if webhook.name == 'Nishank':
-                url = webhook.url
+#         url = None
+#         webhooks = await ctx.channel.webhooks()
+#         for webhook in webhooks:
+#             if webhook.name == 'Nishank':
+#                 url = webhook.url
 
-        if url is None:
-            webhook = await ctx.channel.create_webhook(name = 'Nishank')
-            url = webhook.url
+#         if url is None:
+#             webhook = await ctx.channel.create_webhook(name = 'Nishank')
+#             url = webhook.url
 
-        async with ClientSession() as session:
-            webhook = discord.Webhook.from_url(url, adapter = discord.AsyncWebhookAdapter(session))
+#         async with ClientSession() as session:
+#             webhook = discord.Webhook.from_url(url, adapter = discord.AsyncWebhookAdapter(session))
 
 
-            await webhook.send(content = message, username = member.name, avatar_url = member.avatar_url)
+#             await webhook.send(content = message, username = member.name, avatar_url = member.avatar_url)
 
 
 @client.command(hidden=True)
@@ -566,25 +611,25 @@ async def cl(ctx,member1:discord.Member,member2:discord.Member,member3:discord.M
   await ctx.send(f'`1){member1.name} - 5 points`\n`2){member2.name} - 3 points`\n`3){member3.name} - 1 points`')
 
 
-@client.command(pass_context=True)
-async def giphy(ctx, *, search):
-    embed = discord.Embed(colour=discord.Colour.blue())
-    session = aiohttp.ClientSession()
+# @client.command(pass_context=True)
+# async def giphy(ctx, *, search):
+#     embed = discord.Embed(colour=discord.Colour.blue())
+#     session = aiohttp.ClientSession()
 
-    if search == '':
-        response = await session.get(f'https://api.giphy.com/v1/gifs/random?api_key={getenv("gify")}')
-        data = json.loads(await response.text())
-        embed.set_image(url=data['data']['images']['original']['url'])
-    else:
-        search.replace(' ', '+')
-        response = await session.get('http://api.giphy.com/v1/gifs/search?q=' + search + f'&api_key={getenv("giphy_key")}')
-        data = json.loads(await response.text())
-        gif_choice = random.randint(0, 9)
-        embed.set_image(url=data['data'][gif_choice]['images']['original']['url'])
+#     if search == '':
+#         response = await session.get(f'https://api.giphy.com/v1/gifs/random?api_key={getenv("gify")}')
+#         data = json.loads(await response.text())
+#         embed.set_image(url=data['data']['images']['original']['url'])
+#     else:
+#         search.replace(' ', '+')
+#         response = await session.get('http://api.giphy.com/v1/gifs/search?q=' + search + f'&api_key={getenv("giphy_key")}')
+#         data = json.loads(await response.text())
+#         gif_choice = random.randint(0, 9)
+#         embed.set_image(url=data['data'][gif_choice]['images']['original']['url'])
 
-    await session.close()
+#     await session.close()
 
-    await ctx.send(embed=embed)
+#     await ctx.send(embed=embed)
 
 
 @client.command()
@@ -966,7 +1011,7 @@ async def internal(ctx,member:discord.Member=None):
     await ctx.send(file=discord.File('internalled.png'))
 
 
-@client.command(aliases=['NUKE','Nuke'])
+@client.command()
 @commands.has_permissions(manage_messages=True)
 async def nuke(ctx):
   mannel = await ctx.channel.clone()
@@ -984,33 +1029,6 @@ async def spoiler(ctx,*,arg):
 
   await ctx.send(''.join(newlist))
 
-@client.command(aliases=['triggered'])
-async def trigger(ctx, *,user=None):
-
-		if user:
-				try:
-						user = await commands.converter.MemberConverter().convert(ctx,user)
-				except:
-						await ctx.send(f"I don\'t know {user}, lets just use your avatar ...")
-						user = ctx.author
-		else:
-				user = ctx.author
-
-		getVars = {'avatar': user.avatar_url_as(format='png')}
-		url = 'https://some-random-api.ml/canvas/triggered/?'
-		response = requests.get(
-				url + urllib.parse.urlencode(getVars), stream=True)
-
-		if response.status_code != 200:
-				await ctx.send('Well ... that did not work for some reason.')
-				return
-
-		response.raw.decode_content = True
-		with open('triggered.gif', 'wb') as out_file:
-				shutil.copyfileobj(response.raw, out_file)
-		del response
-
-		await ctx.send(file=discord.File('triggered.gif'))
 
 @client.command()
 async def humans(ctx):
@@ -1084,7 +1102,7 @@ async def audit(ctx,num:int=5):
 
   await ctx.send(embed=embed)
     
-@client.command(aliases=['SLM','Slm','slm'])
+@client.command(aliases=['SLM'])
 async def setleavemessage(ctx):
   await ctx.send('What is the message you want to send??\n***TYPE THE SUFFIX***(the message will start as a mention to the member...)\nSo example type `has left` unless you wanna send in DM')
   def check(m):
@@ -1154,11 +1172,11 @@ async def tips(ctx):
   await ctx.send('')
 
 @client.command()
-@commands.has_permissions(manage_messages=True)
+@commands.has_permissions(manage_channels=True)
 async def lock(ctx,channelid:int=None):
   if channelid == None:
     await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=False)
-    return await ctx.send(f'Unlocked <#{ctx.channel.id}>')
+    return await ctx.send(f'Locked <#{ctx.channel.id}>')
   for i in ctx.guild.channels:
     if i.id == channelid:
       break
@@ -1168,7 +1186,7 @@ async def lock(ctx,channelid:int=None):
   await i.set_permissions(ctx.guild.default_role, send_messages=False)
 
 @client.command()
-@commands.has_permissions(manage_messages=True)
+@commands.has_permissions(manage_channels=True)
 async def unlock(ctx,channelid:int=None):
   if channelid == None:
     await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=True)
@@ -1183,6 +1201,15 @@ async def unlock(ctx,channelid:int=None):
   await ctx.send(f'Unlocked <#{ctx.channel.id}>')
   await i.set_permissions(ctx.guild.default_role, send_messages=True)
 
+@client.command()
+async def paperofchem(ctx):
+  embed=discord.Embed(title='paper',description='[Click here to download paper of chem](https://www.youtube.com/watch?v=dQw4w9WgXcQ)')
+  await ctx.send(embed=embed)
+
+@client.command()
+async def testt(ctx,emoji):
+  print(emoji)
+  await ctx.message.add_reaction(str(emoji))
 
 keep_alive()
 

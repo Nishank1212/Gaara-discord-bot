@@ -11,7 +11,7 @@ class Warn(commands.Cog):
     self.client = client
 
 
-  @commands.command(aliases=['WARN','Warn'])
+  @commands.command()
   @commands.has_permissions(ban_members=True)
   async def warn(self,ctx,member:discord.Member=None):
     
@@ -80,7 +80,7 @@ class Warn(commands.Cog):
         embed=discord.Embed(title='Warns',description=f'{member.mention} has {bankinfo["warns"]} warns',colour=discord.Colour.blue())
         await ctx.send(embed=embed)
 
-  @commands.command(aliases=['CW','Cw'])
+  @commands.command()
   @commands.has_permissions(ban_members=True)
   async def cw(self,ctx,member:discord.Member):
     bankinfo = collection.find_one({"guild":ctx.guild.id,"member": member.id})

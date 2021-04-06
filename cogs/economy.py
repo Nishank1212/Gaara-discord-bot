@@ -12,7 +12,7 @@ class Economy(commands.Cog):
   def __init__(self,client):
     self.client = client
 
-  @commands.command(aliases=['BAL','Bal','BALANCE','Balance','balance'])
+  @commands.command(aliases=['balance'])
   async def bal(self,ctx,member: discord.Member=None):
     if member == None:
       member=ctx.author
@@ -33,7 +33,7 @@ class Economy(commands.Cog):
       await ctx.send(embed=embed)
       print(bankinfo['inventory'])
 
-  @commands.command(aliases=['BEG','Beg'])
+  @commands.command()
   @commands.cooldown(1, 20, commands.BucketType.user)
   async def beg(self,ctx):
     
@@ -70,7 +70,7 @@ class Economy(commands.Cog):
       await ctx.send(embed=embed)
 
 
-  @commands.command(aliases=['DEPOSIT','Deposit','Dep','DEP','deposit'])
+  @commands.command(aliases=['deposit'])
   async def dep(self,ctx,amount:str):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
@@ -98,7 +98,7 @@ class Economy(commands.Cog):
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
 
 
-  @commands.command(aliases=['WITHDRAW','Withdraw','WITH','With','with'])
+  @commands.command(aliases=['with'])
   async def withdraw(self,ctx,amount:str):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
@@ -125,7 +125,7 @@ class Economy(commands.Cog):
 
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
 
-  @commands.command(aliases=['SLOTS','Slots'],cooldown_after_parsing=True)
+  @commands.command(cooldown_after_parsing=True)
   @commands.cooldown(1, 20, commands.BucketType.user)
   async def slots(self,ctx,amount:int):
 
@@ -174,7 +174,7 @@ class Economy(commands.Cog):
       await ctx.send(embed=embed)
       
 
-  @commands.command(aliases=['ROB','Rob'],cooldown_after_parsing=True)
+  @commands.command(cooldown_after_parsing=True)
   @commands.cooldown(1,120, commands.BucketType.user)
   async def rob(self,ctx,member:discord.Member = None):
 
@@ -261,13 +261,13 @@ class Economy(commands.Cog):
       collection.replace_one({"user": bankinfo1['user']},{"user": bankinfo1['user'], "wallet": bankinfo1['wallet'], "bank": bankinfo1['bank'],"inventory" : bankinfo1['inventory']})
 
   @rob.error
-  async def tob_error(self,ctx,error):
+  async def rob_error(self,ctx,error):
     if isinstance(error,commands.CommandOnCooldown):
       embed=discord.Embed(title='Woah Slow it down buddy',description=f'You can try this command after {round(error.retry_after)} seconds, the police are still looking for you, default cooldown - 20 seconds',colour=discord.Colour.blue())
       await ctx.send(embed=embed)
 
 
-  @commands.command(aliases=['SEARCH','Search'])
+  @commands.command()
   @commands.cooldown(1,30, commands.BucketType.user)
   async def search(self,ctx):
     bankinfo = collection.find_one({"user": ctx.author.id})
@@ -329,13 +329,13 @@ class Economy(commands.Cog):
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
 
   @search.error
-  async def slots_error(self,ctx,error):
+  async def search_error(self,ctx,error):
     if isinstance(error,commands.CommandOnCooldown):
       embed=discord.Embed(title='Woah Slow it down buddy',description=f'You can try this command after {round(error.retry_after)} seconds,You already scouted this area, default cooldown - 20 seconds',colour=discord.Colour.blue())
       await ctx.send(embed=embed)
 
 
-  @commands.command(aliases=['GIVE','GIB','Gib','gib','Give'])
+  @commands.command()
   async def give(self,ctx,amount:int,member:discord.Member=None):
     if member == None:
       await ctx.send('Try running the command again but this time tell who do you want to give your money to! :rolling_eyes:')
@@ -367,7 +367,7 @@ class Economy(commands.Cog):
         collection.replace_one({"user": bankinfo1['user']},{"user": bankinfo1['user'], "wallet": bankinfo1['wallet'], "bank": bankinfo1['bank'],"inventory" : bankinfo1['inventory']})
 
         
-  @commands.command(aliases=['BUY','Buy'])
+  @commands.command()
   async def buy(self,ctx,*,thing):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
@@ -438,7 +438,7 @@ class Economy(commands.Cog):
 
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
 
-  @commands.command(aliases=['FISH','Fish'])
+  @commands.command()
   @commands.cooldown(1,20, commands.BucketType.user)
   async def fish(self,ctx):
     bankinfo = collection.find_one({"user": ctx.author.id})
@@ -474,7 +474,7 @@ class Economy(commands.Cog):
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
 
   
-  @commands.command(aliases=['HUNT','Hunt'])
+  @commands.command()
   @commands.cooldown(1,20, commands.BucketType.user)
   async def hunt(self,ctx):
     bankinfo = collection.find_one({"user": ctx.author.id})
@@ -527,7 +527,7 @@ class Economy(commands.Cog):
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
 
 
-  @commands.command(aliases=['SELL','Sell'])
+  @commands.command()
   async def sell(self,ctx,thing,amount):
     bankinfo = collection.find_one({"user": ctx.author.id})
     if not bankinfo:
@@ -644,7 +644,7 @@ class Economy(commands.Cog):
 
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
 
-  @commands.command(aliases=['INVENTORY','Inventory','inventory','INV','Inv'])
+  @commands.command(aliases=['INVENTORY'])
   async def inv(self,ctx,member:discord.Member = None):
     if member == None:
       member=ctx.author
@@ -665,7 +665,7 @@ class Economy(commands.Cog):
 
       await ctx.send(embed=embed)
 
-  @commands.command(aliases=['SHOP','Shop'])
+  @commands.command()
   async def shop(self,ctx):
 
     bankinfo = collection.find_one({"user": ctx.author.id})
@@ -682,7 +682,7 @@ class Economy(commands.Cog):
     await ctx.send(embed=embed)    
 
 
-  @commands.command(aliases=['POSTMEME','Postmeme','PM','Pm','postmeme'])
+  @commands.command(aliases=['postmeme'])
   @commands.cooldown(1, 20, commands.BucketType.user) 
   
   async def pm(self,ctx):
@@ -800,7 +800,7 @@ class Economy(commands.Cog):
       collection.replace_one({"user": bankinfo['user']},{"user": bankinfo['user'], "wallet": bankinfo['wallet'], "bank": bankinfo['bank'],"inventory" : bankinfo['inventory']})
 
             
-  @commands.command(aliases=['Gamble','GAMBLE'])
+  @commands.command()
   @commands.cooldown(1, 20, commands.BucketType.user) 
   async def gamble(self,ctx,amount:int=None):
 

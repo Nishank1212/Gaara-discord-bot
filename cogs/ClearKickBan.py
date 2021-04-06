@@ -6,7 +6,7 @@ class eightball(commands.Cog):
   def __init__(self,client):
     self.client = client
 
-  @commands.command(aliases=['CLEAR','Clear'])
+  @commands.command()
   @commands.has_permissions(manage_messages=True)
   async def clear(self,ctx, amount : int):
     if amount >= 100:
@@ -30,21 +30,21 @@ class eightball(commands.Cog):
     await message.delete()
 
 
-  @commands.command(aliases=['Kick','KICK'])
+  @commands.command()
   @commands.has_permissions(kick_members=True)
   async def kick(self,ctx, member : discord.Member, *, reason=None):
     await member.kick(reason=reason)
     await ctx.send(f'lol {member.mention} just got kicked')
 
 
-  @commands.command(aliases=['BAN','Ban'])
+  @commands.command()
   @commands.has_permissions(ban_members=True)
   async def ban(self,ctx,member : discord.Member, *, reason=None):
     await member.ban(reason=reason)
     await ctx.send(f'lol {member.mention} just got banned')
 
 
-  @commands.command(aliases=['UNBAN','Unban'])
+  @commands.command()
   @commands.has_permissions(ban_members=True)
   async def unban(self,ctx, *,member):
     banned_users = await ctx.guild.bans()

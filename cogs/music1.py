@@ -303,7 +303,7 @@ class Music(commands.Cog):
 
 			await ctx.send("An error occurred: {}".format(str(error)))
 
-	@commands.command(name="join",aliases=['j','J'],invoke_without_subcommand=True)
+	@commands.command(name="join",aliases=['j'],invoke_without_subcommand=True)
 	async def _join(self, ctx: commands.Context):
 
 		destination = ctx.author.voice.channel
@@ -318,19 +318,19 @@ class Music(commands.Cog):
 		
 		await ctx.send(embed=embed)
 
-	@commands.command(name="leave", aliases=["disconnect",'l','L'])
+	@commands.command(name="leave", aliases=["disconnect",'L'])
 	async def _leave(self, ctx: commands.Context):
 
 		if not ctx.voice_state.voice:
 			return await ctx.send("HOW THE HECK WILL I LEAVE IF I AM NOT IN A CHANNEL :thinking:")
 
-		await ctx.voice_state.stop()
+		ctx.voice_state.voice.stop()
 		embed = discord.Embed(
 		title="Left! sorry for upseting you :pleading_face:", color=discord.Colour.blue()
 		)
 		await ctx.send(embed=embed)
 
-	@commands.command(name="queue",aliases=['q','Q'])
+	@commands.command(name="queue",aliases=['q'])
 	async def _queue(self, ctx: commands.Context, *, page: int = 1):
 
 		if len(ctx.voice_state.songs) == 0:
@@ -353,7 +353,7 @@ class Music(commands.Cog):
 		).set_footer(text="Viewing page {}/{}".format(page, pages))
 		await ctx.send(embed=embed)
 
-	@commands.command(aliases=['PAUSE','Pause'])
+	@commands.command()
 	async def pause(self,ctx):
 		if ctx.voice_state.is_playing and ctx.voice_state.voice.is_playing:
 			message = await ctx.send("pausing...")
@@ -363,7 +363,7 @@ class Music(commands.Cog):
 			await ctx.message.add_reaction("⏯")
 			
 	
-	@commands.command(aliases=['RESUME','Resume','r','R'])
+	@commands.command(aliases=['R'])
 	async def resume(self,ctx):
 		if ctx.voice_state.is_playing and ctx.voice_state.voice.is_paused:
 			message = await ctx.send("resuming...")
@@ -373,7 +373,7 @@ class Music(commands.Cog):
 			await ctx.message.add_reaction("⏯")
 		
 
-	@commands.command(aliases=['STOP','Stop','st','ST','St'])
+	@commands.command(aliases=['St'])
 	async def stop(self,ctx):
 
 		ctx.voice_state.songs.clear()
@@ -386,7 +386,7 @@ class Music(commands.Cog):
 			await ctx.message.add_reaction("⏹")
 			
 
-	@commands.command(name="play",aliases=['PLAY','Play','P','p'])
+	@commands.command(name="play",aliases=['p'])
 	async def _play(self, ctx: commands.Context, *, search: str):
 
 		if not ctx.voice_state.voice:
@@ -406,7 +406,7 @@ class Music(commands.Cog):
 				await ctx.voice_state.songs.put(song)
 				await ctx.send("Enqueued {}".format(str(source)))
 
-	@commands.command(aliases=['SKIP','Skip','s','S'])
+	@commands.command(aliases=['S'])
 	async def skip(self,ctx):
 		if not ctx.voice_state.is_playing:
 			await ctx.send(':thinking: I think now i shall skip the next time u ask me to play music')

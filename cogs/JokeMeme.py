@@ -10,7 +10,7 @@ class Joke(commands.Cog):
   def __init__(self,client):
     self.client = client
 
-  @commands.command(aliases=['JOKE','Joke'])
+  @commands.command()
   async def joke(self,ctx):
 
     
@@ -29,7 +29,7 @@ class Joke(commands.Cog):
     embed.set_footer(text=f'{ctx.author.name} asked me...Dont Blame me',icon_url=f'{ctx.author.avatar_url}')
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['MEME','Meme'])
+  @commands.command()
   async def meme(self,ctx):
 
     url = "https://meme-api.herokuapp.com/gimme"
@@ -42,7 +42,7 @@ class Joke(commands.Cog):
     embed.set_image(url=final_meme)
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['GOODJOKE','GoodJoke','goodjoke','Goodjoke','GOOD','Good'])
+  @commands.command()
   async def good(self,ctx,choice=None):
     if choice == None:
       await ctx.send('I may be too good but I cant do that hermano')

@@ -5,7 +5,7 @@ class Spoon(commands.Cog):
   def __init__(self,client):
     self.client = client
   
-  @commands.command(aliases=['SPOONFEEDING','Spoonfeeding'])
+  @commands.command()
   async def spoonfeeding(self,ctx):
     embed=discord.Embed(title='Spoonfeeding',colour=discord.Colour.blue())
     embed.set_image(url="https://i.imgur.com/RUdPyQP.jpg")
@@ -13,7 +13,7 @@ class Spoon(commands.Cog):
     await ctx.send(embed=embed)
 
 
-  @commands.command(aliases=['HEHE','Hehe'])
+  @commands.command()
   async def hehe(self,ctx,boi=None):
     if boi == None:
       pass
@@ -26,7 +26,7 @@ class Spoon(commands.Cog):
     else:
       pass
 
-  @commands.command(aliases=['KHOPDI','Khopdi'])
+  @commands.command()
   async def khopdi(self,ctx,tod=None):
     if tod == None:
       pass

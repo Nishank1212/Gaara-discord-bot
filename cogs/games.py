@@ -7,7 +7,7 @@ class Games(commands.Cog):
   def __init__(self,client):
     self.client = client
     
-  @commands.command(aliases=['GUESS','Guess'])
+  @commands.command()
   async def guess(self,ctx):
     await ctx.send('**Welcome to the guessing game**\nMy number is between 1 - 10, you have 3 guesses to guess my number')
     number = random.randint(1,10)
@@ -34,7 +34,7 @@ class Games(commands.Cog):
         await ctx.send(f'Game ended with no response, my number was {number}')
 
 
-  @commands.command(aliases=['RPS','Rps'])
+  @commands.command()
   async def rps(self,ctx, user_choice):
     bot_choices = ['rock','paper','scissor']  
     bots_choice_made = random.choice(bot_choices)
@@ -60,7 +60,7 @@ class Games(commands.Cog):
         embed.add_field(name=f'I chose {bots_choice_made}',value='I won!')
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['Dice','DICE'])
+  @commands.command()
   async def dice(self,ctx):
     a = random.randint(0,10)
     b = random.randint(0,10)

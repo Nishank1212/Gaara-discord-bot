@@ -17,14 +17,14 @@ class Error(commands.Cog):
             await ctx.send(embed=embed)
 
   
-        elif isinstance(error, commands.CommandNotFound):
-          embed = discord.Embed(
-          title='Commmand Not Found', description="That's not a valid command", colour=discord.Colour.blue())
-          await ctx.send(embed=embed)
-        elif isinstance(error, commands.MissingRequiredArgument):
-          embed = discord.Embed(
-          title='That wont work', description="Please fill in all the required arguments", colour=discord.Colour.blue())
-          await ctx.send(embed=embed)
+        # elif isinstance(error, commands.CommandNotFound):
+        #   embed = discord.Embed(
+        #   title='Commmand Not Found', description="That's not a valid command", colour=discord.Colour.blue())
+        #   await ctx.send(embed=embed)
+        # elif isinstance(error, commands.MissingRequiredArgument):
+        #   embed = discord.Embed(
+        #   title='That wont work', description="Please fill in all the required arguments", colour=discord.Colour.blue())
+        #   await ctx.send(embed=embed)
         elif isinstance(error,commands.MemberNotFound):
           embed=discord.Embed(title='Member Not Found',description='Thats Not A Valid Member',colour=discord.Colour.blue())
           await ctx.send(embed=embed)

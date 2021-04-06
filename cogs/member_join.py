@@ -6,15 +6,19 @@ class Join(commands.Cog):
   def __init__(self,client):
     self.client = client
 
-  @commands.command(aliases=['swm','SWM','Swm'])
+  @commands.command(aliases=['swm'])
   @commands.has_permissions(manage_messages=True)
   async def set_welcome_message(self,ctx,*,message):
     with open("welcome.json",'r') as f:
       welcome = json.load(f)
 
-    # try:
-    #   a = welcome[str(ctx.guild.id)]
-    #   del a
+    try:
+       a = welcome[str(ctx.guild.id)]
+       del a
+
+    except:
+      pass
+
     welcome[str(ctx.guild.id)] = message
 
 
@@ -26,7 +30,7 @@ class Join(commands.Cog):
     await ctx.send('Make sure to use the swc command to set the welcome channel and provide a channel id there')
 
 
-  @commands.command(aliases=['swc','SWC','Swc'])
+  @commands.command(aliases=['swc'])
   @commands.has_permissions(manage_messages=True)
   async def set_welcome_channel(self,ctx,id:int):
     ids = []

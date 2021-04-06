@@ -5,7 +5,7 @@ class Avatar(commands.Cog):
   def __init__(self,client):
     self.client = client
 
-  @commands.command(aliases=['AVATAR','Avatar'])
+  @commands.command()
   async def avatar(self,ctx,member:discord.Member=None ):
     if member is None:
       member=ctx.author
@@ -17,7 +17,7 @@ class Avatar(commands.Cog):
       embed.set_image(url = member.avatar_url)
       await ctx.send(embed=embed)
 
-  @commands.command(aliases=['WASTED', 'Wasted'])
+  @commands.command()
   async def wasted(self,ctx, member: discord.Member = None):
     if member is None:
         member = ctx.author
@@ -30,7 +30,7 @@ class Avatar(commands.Cog):
     embed.set_image(url = final_url)
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['INVERT', 'Invert'])
+  @commands.command()
   async def invert(self,ctx, member: discord.Member = None):
     if member is None:
         member = ctx.author
@@ -43,7 +43,7 @@ class Avatar(commands.Cog):
     embed.set_image(url = final_url)
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['INVERTGREY', 'InvertGrey','Invertgrey'])
+  @commands.command()
   async def invertgrey(self,ctx, member: discord.Member = None):
     if member is None:
         member = ctx.author
@@ -56,7 +56,7 @@ class Avatar(commands.Cog):
     embed.set_image(url = final_url)
     await ctx.send(embed=embed)
   
-  @commands.command(aliases=['BRIGHT', 'Bright'])
+  @commands.command()
   async def bright(self,ctx, member: discord.Member = None):
     if member is None:
         member = ctx.author
@@ -69,7 +69,7 @@ class Avatar(commands.Cog):
     embed.set_image(url = final_url)
     await ctx.send(embed=embed)
 
-  @commands.command(aliases=['BLUE', 'Blue'])
+  @commands.command()
   async def blue(self,ctx, member: discord.Member = None):
     if member is None:
         member = ctx.author
