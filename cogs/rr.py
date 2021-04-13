@@ -188,6 +188,154 @@ class rr(commands.Cog):
         m = json.dump(m,f)
     except:
       pass
+    
+  @commands.command()
+  async def rrmini(self,ctx,emoji,role_id : int,channel:discord.TextChannel,*,message):
+    try:
+
+      await ctx.message.add_reaction(str(emoji))
+
+    except:
+      return await ctx.send('Try again Like this `~~rrmini <emoji> (role_id) [channel to send] <title or message>`')
+
+    role_check = ctx.guild.get_role(role_id)
+
+    if not role_check:
+      return await ctx.send('Try again Like this `~~rrmini <emoji> (role_id) [channel to send] <title or message>`')
+
+    embed=discord.Embed(description=message,colour=discord.Colour.blue())
+    embed.add_field(name='\u200b',value=f'{emoji} : {role_check}')
+
+
+    lol = await channel.send(embed=embed)
+    await lol.add_reaction(str(emoji))
+    await ctx.send(f'Check it out in this link below\nhttps://discord.com/channels/{ctx.guild.id}/{channel.id}/{lol.id}')
+    
+
+    with open('rr.json','r') as f:
+      m = json.load(f)
+
+    list_needed = {str(emoji) : role_check.id}
+
+    m[str(lol.id)] = list_needed
+
+    with open('rr.json','w') as f:
+      json.dump(m,f)
+
+  @rrmini.error
+  async def rrmini_error(self,ctx,error):
+    await ctx.send('Try again Like this `~~rrmini <emoji> (role_id) [channel to send] <title or message>`')
+
+  @commands.command(aliases=['armake','autorolemake'])
+  async def autorole(self,ctx):
+    await ctx.send('OK so now say THE role id you want to add when someone joins\nnote: only one role allowed')
+    def check(m):
+      return m.author==ctx.author and m.channel.id == ctx.channel.id 
+    role_id = await self.client.wait_for('message',check=check)
+    if not role_id.content.isdigit():
+      return await ctx.send('a role id should have been sent')
+
+
+    roleid = int(role_id.content)
+    for i in ctx.guild.roles:
+      if int(i.id) == roleid:
+        nice = True
+        break
+
+      else:
+        nice = False
+        continue
+
+    if not nice:
+      return await ctx.send('Sorry There is No role with that ID')
+    role = ctx.guild.get_role(roleid)
+
+    
+    await ctx.send(f'Alright I will add {role.name} role to the person who joins and note this I wont add the role to any bots... If you want to add for bots then use the `~~bar` or `~~BotAutoRole` command')
+
+    with open('ar.json','r') as f:
+      m = json.load(f)
+
+    try:
+      del m[str(ctx.guild.id)]
+    except:
+      pass
+    
+    m[ctx.guild.id] = roleid
+
+    with open('ar.json','w') as f:
+      json.dump(m,f)
+
+  @commands.command(aliases=['barmake','botautorolemake'])
+  async def br(self,ctx):
+    await ctx.send('OK so now say THE role id you want to add when some `bot` joins\nnote: only one role allowed')
+    def check(m):
+      return m.author==ctx.author and m.channel.id == ctx.channel.id 
+    role_id = await self.client.wait_for('message',check=check)
+    if not role_id.content.isdigit():
+      return await ctx.send('a role id should have been sent')
+
+
+    roleid = int(role_id.content)
+    for i in ctx.guild.roles:
+      
+      if int(i.id) == roleid:
+        nice = True
+        break
+
+      else:
+        nice = False
+        continue
+
+    if not nice:
+      return await ctx.send('Sorry There is No role with that ID')
+    role = ctx.guild.get_role(roleid)
+
+    
+    await ctx.send(f'Alright I will add {role.name} role to the bot who joins and note this I wont add the role to any humans... If you want to add for bots then use the `~~armake` or `~~autorole` command')
+
+    with open('bar.json','r') as f:
+      m = json.load(f)
+
+    try:
+      del m[str(ctx.guild.id)]
+    except:
+      pass
+    
+    m[ctx.guild.id] = roleid
+
+    with open('bar.json','w') as f:
+      json.dump(m,f)
+    
+
+  @commands.command()
+  async def ardelete(self,ctx):
+    with open('ar.json','r') as f:
+      m = json.load(f)
+
+    try:
+      del m[str(ctx.guild.id)]
+      await ctx.send('Deleted Auto Role System For humans!!!')
+
+      with open('ar.json','w') as f:
+        json.dump(m,f)
+    except:
+      await ctx.send('There Was No Auto Role in this server')
+
+  @commands.command()
+  async def bardelete(self,ctx):
+    with open('ar.json','r') as f:
+      m = json.load(f)
+
+    try:
+      del m[str(ctx.guild.id)]
+      await ctx.send('Deleted Auto Role System For bots!!!')
+
+      with open('bar.json','w') as f:
+        json.dump(m,f)
+    except:
+      await ctx.send('There Was No bot Auto Role in this server')
+
 
 def setup(client):
   client.add_cog(rr(client))

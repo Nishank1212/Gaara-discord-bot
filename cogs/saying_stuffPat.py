@@ -22,7 +22,7 @@ class Say(commands.Cog):
   @commands.command()
   async def say(self,ctx,*,lines):
     
-    await ctx.send(f'{lines}\n\n**-{ctx.author.name}')
+    await ctx.send(f'{lines}\n\n**-{ctx.author.name}**')
 
 def setup(client):
   client.add_cog(Say(client))

@@ -862,6 +862,18 @@ class Economy(commands.Cog):
       with open('rob.json','w') as f:
         json.dump(rob,f)
 
+    if what.lower() == 'tips' or what.lower() == 'tip':
+      with open('tips.json','r') as f:
+        m = json.load(f)
+
+      try:
+        del m[str(ctx.guild.id)]
+        await ctx.send('Enabled Tips')
+
+        with open('tips.json','w') as f:
+          json.dump(m,f)
+      except:
+        await ctx.send('Already Enabled')
   @commands.command()
   @commands.has_permissions(manage_guild=True)
   async def disable(self,ctx,what):
@@ -879,6 +891,21 @@ class Economy(commands.Cog):
       with open('rob.json','w') as f:
         json.dump(rob,f)
 
+    if what.lower() == 'tips' or what.lower() == 'tip':
+      with open('tips.json','r') as f:
+        m = json.load(f)
+
+      try:
+        del m[str(ctx.guild.id)]
+        m[str(ctx.guild.id)] == 'disabled'
+        await ctx.send('Already Disabled Tips')
+
+      except:
+        m[ctx.guild.id] = 'disabled'
+        await ctx.send('Disabled Tips!')
+
+      with open('tips.json','w') as f:
+        json.dump(m,f)
   
   # @commands.command(aliases=['DAILY','Daily'])
   # @commands.cooldown(1, 86400, commands.BucketType.user) 

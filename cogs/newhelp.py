@@ -22,8 +22,8 @@ class Help(commands.Cog):
 
   
 
-      embed=discord.Embed(title='Help Me!',description='this command helps you by providing you commands',colour=discord.Colour.blue())
-      embed.add_field(name='Type these for more information',value='`help general`\n`help fun`\n`help games`\n`help animals`\n`help admin`\n`help ChatBot`\n`help economy`\n`help rank`\n`help music`\n`help bot`\n`help image`')
+      embed=discord.Embed(title='Help roles!',description='this command helps you by providing you commands of roles',colour=discord.Colour.blue())
+      embed.add_field(name='Type these for more information',value='`rrmake`\n`rr delete <message id>`\n`rrmini <emoji> <role id> <channel> <text>`\n`armake - auto role`\n`barmake - Bot auto roles`\n`ardelete - deletes auto role`\n`bardelete - deletes bot auto role`')
       # embed.set_image(url='https://thumbs.dreamstime.com/b/help-me-abstract-colorful-background-bokeh-design-illustration-isolated-yellow-red-banner-154777299.jpg')
       embed.set_footer(text=f'Use command prefix "{pre}" ')
       #await ctx.send(embed=embed)
@@ -114,8 +114,8 @@ class Help(commands.Cog):
 
   
 
-      contents = [embed11,embed10,embed9,embed8,embed7,embed5,embed4,embed3,embed2,embed1,embed111,embed112]
-      pages = 12
+      contents = [embed11,embed10,embed9,embed8,embed7,embed5,embed4,embed3,embed2,embed1,embed111,embed112,embed]
+      pages = 13
       cur_page = 1
       message = await ctx.send(f"Page {cur_page}/{pages}",embed=contents[cur_page-1])
       # getting the message object for editing and reacting
@@ -164,6 +164,7 @@ class Help(commands.Cog):
                 await ctx.message.delete()
                 break
                 return
+                
 
             
 

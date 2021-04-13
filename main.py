@@ -202,18 +202,40 @@ async def on_member_join(member):
       try:
 
         messages = message[str(member.guild.id)]
-        print(messages)
+
+        with open('channel.json','r') as f:
+          channelid = json.load(f)      
+
+        channel = channelid[str(member.guild.id)]
+
+        await client.get_channel(int(channel)).send(f"{member.mention}\n{messages}")
 
       except:
-        return
+        pass
+
+      try:
+        if member.bot:
+          with open('bar.json','r') as f:
+            d = json.load(f)
+
+          id = d[str(member.guild.id)]
+          role = member.guild.get_role(id)
+          await member.add_roles(role)
+
+          return
+          
+        with open('ar.json','r') as f:
+          m = json.load(f)
+        role_id = m[str(member.guild.id)]
+
+        role = member.guild.get_role(role_id)
+
+        await member.add_roles(role)
      
-      with open('channel.json','r') as f:
-        channelid = json.load(f)
+      except KeyError as e:
+        pass
 
-      channel = channelid[str(member.guild.id)]
-      print(channel)
-
-      await client.get_channel(int(channel)).send(f"{member.mention}\n{messages}")
+      
 
 @client.event
 async def on_guild_join(guild):
@@ -1206,10 +1228,45 @@ async def paperofchem(ctx):
   embed=discord.Embed(title='paper',description='[Click here to download paper of chem](https://www.youtube.com/watch?v=dQw4w9WgXcQ)')
   await ctx.send(embed=embed)
 
+
+# @client.command(aliases=['giphy','tenor'])
+# async def gif(ctx,*,q="random"):
+
+#     api_key="qV77VtLZBrFcLRPp3OrYqujYU7kvWE5r"
+#     api_instance = giphy_client.DefaultApi()
+
+#     try: 
+#     # Search Endpoint
+        
+#         api_response = api_instance.gifs_search_get(api_key, q, limit=5, rating='g')
+#         lst = list(api_response.data)
+#         giff = random.choice(lst)
+
+#         emb = discord.Embed(title=q)
+#         emb.set_image(url = f'https://media.giphy.com/media/{giff.id}/giphy.gif')
+
+#         await ctx.channel.send(embed=emb)
+#     except ApiException as e:
+#         print("Exception when calling DefaultApi->gifs_search_get: %s\n" % e)
+
 @client.command()
 async def testt(ctx,emoji):
   print(emoji)
   await ctx.message.add_reaction(str(emoji))
+
+@client.event
+async def on_command_completion(ctx):
+  with open('tips.json','r') as f:
+    m = json.load(f)
+  try:
+    a = m[str(ctx.guild.id)]
+    return
+  except:
+
+    if random.randint(1,16) == 15:
+      random_tips_list = ["Join our community + support server for getting help!!! https://discord.gg/SPNsAVc7Hp",'You can use the ~~swm and ~~swc command to set up a welcome message and its channel','You can make Reaction roles!!! simply type `~~rrmake` to get some help for making it','Set your birthday like this `~~setbb MONTH-DAY`','You can use `~~slm` to set the leave message','Rank system? Type `~~levelenable` for enabling it and `~~leveldisable` for disabling it - default switched off','Caps Limit? Type `~~modon <num of caps limit>` to start it','Filtering bad words? type `~~filteron` to get started','Economy Commands!!! You can type `~~bal` to get started','You can use warn commands, to get started type `~~warn <member>`']
+      await ctx.send(f'Tip : {random.choice(random_tips_list)}')
+  
 
 keep_alive()
 
